@@ -1,0 +1,40 @@
+div.quarto-about-jolla {
+margin-top: 0px;
+}
+
+body:not(.floating) .nav-footer {
+    border-top: 1px solid #dee2e6;
+}
+
+.btn-primary {
+  pointer-events: none; /* Make the button unclickable */
+  cursor: default; /* Change the cursor to indicate it's inactive */
+}
+
+.btn-green {
+  color: white;
+  background-color: #4fb043; /* Light green */
+  display: inline-block; /* Make it look like a button */
+  text-align: center; /* Center text */
+  border: none; /* Remove borders */
+  pointer-events: none; /* Make the button unclickable */
+  cursor: default; /* Change the cursor to indicate it's inactive */
+}
+
+.btn-green:hover {
+  background-color: #4fb043; /* Prevent color change on hover */
+}
+
+.btn-grey {
+  color: white;
+  background-color: #D3D3D3; /* Light green */
+  display: inline-block; /* Make it look like a button */
+  text-align: center; /* Center text */
+  border: none; /* Remove borders */
+  pointer-events: none; /* Make the button unclickable */
+  cursor: default; /* Change the cursor to indicate it's inactive */
+}
+
+.btn-grey:hover {
+  background-color: #D3D3D3; /* Prevent color change on hover */
+}
