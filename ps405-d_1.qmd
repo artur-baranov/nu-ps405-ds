@@ -1,0 +1,54 @@
+---
+title: "Last Quarter's Review"
+author: "[Artur Baranov](https://artur-baranov.github.io)"
+date: 2025-01-09
+format: 
+  html:
+    embed-resources: true
+toc: true
+---
+
+# Before we start
+
+We are expected to have installed R and RStudio, if not see the [installing R section](@sec-installing-r).
+
+# Brief recap of the last quarter
+
+-   
+
+
+
+Useful functions, `sample()`
+
+Visualizations
+
+Tidyverse basics (mutate, filter, select, summarize, etc)
+Descriptive statistics 
+Confidence intervals
+
+
+
+
+# Installing R and RStudio {#sec-installing-r}
+
+**First**, we need to install R. Click the button below and click "Download and Install R". Choose your OS. For Windows you need to download "**base**"; for MacOS and Linux you have to choose the version of your OS. Install.
+  
+<center>[Download R](https://cran.rstudio.com){.btn .btn-primary .btn role="button" target="_blank" style="width:200px"}</center>
+
+<details>
+  <summary>Step one</summary>
+  <center>![](https://raw.githubusercontent.com/gustavo-diaz/NUmathcamp/main/r/images/install_r_cran.png)</center>
+  
+  For windows:
+  
+  <center>![](https://raw.githubusercontent.com/gustavo-diaz/NUmathcamp/main/r/images/install_r_base.png)</center>
+</details>
+
+**Second**, we need to install RStudio. Click the button below and click "Download RStudio Desktop". You will be redirected to your version automatically. Install.
+
+<center>[Download RStudio](https://posit.co/download/rstudio-desktop/){.btn .btn-primary .btn role="button" target="_blank" style="width:200px"}</center>
+
+<details>
+  <summary>Step two</summary>
+  <center>![](https://raw.githubusercontent.com/gustavo-diaz/NUmathcamp/main/r/images/install_rstudio_posit.png)</center>
+</details>

@@ -1,0 +1,26 @@
+project:
+  type: website
+
+website:
+  title: "PS405 Linear Models"
+  navbar:
+    left:
+      - href: index.qmd
+        
+  sidebar:
+      pinned: true
+      align: center
+      contents:
+        - text: "1 | Last Quarter's Review"
+          file: ps405-d_1.qmd
+
+format:
+  html:
+    theme:
+      light: [flatly, custom.scss]
+    mainfont: roboto
+    css: styles.css
+    toc: true
+
+
+

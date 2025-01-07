@@ -1,0 +1,34 @@
+[
+  {
+    "objectID": "index.html",
+    "href": "index.html",
+    "title": "Home",
+    "section": "",
+    "text": "This is a Quarto website.\nTo learn more about Quarto websites visit https://quarto.org/docs/websites.\n\n1 + 1\n\n[1] 2"
+  },
+  {
+    "objectID": "ps405-d1.html",
+    "href": "ps405-d1.html",
+    "title": "Last Quarter’s Review",
+    "section": "",
+    "text": "Before we start\nWe are expected to have installed R and RStudio, if not see the installing R section.\n\n\nBrief recap of the last quarter\n\n\n\nUseful functions, sample()\nVisualizations\nTidyverse basics (mutate, filter, select, summarize, etc) Descriptive statistics Confidence intervals\n\n\nInstalling R and RStudio\nFirst, we need to install R. Click the button below and click “Download and Install R”. Choose your OS. For Windows you need to download “base”; for MacOS and Linux you have to choose the version of your OS. Install.\n\nDownload R\n\n\n\nStep one\n\n\n\n\nFor windows:\n\n\n\n\nSecond, we need to install RStudio. Click the button below and click “Download RStudio Desktop”. You will be redirected to your version automatically. Install.\n\nDownload RStudio\n\n\n\nStep two"
+  },
+  {
+    "objectID": "ps405-dg_1.html",
+    "href": "ps405-dg_1.html",
+    "title": "Last Quarter’s Review",
+    "section": "",
+    "text": "Before we start\nWe are expected to have installed R and RStudio, if not see the installing R section.\n\n\nBrief recap of the last quarter\n\n\n\nUseful functions, sample()\nVisualizations\nTidyverse basics (mutate, filter, select, summarize, etc) Descriptive statistics Confidence intervals\n\n\nInstalling R and RStudio\nFirst, we need to install R. Click the button below and click “Download and Install R”. Choose your OS. For Windows you need to download “base”; for MacOS and Linux you have to choose the version of your OS. Install.\n\nDownload R\n\n\n\nStep one\n\n\n\n\nFor windows:\n\n\n\n\nSecond, we need to install RStudio. Click the button below and click “Download RStudio Desktop”. You will be redirected to your version automatically. Install.\n\nDownload RStudio\n\n\n\nStep two"
+  },
+  {
+    "objectID": "ps405-d_1.html",
+    "href": "ps405-d_1.html",
+    "title": "Last Quarter’s Review",
+    "section": "",
+    "text": "Before we start\nWe are expected to have installed R and RStudio, if not see the installing R section.\n\n\nBrief recap of the last quarter\n\n\n\nUseful functions, sample()\nVisualizations\nTidyverse basics (mutate, filter, select, summarize, etc) Descriptive statistics Confidence intervals\n\n\nInstalling R and RStudio\nFirst, we need to install R. Click the button below and click “Download and Install R”. Choose your OS. For Windows you need to download “base”; for MacOS and Linux you have to choose the version of your OS. Install.\n\nDownload R\n\n\n\nStep one\n\n\n\n\nFor windows:\n\n\n\n\nSecond, we need to install RStudio. Click the button below and click “Download RStudio Desktop”. You will be redirected to your version automatically. Install.\n\nDownload RStudio\n\n\n\nStep two",
+    "crumbs": [
+      "Home",
+      "1 | Last Quarter's Review"
+    ]
+  }
+]
