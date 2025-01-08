@@ -1,4 +1,16 @@
 ---
 title: ""
+listing:
+  - id: schedule
+    include: 
+      type: "schedule"
+    contents: classes.yaml
+    type: table
+    fields: [Week, title, Links]
+    filter-ui: false
+    sort: "week"
+    sort-ui: false
 ---
 
+:::{#schedule}
+:::

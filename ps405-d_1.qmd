@@ -1,6 +1,5 @@
 ---
 title: "Last Quarter's Review"
-author: "[Artur Baranov](https://artur-baranov.github.io)"
 date: 2025-01-09
 format: 
   html:
@@ -10,13 +9,210 @@ toc: true
 
 # Before we start
 
-We are expected to have installed R and RStudio, if not see the [installing R section](@sec-installing-r).
+-   We are expected to have installed R and RStudio, if not see the [installing R section](#installingr).
+
+-   In the discussion section, we will focus on coding and practicing what we have learned in the lectures.
+
+-   Office hours are on Tuesday, 11-12:30 Scott 110.
+
+-   Questions?
 
 # Brief recap of the last quarter
 
--   
+## Coding Terminology
+
+### Code Chunk
+
+To insert a **Code Chunk**, you can use `Ctrl+Alt+I` on Windows and `Cmd+Option+I` on Mac. Run the whole chunk by clicking the green triangle, or one/multiple lines by using `Ctrl + Enter` or `Command + Return` on Mac.
+
+```{r}
+print("Code Chunk")
+```
+
+### Function and Arguments
+
+Most of the **functions** we want to run require an **argument** For example, the function `print()` above takes the argument "Code Chunk".
+
+```{r}
+#| eval: false
+
+function(argument)
+```
 
 
+### Data structures
+
+There are many **data structures**, but the most important to know the following.
+
+-   **Objects.** Those are individual units, e.g. a number or a word.
+
+```{r}
+#| results: hold
+number = 1
+number
+
+word = "Northwestern"
+word
+```
+
+
+-   **Vectors**. Vectors are collections of objects. To create one, you will need to use function `c()`.
+
+```{r}
+numbers = c(1, 2, 3)
+numbers
+```
+
+-   **Dataframes**. Dataframes are the most used data structure. Last quarter you spend a lot of time working with it. It is a table with data. Columns are called variables, and those are vectors. You can access a column using `$` operator.
+
+```{r}
+#| results: hold
+df = data.frame(numbers, 
+                numbers_multiplied = numbers * 2)
+df
+df$numbers_multiplied
+```
+
+
+### Data classes
+
+We work with various **classes of data**, and the analysis we perform depends heavily on these classes.
+
+-   **Numeric**. Continuous data. 
+
+```{r}
+#| results: hold
+numeric_class = c(1.2, 2.5, 7.3)
+numeric_class
+class(numeric_class)
+```
+-   **Integer**. Whole numbers (e.g., count data).
+
+```{r}
+#| results: hold
+integer_class = c(1:3)
+class(integer_class)
+```
+
+-   **character**. Usually, represent textual data.
+
+```{r}
+word
+class(word)
+```
+
+-   **Factor**. Categorical variables, where each value is treated as an identifier for a category.
+
+```{r}
+#| results: hold
+
+colors = c("blue", "green")
+class(colors)
+```
+As you noticed, R did not identify the class of data correctly. We can change it using `as.factor()` function. You can easily change the class of your variable (`as.numeric()`, `as.integer()`, `as.character()`)
+
+```{r}
+colors = as.factor(colors)
+class(colors)
+```
+
+### Libraries
+
+Quite frequently, we will use additional **libraries** to extend the capabilities of R. I'm sure you remember `tidyverse`. Let's load it.
+
+```{r}
+#| message: false
+
+library(tidyverse)
+```
+If you updated your R or recently downloaded it, you can easily install libraries using the function `install.packages()`.
+
+
+### Pipes
+
+**Pipes** (`%>%` or `|>`) are helpful for streamlining the coding. They introduce linearity to the process of writing the code. In plain English, a pipe translates to "take an object, and then". 
+
+```{r}
+numbers %>%
+  print()
+```
+
+# Describing Data
+
+First task, install `vdemdata` in your **console**. Then, load the library.
+
+```{r}
+library(vdemdata)
+```
+
+This is the V-Dem dataset. For your reference, their codebook is available [here](https://v-dem.net/documents/38/V-Dem_Codebook_v14.pdf).
+
+The dataset is huge! Be careful
+
+```{r}
+#| results: hold
+nrow(vdem)
+ncol(vdem)
+```
+Imagine you are interested in the relationship between regime type and physical violence. Let’s **select** the variables we will work with. Quite unfortunately, the names of the variables are not as straightforward. The regime index is `e_v2x_polyarchy_5C` and Physical violence index is `v2x_clphy`. 
+
+```{r}
+violence_data = vdem %>%
+  select(country_name, year, e_v2x_polyarchy_5C, v2x_clphy) 
+```
+
+Let's **rename** the variables so it's easier to work with them.
+
+```{r}
+violence_data = violence_data %>%
+  rename(regime = e_v2x_polyarchy_5C,
+         violence = v2x_clphy)
+```
+
+Now, analyze the regime data. We can describe regime data using various statistics. Let's check the min score for the regime.
+
+```{r}
+min(violence_data$regime, na.rm = T)
+```
+Check the max score for the regime variable below.
+
+```{r}
+#| eval: false
+...(violence_data$regime, na.rm = T)
+```
+
+Check the average score for the regime variable below.
+
+```{r}
+#| eval: false
+mean(..., na.rm = T)
+```
+
+Finally, use the `summary()` function.
+
+```{r}
+summary(violence_data$regime)
+```
+
+
+
+  mutate(dem = case_when(ifelse(e_v2x_polyarchy_5C >= 0.5, 1, 0))) 
+  
+| Statistic          | Function       | Example Usage            |
+|--------------------|----------------|--------------------------|
+| Minimum            | `min()`        | `min(x)`                 |
+| Maximum            | `max()`        | `max(x)`                 |
+| Mean               | `mean()`       | `mean(x)`                |
+| Median             | `median()`     | `median(x)`              |
+| Standard Deviation | `sd()`         | `sd(x)`                  |
+| Variance           | `var()`        | `var(x)`                 |
+| Sum                | `sum()`        | `sum(x)`                 |
+| Summary            | `summary()`    | `summary(x)`             |
+
+# Sampling
+
+
+Base R vs Tidyverse
 
 Useful functions, `sample()`
 
@@ -26,10 +222,31 @@ Tidyverse basics (mutate, filter, select, summarize, etc)
 Descriptive statistics 
 Confidence intervals
 
+| Function      | Description                                                    |
+|---------------|----------------------------------------------------------------|
+| `select()`    | Selects specific columns from a data frame                     |
+| `mutate()`    | Adds new variables or modifies existing ones                   |
+| `filter()`    | Filters rows based on specified conditions                     |
+| `group_by()`  | Groups data by one or more variables for subsequent operations |
+| `summarize()` | Summarizes data by applying a function (e.g., mean, sum)       |
+| `case_when()` | Modifies a variable based on conditional logic                 |
+| `rename()`    | Renames columns in a data frame                                |
+
+You can check how to use these commands in this scipt, or you can simply use the help option `?function()`.
 
 
 
-# Installing R and RStudio {#sec-installing-r}
+
+# Helpful to review
+
+-   [Summarizing Random Variables](https://gustavodiaz.org/ps403/slides/week3.html#/expected-value)
+
+-   [Random Samples](https://gustavodiaz.org/ps403/slides/week4.html#/ingredients-for-statistical-inference)
+
+-   [p-values](https://gustavodiaz.org/ps403/slides/week8.html#/p-values)
+
+
+# Installing R and RStudio {#installingr}
 
 **First**, we need to install R. Click the button below and click "Download and Install R". Choose your OS. For Windows you need to download "**base**"; for MacOS and Linux you have to choose the version of your OS. Install.
   

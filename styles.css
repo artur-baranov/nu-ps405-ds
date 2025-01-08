@@ -6,11 +6,6 @@ body:not(.floating) .nav-footer {
     border-top: 1px solid #dee2e6;
 }
 
-.btn-primary {
-  pointer-events: none; /* Make the button unclickable */
-  cursor: default; /* Change the cursor to indicate it's inactive */
-}
-
 .btn-green {
   color: white;
   background-color: #4fb043; /* Light green */
