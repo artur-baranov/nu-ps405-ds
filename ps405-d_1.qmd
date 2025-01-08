@@ -270,9 +270,12 @@ violence_2000 = violence_data %>%
 The higher the number, the better the physical integrity in a given country. 
 
 ```{r}
+#| warning: false
+
 ggplot(data = violence_2000) +
   geom_histogram(aes(x = violence))
 ```
+
 Let's customize the plot a bit.
 
 ```{r}

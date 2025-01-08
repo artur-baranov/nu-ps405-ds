@@ -18,7 +18,7 @@ toc: true
 -   Questions?
 
 <center>
-<a href="https://artur-baranov.github.io/nu-ps405-ds/ps405-d_1.qmd" class="btn btn-primary" role="button" download="ps405-d_1.qmd" style="width:200px" target="_blank">Download script</a>
+<a href="https://artur-baranov.github.io/nu-ps405-ds/scripts/ps405-d_1.qmd" class="btn btn-primary" role="button" download="ps405-d_1.qmd" style="width:200px" target="_blank">Download script</a>
 </center>
 
 # Brief recap of the last quarter
@@ -270,9 +270,12 @@ violence_2000 = violence_data %>%
 The higher the number, the better the physical integrity in a given country. 
 
 ```{r}
+#| warning: false
+
 ggplot(data = violence_2000) +
   geom_histogram(aes(x = violence))
 ```
+
 Let's customize the plot a bit.
 
 ```{r}
