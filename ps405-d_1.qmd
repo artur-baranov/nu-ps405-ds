@@ -94,7 +94,7 @@ integer_class = c(1:3)
 class(integer_class)
 ```
 
--   **character**. Usually, represent textual data.
+-   **Character**. Usually, represent textual data.
 
 ```{r}
 word
@@ -139,11 +139,12 @@ numbers %>%
 
 # Describing Data
 
-First task, install `vdemdata` in your **console**. Then, load the library.
+First task, let's load the data
 
 ```{r}
-library(vdemdata)
+load(url("https://github.com/vdeminstitute/vdemdata/raw/6bee8e170578fe8ccdc1414ae239c5e870996bc0/data/vdem.RData"))
 ```
+
 
 This is the V-Dem dataset. For your reference, their codebook is available [here](https://v-dem.net/documents/38/V-Dem_Codebook_v14.pdf).
 
@@ -154,6 +155,7 @@ The dataset is huge! Be careful
 nrow(vdem)
 ncol(vdem)
 ```
+
 Imagine you are interested in the relationship between regime type and physical violence. Let’s **select** the variables we will work with. Quite unfortunately, the names of the variables are not as straightforward. The regime index is `e_v2x_polyarchy_5C` and Physical violence index is `v2x_clphy`. 
 
 ```{r}
@@ -167,6 +169,8 @@ Let's **rename** the variables so it's easier to work with them.
 violence_data = violence_data %>%
   rename(regime = e_v2x_polyarchy_5C,
          violence = v2x_clphy)
+
+head(violence_data)
 ```
 
 Now, analyze the regime data. We can describe regime data using various statistics. Let's check the min score for the regime.
@@ -174,6 +178,7 @@ Now, analyze the regime data. We can describe regime data using various statisti
 ```{r}
 min(violence_data$regime, na.rm = T)
 ```
+
 Check the max score for the regime variable below.
 
 ```{r}
@@ -188,16 +193,54 @@ Check the average score for the regime variable below.
 mean(..., na.rm = T)
 ```
 
-Finally, use the `summary()` function.
+Finally, use the `summary()` function to get the descriptive statistics.
 
 ```{r}
 summary(violence_data$regime)
 ```
 
+::: callout-note
+## Exercise
+
+Select country name (`contry_name`), year (`year`) and Political corruption index (`v2x_corr`) from the `vdem` dataset.
+
+```{r}
+#| eval: false
+
+corruption = vdem %>%
+  ...(contry_name, ...)
+```
+
+Leave only year 2010 using `filter()` function
+
+```{r}
+#| eval: false
+
+corruption = corruption
+  ...
+```
+
+Calculate min, max and median. Don't forget about missing values, `na.rm = TRUE` argument should remove them.
+
+```{r}
+#| eval: false
+#| 
+...(corruption$v2x_corr)
+```
+
+Present the summary
+
+```{r}
+#| eval: false
 
 
-  mutate(dem = case_when(ifelse(e_v2x_polyarchy_5C >= 0.5, 1, 0))) 
-  
+```
+
+:::
+
+
+You can use the table below for your reference.
+
 | Statistic          | Function       | Example Usage            |
 |--------------------|----------------|--------------------------|
 | Minimum            | `min()`        | `min(x)`                 |
@@ -209,18 +252,181 @@ summary(violence_data$regime)
 | Sum                | `sum()`        | `sum(x)`                 |
 | Summary            | `summary()`    | `summary(x)`             |
 
+
+# Vizualization
+
+Let's begin with analyzing the distribution of the Violence Index in the year 2000. We need to **filter** the data for this task.
+
+```{r}
+violence_2000 = violence_data %>%
+  filter(year == 2000)
+```
+
+The higher the number, the better the physical integrity in a given country. 
+
+```{r}
+ggplot(data = violence_2000) +
+  geom_histogram(aes(x = violence))
+```
+Let's customize the plot a bit.
+
+```{r}
+ggplot(data = violence_2000) +
+  geom_histogram(aes(x = violence)) +
+  labs(title = "Physical Integrity Rights Index",
+       subtitle = "In 2000",
+       x = "Violence Integrity Index",
+       y = "") +
+  theme_bw()
+``` 
+
+Imagine, you asked the following question. Is it true that in the year 2000 democracies had better violence integrity rights index?
+
+Firstly, you we need to differentiate between the regimes. Using `mutate()` function we can create and modify existing variables. Let's do that!
+
+```{r}
+violence_2000 = violence_2000 %>%
+  mutate(democracy = case_when(regime >= 0.5 ~ "Democracy",
+                               regime < 0.5 ~ "Autocracy"))
+
+head(violence_2000)
+```
+
+There are multiple ways to visually compare between two groups. 
+
+Let's draw histograms first.
+
+```{r}
+#| message: false
+
+ggplot(violence_2000) +
+  geom_histogram(aes(x = violence, fill = democracy))
+```
+
+But comparing distributions between groups is easier with the boxplot. But are they different?
+
+```{r}
+ggplot(violence_2000) +
+  geom_boxplot(aes(x = democracy, y = violence))
+```
+
+Let's try to reverse engineer the data-generating process and calculate the confidence intervals for those samples to double-check the results. We need to `group_by()` type of the regime, and then `summarize()` the data.
+
+```{r}
+violence_ci = violence_2000 %>%
+  group_by(democracy) %>%
+  summarize(
+    mean_violence = mean(violence, na.rm = TRUE),
+    lower = mean_violence - 1.96 * sd(violence, na.rm = TRUE) / sqrt(n()),
+    upper = mean_violence + 1.96 * sd(violence, na.rm = TRUE) / sqrt(n()))
+
+violence_ci
+```
+
+Finally, visualize it.
+
+```{r}
+ggplot(violence_ci) +
+  geom_linerange(aes(x = democracy,
+                     ymin = lower,
+                     ymax = upper)) +
+  geom_point(aes(x = democracy,
+                 y = mean_violence))
+```
+
+::: callout-note
+## Exercise
+
+Add title, and rename X and Y axis.
+
+```{r}
+#| eval: false
+
+ggplot(violence_ci) +
+  geom_linerange(aes(x = democracy,
+                     ymin = lower,
+                     ymax = upper)) +
+  geom_point(aes(x = democracy,
+                 y = mean_violence)) +
+  labs()
+```
+
+Draw a histogram of Political corruption index (`v2x_corr`) from the exercises above.
+
+```{r}
+#| eval: false
+
+...(corruption) 
+  geom_...()
+```
+
+
+:::
+
+
 # Sampling
 
+Lastly, sampling. Imagine, we have data for the whole "population". In our case, these are all countries in the year 2000. We know average of violence index, which is
 
-Base R vs Tidyverse
+```{r}
+mean(violence_2000$violence)
+```
 
-Useful functions, `sample()`
+Compare it to the sample of N = 30
 
-Visualizations
+```{r}
+set.seed(1)
+violence_sample_15 = sample(violence_2000$violence, size = 15)
+```
 
-Tidyverse basics (mutate, filter, select, summarize, etc)
-Descriptive statistics 
-Confidence intervals
+And now calculate the average of the sample. Is it accurate?
+
+```{r}
+mean(violence_sample_15)
+```
+
+Let's repeat (iterate) the process multiple times. First, create an empty dataset to store the data
+
+```{r}
+sample_averages = data.frame() 
+```
+
+Second, repeat the process 100 times
+
+```{r}
+for(i in 1:100){
+  temporary_sample = sample(violence_2000$violence, size = 15) 
+  temporary_sample_average = mean(temporary_sample)  
+  sample_averages = rbind(sample_averages, temporary_sample_average) 
+}
+```
+
+Check what we have got
+
+```{r}
+colnames(sample_averages) = "average"
+head(sample_averages)
+```
+
+Take a look on the average of the collected averages. Did it get closer to the real parameter? This is essentially **bootstrapping**.
+
+```{r}
+mean(sample_averages$average) 
+```
+
+Draw a histogram of the averages. 
+
+```{r}
+#| eval: false
+
+...(...) 
+  geom_histogram(aes(...))
+```
+
+
+# Useful Tidyverse Functions
+
+You can use the table below for your reference.
 
 | Function      | Description                                                    |
 |---------------|----------------------------------------------------------------|
@@ -233,8 +439,6 @@ Confidence intervals
 | `rename()`    | Renames columns in a data frame                                |
 
 You can check how to use these commands in this scipt, or you can simply use the help option `?function()`.
-
-
 
 
 # Helpful to review
