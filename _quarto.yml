@@ -1,6 +1,9 @@
 project:
   type: website
   output-dir: docs
+  render:
+    - "*.qmd"
+    - "!/docs/scripts/*.qmd"
 
 website:
   title: "PS405 Linear Models"
