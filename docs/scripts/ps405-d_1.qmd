@@ -380,7 +380,7 @@ Lastly, sampling. Imagine, we have data for the whole "population". In our case,
 mean(violence_2000$violence)
 ```
 
-Compare it to the sample of N = 30
+Compare it to the sample of N = 15
 
 ```{r}
 set.seed(1)
