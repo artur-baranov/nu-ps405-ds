@@ -1,5 +1,5 @@
 ---
-title: "Regression overview"
+title: "Regression Overview"
 subtitle: "Week 2"
 date: 2025-01-16
 format: 
