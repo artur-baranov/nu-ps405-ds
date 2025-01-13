@@ -8,3 +8,201 @@ format:
 toc: true
 ---
 
+# Review of the Previous Session
+
+Let's refresh what we did last week. 
+
+::: callout-note
+## Exercise
+
+First, load the V-Dem data
+
+```{r}
+#| message: false
+
+library(tidyverse)
+load(url("https://github.com/vdeminstitute/vdemdata/raw/6bee8e170578fe8ccdc1414ae239c5e870996bc0/data/vdem.RData"))
+```
+
+
+You are interested in corruption in various geographical regions. Select year (`year`), region (`e_regionpol_7C`) and corruption (`v2x_corr`) variables from the `vdem` dataset.
+
+```{r}
+#| eval: false
+
+corruption_data = ... %>%
+  ...(year, ..., v2x_corr) 
+```
+
+
+As we are working with the V-Dem data, let's rename variables so it's more straightforward.
+
+```{r}
+#| eval: false
+
+corruption_data = corruption_data ...
+  ...(region = e_regionpol_7C,
+      corruption = ...)
+```
+
+Calculate the average of the `corruption` variable. Don't forget about the `na.rm = TURE` argument!
+
+```{r}
+#| eval: false
+
+...
+```
+
+Using `group_by()` and `summarize()` calculate the average corruption for all regions in the dataset.
+
+```{r}
+#| eval: false
+
+corruption_data ...
+  (...) %>%
+  ...(average = ...(..., na.rm = T))
+```
+
+Lastly, let's see the distributions of corruption across regions. Draw a boxplot below with `region` variable on the X axis, and `corruption` variable on the Y axis.
+
+```{r}
+#| eval: false
+
+ggplot(data = corruption_data) +
+  ...(aes(x = ..., y = ...))
+```
+
+Something is wrong, right? We haven't checked the classes of the variables, and apparently the `region` variable has to be changed. Let's check it's class first.
+
+```{r}
+#| eval: false
+
+...(corruption_data$...)
+```
+
+What class should it be? Let's recode it directly on the plot.
+
+```{r}
+#| eval: false
+
+...(...) +
+  geom_boxplot(aes(x = ...(region), y = ...))
+```
+
+:::
+
+# Agenda for Today
+
+<center>
+<a href="https://artur-baranov.github.io/nu-ps405-ds/scripts/..." class="btn btn-primary" role="button" download="..." style="width:200px" target="_blank">Download script</a>
+</center>
+
+# Nonparametric regressions
+
+
+In this part, we continue working with the corruption across the globe. However, we will use another type of the variable for the corruption. First, we extract all the data we need from the V-Dem dataset. Those include `country_name`, `year`, Political corruption index (`e_v2x_corr_5C`) and GDP per capita (`e_gdppc`) variables.
+
+
+```{r}
+corruption_gdp = vdem %>%
+  select(country_name, year, e_v2x_corr_5C, e_gdppc) %>%
+  rename(corruption = e_v2x_corr_5C,
+         gdp_percap = e_gdppc) %>%
+  filter(year >= 2000)
+```
+
+Explore the variable `corruption` below. What do you notice?
+
+```{r}
+#| warning: false
+
+ggplot(corruption_gdp) +
+  geom_histogram(aes(x = corruption))
+```
+
+Let's check which values this variable takes. And we want to know it's class too.
+
+```{r}
+table(corruption_gdp$corruption)
+class(corruption_gdp$corruption)
+```
+
+Apparently, those are categories. Thus, we need to treat them as factors instead of numeric.
+
+```{r}
+corruption_gdp$corruption = as.factor(corruption_gdp$corruption)
+```
+
+Great! Now, let's reproduce the logic behind the Simple Local Averages regression. Visualize GDP per capita distribution across corruption index groups.
+
+```{r}
+#| warning: false
+
+ggplot(corruption_gdp,
+       aes(x = corruption,
+           y = gdp_percap)) +
+  geom_point() +
+  labs(x = "Corruption Index (Categorical)",
+       y = "GDP Per Capita")
+```
+
+Now, we should add a local average, i.e. an average in each group. Take a moment to understand the code.
+
+```{r}
+#| warning: false
+
+ggplot(corruption_gdp,
+       aes(x = corruption,
+           y = gdp_percap)) +
+  geom_point() +
+  stat_summary(fun = mean, 
+               color = "red") +
+  labs(x = "Corruption Index (Categorical)",
+       y = "GDP Per Capita")
+```
+
+
+# Parametric Regression
+Regression
+
+interpretation
+
+A one percentage point increase in rate of College Educated voters is associated with a .33 percentage point decrease in the average 2016-2020 change in Republican vote share.
+
+Bias-Variance Tradeoff
+
+
+
+
+Election turnout (A) (v2eltrnout)
+Legislative constraints on the executive index (D) (v2xlg_legcon)
+
+Are the capacities of the legislature associated with electoral turnout? Is there an association between legislative constraints on the executive and electoral turnout? 
+
+```{r}
+legislative_data = vdem %>% 
+  select(country_name, year, v2xlg_legcon, v2eltrnout, e_v2x_polyarchy_5C) %>%
+  rename(legislative_constraints = v2xlg_legcon,
+         turnout = v2eltrnout,
+         regime = e_v2x_polyarchy_5C) %>%
+  filter(year > 2020 & regime >= 0.5) 
+
+legislative_data %>%
+  ggplot(aes(x = legislative_constraints, y = turnout)) +
+  geom_point() +
+  geom_smooth(method = "lm")
+
+lm(turnout ~ legislative_constraints, legislative_data) %>%
+  summary()
+
+library(estimatr)
+
+```
+
+
+
+# Check List
+
+<input type="checkbox"/> I know that wrong class of a variable can hinder statistical models and vizualizaitons
+
+
