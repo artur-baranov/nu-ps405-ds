@@ -15,12 +15,19 @@ Let's refresh what we did last week.
 ::: callout-note
 ## Exercise
 
-First, load the V-Dem data
+First, load the `tidyverse` library
 
 ```{r}
 #| message: false
 
 library(tidyverse)
+```
+
+Then, load the V-Dem data
+
+```{r}
+#| eval: false
+
 load(url("https://github.com/vdeminstitute/vdemdata/raw/6bee8e170578fe8ccdc1414ae239c5e870996bc0/data/vdem.RData"))
 ```
 
@@ -93,85 +100,135 @@ What class should it be? Let's recode it directly on the plot.
 
 # Agenda for Today
 
+-   Clearing the environment
+
+-   Loading CSV data to R
+
+-   Building a simple OLS regression
+
+-   Interpreting the regression
+
 <center>
 <a href="https://artur-baranov.github.io/nu-ps405-ds/scripts/..." class="btn btn-primary" role="button" download="..." style="width:200px" target="_blank">Download script</a>
 </center>
 
-# Nonparametric regressions
+<br>
+
+<center>
+<a href="https://artur-baranov.github.io/nu-ps405-ds/data/WHR.csv" class="btn btn-primary" role="button" download="WHR.csv" style="width:200px" target="_blank">Download data</a>
+</center>
 
 
-In this part, we continue working with the corruption across the globe. However, we will use another type of the variable for the corruption. First, we extract all the data we need from the V-Dem dataset. Those include `country_name`, `year`, Political corruption index (`e_v2x_corr_5C`) and GDP per capita (`e_gdppc`) variables.
+# Simple Linear Regression
 
+First of all, don't forget to download the data! Today we are working with the World Happiness Report. For loading the dataset in R, `getwd()` and `setwd()` can be helpful. The [codebook](https://happiness-report.s3.amazonaws.com/2024/Ch2+Appendix.pdf) is here to help us.
+
+-   `Country_name` is the name of the country
+
+-   `Ladder_score` is the happiness score
+
+-   `Logged_GDP_per_capita` is the log of GDP per capita
+
+-   `Social_support` is an index that measures the extent to which an individual has someone to rely on in times of trouble.
+
+-   `Healthy_life_expectancy` is the expected age of healthy living.
+
+And many others.
 
 ```{r}
-corruption_gdp = vdem %>%
-  select(country_name, year, e_v2x_corr_5C, e_gdppc) %>%
-  rename(corruption = e_v2x_corr_5C,
-         gdp_percap = e_gdppc) %>%
-  filter(year >= 2000)
+whr = read.csv("data/WHR.csv")
 ```
 
-Explore the variable `corruption` below. What do you notice?
+Explore what we have in the dataset by accessing the column names
 
 ```{r}
-#| warning: false
+colnames(whr)
+```
+First, let's draw a histogram for `Ladder_score` variable.
 
-ggplot(corruption_gdp) +
-  geom_histogram(aes(x = corruption))
+```{r}
+#| message: false
+
+ggplot(whr) +
+  geom_histogram(aes(x = Ladder_score)) +
+  labs(x = "Happiness Score") +
+  scale_y_continuous(breaks = c(0:10)) +
+  theme_classic()
 ```
 
-Let's check which values this variable takes. And we want to know it's class too.
+Now, let's plot happiness scores (`Ladder_score`) against `Social_support`. What can we see?
 
 ```{r}
-table(corruption_gdp$corruption)
-class(corruption_gdp$corruption)
+ggplot(whr) +
+  geom_point(aes(x = Social_support, y = Ladder_score))
 ```
 
-Apparently, those are categories. Thus, we need to treat them as factors instead of numeric.
+Let's load the `estimatr` library for the `lm_robust()` function, and then run the model. 
 
 ```{r}
-corruption_gdp$corruption = as.factor(corruption_gdp$corruption)
+library(estimatr)
+basic_model = lm_robust(Ladder_score ~ Social_support, whr)
+  
+summary(basic_model)
 ```
 
-Great! Now, let's reproduce the logic behind the Simple Local Averages regression. Visualize GDP per capita distribution across corruption index groups.
+A one unit increase in Social Support is associated with a 7.4 increase in the happiness score. What is the maximum value the Happiness Score can take?
 
 ```{r}
-#| warning: false
+max(whr$Ladder_score)
+```
 
-ggplot(corruption_gdp,
-       aes(x = corruption,
-           y = gdp_percap)) +
+So, how much does this model tell us?
+
+Let's correct the `Social_support` variable a bit, transforming it to 0-100 scale. What do you think about the model now? What do you think about $R^2$?
+
+```{r}
+whr = whr %>%
+  mutate(Social_support_percentage = Social_support * 100)
+
+adjusted_model = lm_robust(Ladder_score ~ Social_support_percentage, whr)
+  
+summary(adjusted_model)
+```
+
+Let's write this regression formula out. Do you remember the general form?
+
+$$
+Y = \beta_0 + \beta_1x_1+\epsilon
+$$
+In our case, this can be presented as
+
+$$
+\text{Happines} = -0.34 + 0.07\text{ Social Support} + e \\
+Y = -0.34+0.07X+u
+$$
+
+
+Now, visualize the regression.
+
+```{r}
+ggplot(whr, aes(x = Social_support_percentage, y = Ladder_score)) +
   geom_point() +
-  labs(x = "Corruption Index (Categorical)",
-       y = "GDP Per Capita")
-```
-
-Now, we should add a local average, i.e. an average in each group. Take a moment to understand the code.
-
-```{r}
-#| warning: false
-
-ggplot(corruption_gdp,
-       aes(x = corruption,
-           y = gdp_percap)) +
-  geom_point() +
-  stat_summary(fun = mean, 
-               color = "red") +
-  labs(x = "Corruption Index (Categorical)",
-       y = "GDP Per Capita")
+  geom_smooth(method = "lm") +
+  labs(x = "Social Support (%)",
+       y = "Happiness Score")
 ```
 
 
-# Parametric Regression
-Regression
+
+
+
+Healthy lifestyle for mutation exercise
 
 interpretation
 
-A one percentage point increase in rate of College Educated voters is associated with a .33 percentage point decrease in the average 2016-2020 change in Republican vote share.
+
 
 Bias-Variance Tradeoff
 
+set.seed for sampling
 
+R^2
 
 
 Election turnout (A) (v2eltrnout)
@@ -180,6 +237,7 @@ Legislative constraints on the executive index (D) (v2xlg_legcon)
 Are the capacities of the legislature associated with electoral turnout? Is there an association between legislative constraints on the executive and electoral turnout? 
 
 ```{r}
+#| eval: false
 legislative_data = vdem %>% 
   select(country_name, year, v2xlg_legcon, v2eltrnout, e_v2x_polyarchy_5C) %>%
   rename(legislative_constraints = v2xlg_legcon,

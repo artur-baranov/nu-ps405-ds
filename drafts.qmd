@@ -1,0 +1,68 @@
+---
+title: "drafts"
+---
+
+# Nonparametric regressions
+
+
+In this part, we continue working with the corruption across the globe. However, we will use another type of the variable for the corruption. First, we extract all the data we need from the V-Dem dataset. Those include `country_name`, `year`, Political corruption index (`e_v2x_corr_5C`) and GDP per capita (`e_gdppc`) variables.
+
+
+```{r}
+corruption_gdp = vdem %>%
+  select(country_name, year, e_v2x_corr_5C, e_gdppc) %>%
+  rename(corruption = e_v2x_corr_5C,
+         gdp_percap = e_gdppc) %>%
+  filter(year >= 2000)
+```
+
+Explore the variable `corruption` below. What do you notice?
+
+```{r}
+#| warning: false
+
+ggplot(corruption_gdp) +
+  geom_histogram(aes(x = corruption))
+```
+
+Let's check which values this variable takes. And we want to know it's class too.
+
+```{r}
+table(corruption_gdp$corruption)
+class(corruption_gdp$corruption)
+```
+
+Apparently, those are categories. Thus, we need to treat them as factors instead of numeric.
+
+```{r}
+corruption_gdp$corruption = as.factor(corruption_gdp$corruption)
+```
+
+Great! Now, let's reproduce the logic behind the Simple Local Averages regression. Visualize GDP per capita distribution across corruption index groups.
+
+```{r}
+#| warning: false
+
+ggplot(corruption_gdp,
+       aes(x = corruption,
+           y = gdp_percap)) +
+  geom_point() +
+  labs(x = "Corruption Index (Categorical)",
+       y = "GDP Per Capita")
+```
+
+Now, we should add a local average, i.e. an average in each group. Take a moment to understand the code.
+
+```{r}
+#| warning: false
+
+ggplot(corruption_gdp,
+       aes(x = corruption,
+           y = gdp_percap)) +
+  geom_point() +
+  stat_summary(fun = mean, 
+               color = "red") +
+  labs(x = "Corruption Index (Categorical)",
+       y = "GDP Per Capita")
+```
+

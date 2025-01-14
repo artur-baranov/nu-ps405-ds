@@ -4,7 +4,8 @@ project:
   render:
     - "*.qmd"
     - "!/docs/scripts/*.qmd"
-
+    - "!drafts.qmd"
+    
 website:
   title: "PS405 Linear Models"
   navbar:
