@@ -173,6 +173,8 @@ ggplot(whr) +
 Let's load the `estimatr` library for the `lm_robust()` function, and then run the model. 
 
 ```{r}
+#| warning: false
+
 library(estimatr)
 basic_model = lm(Ladder_score ~ Social_support, whr)
   
@@ -225,22 +227,26 @@ ggplot(whr, aes(x = Social_support_percentage, y = Ladder_score)) +
        y = "Happiness Score")
 ```
 
-Let's analyze the regression. First, extract the residuals.
-
-Explain to your friend why the residuals from a regression will always be un-correlated
-with the predictor even if the zero conditional mean assumption is violated.
+Let's analyze the regression. First, extract the residuals and plot their distribution. Does it follow $N(0, \sigma^2)$?
 
 ```{r}
 res = adjusted_model$residuals
-yhat = adjusted_model$fitted.values
 
 ggplot() +
   geom_histogram(aes(x = res), bins = 20) +
   geom_vline(xintercept = mean(res), color = "red", size = 1.5)
-
-# cor.test(res, whr$Social_support)
-# cor.test(res, yhat)
 ```
+
+Now we need to check the constant variance assumption.
+
+```{r}
+yhat = adjusted_model$fitted.values
+
+ggplot() +
+  geom_point(aes(x = yhat, y = res)) +
+  geom_hline(yintercept = 0, color = "blue")
+```
+
 
 
 
