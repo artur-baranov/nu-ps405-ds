@@ -8,6 +8,23 @@ format:
 toc: true
 ---
 
+# Before we start
+
+-   Download the data
+
+-   Organize your directory
+
+<center>
+<a href="https://artur-baranov.github.io/nu-ps405-ds/scripts/..." class="btn btn-primary" role="button" download="..." style="width:200px" target="_blank">Download script</a>
+</center>
+
+<br>
+
+<center>
+<a href="https://artur-baranov.github.io/nu-ps405-ds/data/WHR.csv" class="btn btn-primary" role="button" download="WHR.csv" style="width:200px" target="_blank">Download data</a>
+</center>
+
+
 # Review of the Previous Session
 
 Let's refresh what we did last week. 
@@ -108,16 +125,6 @@ What class should it be? Let's recode it directly on the plot.
 
 -   Interpreting the regression
 
-<center>
-<a href="https://artur-baranov.github.io/nu-ps405-ds/scripts/..." class="btn btn-primary" role="button" download="..." style="width:200px" target="_blank">Download script</a>
-</center>
-
-<br>
-
-<center>
-<a href="https://artur-baranov.github.io/nu-ps405-ds/data/WHR.csv" class="btn btn-primary" role="button" download="WHR.csv" style="width:200px" target="_blank">Download data</a>
-</center>
-
 
 # Simple Linear Regression
 
@@ -167,7 +174,7 @@ Let's load the `estimatr` library for the `lm_robust()` function, and then run t
 
 ```{r}
 library(estimatr)
-basic_model = lm_robust(Ladder_score ~ Social_support, whr)
+basic_model = lm(Ladder_score ~ Social_support, whr)
   
 summary(basic_model)
 ```
@@ -186,7 +193,7 @@ Let's correct the `Social_support` variable a bit, transforming it to 0-100 scal
 whr = whr %>%
   mutate(Social_support_percentage = Social_support * 100)
 
-adjusted_model = lm_robust(Ladder_score ~ Social_support_percentage, whr)
+adjusted_model = lm(Ladder_score ~ Social_support_percentage, whr)
   
 summary(adjusted_model)
 ```
@@ -199,10 +206,14 @@ $$
 In our case, this can be presented as
 
 $$
-\text{Happines} = -0.34 + 0.07\text{ Social Support} + e \\
-Y = -0.34+0.07X+u
+\text{Happines} = -0.34 + 0.07\text{ Social Support} + e
 $$
 
+Alternatively,
+
+$$
+Y = -0.34+0.07X+u
+$$
 
 Now, visualize the regression.
 
@@ -214,13 +225,29 @@ ggplot(whr, aes(x = Social_support_percentage, y = Ladder_score)) +
        y = "Happiness Score")
 ```
 
+Let's analyze the regression. First, extract the residuals.
+
+Explain to your friend why the residuals from a regression will always be un-correlated
+with the predictor even if the zero conditional mean assumption is violated.
+
+```{r}
+res = adjusted_model$residuals
+yhat = adjusted_model$fitted.values
+
+ggplot() +
+  geom_histogram(aes(x = res), bins = 20) +
+  geom_vline(xintercept = mean(res), color = "red", size = 1.5)
+
+# cor.test(res, whr$Social_support)
+# cor.test(res, yhat)
+```
 
 
+
+residuals vs fitted
 
 
 Healthy lifestyle for mutation exercise
-
-interpretation
 
 
 
@@ -231,31 +258,6 @@ set.seed for sampling
 R^2
 
 
-Election turnout (A) (v2eltrnout)
-Legislative constraints on the executive index (D) (v2xlg_legcon)
-
-Are the capacities of the legislature associated with electoral turnout? Is there an association between legislative constraints on the executive and electoral turnout? 
-
-```{r}
-#| eval: false
-legislative_data = vdem %>% 
-  select(country_name, year, v2xlg_legcon, v2eltrnout, e_v2x_polyarchy_5C) %>%
-  rename(legislative_constraints = v2xlg_legcon,
-         turnout = v2eltrnout,
-         regime = e_v2x_polyarchy_5C) %>%
-  filter(year > 2020 & regime >= 0.5) 
-
-legislative_data %>%
-  ggplot(aes(x = legislative_constraints, y = turnout)) +
-  geom_point() +
-  geom_smooth(method = "lm")
-
-lm(turnout ~ legislative_constraints, legislative_data) %>%
-  summary()
-
-library(estimatr)
-
-```
 
 
 

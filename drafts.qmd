@@ -66,3 +66,31 @@ ggplot(corruption_gdp,
        y = "GDP Per Capita")
 ```
 
+
+# Legislative capacity and electoral turnout
+
+Election turnout (A) (v2eltrnout)
+Legislative constraints on the executive index (D) (v2xlg_legcon)
+
+Are the capacities of the legislature associated with electoral turnout? Is there an association between legislative constraints on the executive and electoral turnout? 
+
+```{r}
+#| eval: false
+legislative_data = vdem %>% 
+  select(country_name, year, v2xlg_legcon, v2eltrnout, e_v2x_polyarchy_5C) %>%
+  rename(legislative_constraints = v2xlg_legcon,
+         turnout = v2eltrnout,
+         regime = e_v2x_polyarchy_5C) %>%
+  filter(year > 2020 & regime >= 0.5) 
+
+legislative_data %>%
+  ggplot(aes(x = legislative_constraints, y = turnout)) +
+  geom_point() +
+  geom_smooth(method = "lm")
+
+lm(turnout ~ legislative_constraints, legislative_data) %>%
+  summary()
+
+library(estimatr)
+
+```
