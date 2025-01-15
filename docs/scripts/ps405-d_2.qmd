@@ -17,7 +17,8 @@ toc: true
 <center>
 <a href="https://artur-baranov.github.io/nu-ps405-ds/scripts/ps405-d_2.qmd" class="btn btn-primary" role="button" download="ps405-d_2.qmd" style="width:200px" target="_blank">Download script</a>
 </center>
-<br>
+
+
 <center>
 <a href="https://artur-baranov.github.io/nu-ps405-ds/data/WHR.csv" class="btn btn-primary" role="button" download="WHR.csv" style="width:200px" target="_blank">Download data</a>
 </center>
