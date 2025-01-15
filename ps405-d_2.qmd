@@ -1,5 +1,5 @@
 ---
-title: "Regression Overview"
+title: "Simple Linear Regression"
 subtitle: "Week 2"
 date: 2025-01-16
 format: 
@@ -15,7 +15,7 @@ toc: true
 -   Organize your directory
 
 <center>
-<a href="https://artur-baranov.github.io/nu-ps405-ds/scripts/..." class="btn btn-primary" role="button" download="..." style="width:200px" target="_blank">Download script</a>
+<a href="https://artur-baranov.github.io/nu-ps405-ds/scripts/..." class="btn btn-primary" role="button" download="ps405-d_2.qmd" style="width:200px" target="_blank">Download script</a>
 </center>
 
 <br>
@@ -170,6 +170,8 @@ ggplot(whr) +
   geom_point(aes(x = Social_support, y = Ladder_score))
 ```
 
+## Model Building
+
 Let's load the `estimatr` library for the `lm_robust()` function, and then run the model. 
 
 ```{r}
@@ -227,6 +229,8 @@ ggplot(whr, aes(x = Social_support_percentage, y = Ladder_score)) +
        y = "Happiness Score")
 ```
 
+## Diagnostics
+
 Let's analyze the regression. First, extract the residuals and plot their distribution. Does it follow $N(0, \sigma^2)$?
 
 ```{r}
@@ -237,31 +241,35 @@ ggplot() +
   geom_vline(xintercept = mean(res), color = "red", size = 1.5)
 ```
 
-Now we need to check the constant variance assumption.
+Now we need to check the constant variance assumption. Does it hold? What term is used to describe this satisfied assumption?
 
 ```{r}
 yhat = adjusted_model$fitted.values
 
 ggplot() +
   geom_point(aes(x = yhat, y = res)) +
-  geom_hline(yintercept = 0, color = "blue")
+  geom_hline(yintercept = 0, color = "blue") +
+  labs(title = "Residuals vs fitted values plot")
 ```
 
 
+::: callout-note
+## Exercise
 
+Healthy lifestyle for mutation and model building exercise
 
-residuals vs fitted
+:::
 
-
-Healthy lifestyle for mutation exercise
-
-
-
-Bias-Variance Tradeoff
+# Sampling
 
 set.seed for sampling
 
-R^2
+# Bias vs Variance
+
+Bias-Variance Tradeoff: LOESS
+
+
+
 
 
 
@@ -269,6 +277,14 @@ R^2
 
 # Check List
 
-<input type="checkbox"/> I know that wrong class of a variable can hinder statistical models and vizualizaitons
+<input type="checkbox"/> I know that wrong class of a variable can hinder statistical models and visualizations
 
+<input type="checkbox"/> I know how directories work and how to load data in R
 
+<input type="checkbox"/> I know how to calculate and visualize a simple regression
+
+<input type="checkbox"/> I know how to interpret a regression
+
+<input type="checkbox"/> I know that I can adjust the scales of the variable to ease the interpretation
+
+<input type="checkbox"/> I know how access residuals of the model for the further diagnostics

@@ -4,7 +4,7 @@
   Links: "[{{< fa link >}}](/ps405-d_1.qmd)"
   type: "schedule"
   
-- title: "Regression Overview"
+- title: "Simple Linear Regression"
   Week: 2
   date: 2025-01-16
   Links: "[{{< fa link >}}](/ps405-d_2.qmd)"
