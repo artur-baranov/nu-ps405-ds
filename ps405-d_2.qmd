@@ -218,6 +218,8 @@ $$
 Now, visualize the regression.
 
 ```{r}
+#| message: false
+
 ggplot(whr, aes(x = Social_support_percentage, y = Ladder_score)) +
   geom_point() +
   geom_smooth(method = "lm") +
