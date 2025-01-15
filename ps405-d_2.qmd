@@ -234,6 +234,8 @@ ggplot(whr, aes(x = Social_support_percentage, y = Ladder_score)) +
 Let's analyze the regression. First, extract the residuals and plot their distribution. Does it follow $N(0, \sigma^2)$?
 
 ```{r}
+#| warning: false
+
 res = adjusted_model$residuals
 
 ggplot() +
@@ -256,7 +258,41 @@ ggplot() +
 ::: callout-note
 ## Exercise
 
-Healthy lifestyle for mutation and model building exercise
+Now we are working with healthy lifestyle (`Healthy_life_expectancy`) in the `whr` dataset. First, draw a histogram. What is the variable's scale?
+
+```{r}
+#| eval: false
+
+...
+```
+
+Using `geom_vline()` add an average for `Healthy_life_expectancy` to the plot. 
+
+```{r}
+
+```
+
+Insert a chunk below and build an `lm()` model where dependent variable is Happiness score (`Ladder_score`) and Independent variable is `Healthy_life_expectancy`. Present the summary.
+
+Interpret coefficients and $R^2$.
+
+Using $\LaTeX$ write out the regression function below.
+
+$$
+\text{Happiness Score} = ...
+$$
+
+Finally, using `ggplot()` visualize plot Happiness score (`Ladder_score`) against `Healthy_life_expectancy`. Add a regression line.
+
+```{r}
+#| eval: false
+
+ggplot(...) +
+  geom_...() +
+  geom_smooth()
+```
+
+
 
 :::
 
