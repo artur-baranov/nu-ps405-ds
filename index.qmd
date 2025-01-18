@@ -1,5 +1,8 @@
 ---
 title: ""
+format: 
+  html:
+    toc: false
 listing:
   - id: schedule
     include: 
@@ -12,5 +15,46 @@ listing:
     sort-ui: false
 ---
 
+## Description
+
+This site is designed to support students enrolled in the PS405 Linear Models course. Here, you will find lab materials, which are also available on Canvas. In the section, we will focus on coding and practicing the concepts covered in the lectures.
+
+:::: {.columns}
+
+::: {.column}
+### Section Details
+
+- {{< fa calendar >}} &nbsp; Thursday
+- {{< fa clock >}} &nbsp; 11:00 AM -- 11:50 AM
+- {{< fa location-dot >}} &nbsp; Scott Hall 212
+
+:::
+
+::: {.column}
+### Office Hours Details
+
+- {{< fa calendar >}} &nbsp; Tuesday
+- {{< fa clock >}} &nbsp; 11:00 AM -- 12:30 PM
+- {{< fa location-dot >}} &nbsp; Scott Hall 110
+:::
+
+::::
+
+## Schedule
+
 :::{#schedule}
 :::
+
+## Additional resources
+
+### Data sources
+
+-   [Political Science datasets](https://github.com/erikgahner/PolData)
+
+### Visualization
+
+-   [Introduction to ggplot2](https://jrnold.github.io/r4ds-exercise-solutions/data-visualisation.html)
+
+-   [Maps/Networs/Advanced vizualisation with ggplot2](https://ggplot2-book.org)
+
+-   [Making interactive plots with ggplot2](https://plotly.com/ggplot2/box-plots/)

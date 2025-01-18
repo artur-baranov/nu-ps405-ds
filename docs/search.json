@@ -11,7 +11,7 @@
     "href": "index.html",
     "title": "PS405 Linear Models",
     "section": "",
-    "text": "Week\n\n\nTitle\n\n\nLinks\n\n\n\n\n\n\n1\n\n\nLast Quarter’s Review\n\n\n\n\n\n\n\n2\n\n\nSimple Linear Regression\n\n\n\n\n\n\n\n\nNo matching items"
+    "text": "This site is designed to support students enrolled in the PS405 Linear Models course. Here, you will find lab materials, which are also available on Canvas. In the section, we will focus on coding and practicing the concepts covered in the lectures.\n\n\n\n\n\n   Thursday\n   11:00 AM – 11:50 AM\n   Scott Hall 212\n\n\n\n\n\n\n   Tuesday\n   11:00 AM – 12:30 PM\n   Scott Hall 110"
   },
   {
     "objectID": "ps405-d_1.html#terminology",
@@ -47,5 +47,26 @@
     "title": "Simple Linear Regression",
     "section": "Diagnostics",
     "text": "Diagnostics\nLet’s analyze the regression. First, extract the residuals and plot their distribution. Does it follow \\(N(0, \\sigma^2)\\)?\n\nres = adjusted_model$residuals\n\nggplot() +\n  geom_histogram(aes(x = res), bins = 20) +\n  geom_vline(xintercept = mean(res), color = \"red\", size = 1.5)\n\n\n\n\n\n\n\n\nNow we need to check the constant variance assumption. Does it hold? What term is used to describe this satisfied assumption?\n\nyhat = adjusted_model$fitted.values\n\nggplot() +\n  geom_point(aes(x = yhat, y = res)) +\n  geom_hline(yintercept = 0, color = \"blue\") +\n  labs(title = \"Residuals vs fitted values plot\")\n\n\n\n\n\n\n\n\nExplore different patterns below"
+  },
+  {
+    "objectID": "index.html#schedule",
+    "href": "index.html#schedule",
+    "title": "PS405 Linear Models",
+    "section": "Schedule",
+    "text": "Schedule\n\n\n\n\n\nWeek\n\n\nTitle\n\n\nLinks\n\n\n\n\n\n\n1\n\n\nLast Quarter’s Review\n\n\n\n\n\n\n\n2\n\n\nSimple Linear Regression\n\n\n\n\n\n\n\n\nNo matching items"
+  },
+  {
+    "objectID": "index.html#description",
+    "href": "index.html#description",
+    "title": "PS405 Linear Models",
+    "section": "",
+    "text": "This site is designed to support students enrolled in the PS405 Linear Models course. Here, you will find lab materials, which are also available on Canvas. In the section, we will focus on coding and practicing the concepts covered in the lectures.\n\n\n\n\n\n   Thursday\n   11:00 AM – 11:50 AM\n   Scott Hall 212\n\n\n\n\n\n\n   Tuesday\n   11:00 AM – 12:30 PM\n   Scott Hall 110"
+  },
+  {
+    "objectID": "index.html#additional-resources",
+    "href": "index.html#additional-resources",
+    "title": "PS405 Linear Models",
+    "section": "Additional resources",
+    "text": "Additional resources\n\nData sources\n\nPolitical Science datasets\n\n\n\nVisualization\n\nIntroduction to ggplot2\nMaps/Networs/Advanced vizualisation with ggplot2\nMaking interactive plots with ggplot2"
   }
 ]

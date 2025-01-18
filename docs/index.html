@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.5.57">
+<meta name="generator" content="quarto-1.6.39">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -37,10 +37,10 @@ ul.task-list li input[type="checkbox"] {
 <script src="site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="site_libs/quarto-html/anchor.min.js"></script>
 <link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-e26003cea8cd680ca0c55a263523d882.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<link href="site_libs/bootstrap/bootstrap-84c2eb65fbc3a45e2d271b7546780b8d.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <link href="site_libs/quarto-contrib/fontawesome6-1.2.0/all.min.css" rel="stylesheet">
 <link href="site_libs/quarto-contrib/fontawesome6-1.2.0/latex-fontsize.css" rel="stylesheet">
 <script id="quarto-search-options" type="application/json">{
@@ -133,7 +133,7 @@ window.Quarto = {
 <link rel="stylesheet" href="styles.css">
 </head>
 
-<body class="nav-fixed">
+<body class="nav-fixed fullcontent">
 
 <div id="quarto-search-results"></div>
   <header id="quarto-header" class="headroom fixed-top">
@@ -165,15 +165,40 @@ window.Quarto = {
 <div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
 <!-- sidebar -->
 <!-- margin-sidebar -->
-    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar zindex-bottom">
-        
-    </div>
+    
 <!-- main -->
-<main class="content" id="quarto-document-content">
+<main class="content" id="quarto-document-content"><header id="title-block-header" class="quarto-title-block"></header>
 
 
 
 
+<section id="description" class="level2">
+<h2 class="anchored" data-anchor-id="description">Description</h2>
+<p>This site is designed to support students enrolled in the PS405 Linear Models course. Here, you will find lab materials, which are also available on Canvas. In the section, we will focus on coding and practicing the concepts covered in the lectures.</p>
+<div class="columns">
+<div class="column">
+<section id="section-details" class="level3">
+<h3 class="anchored" data-anchor-id="section-details">Section Details</h3>
+<ul>
+<li><i class="fa-solid fa-calendar" aria-label="calendar"></i> &nbsp; Thursday</li>
+<li><i class="fa-solid fa-clock" aria-label="clock"></i> &nbsp; 11:00 AM – 11:50 AM</li>
+<li><i class="fa-solid fa-location-dot" aria-label="location-dot"></i> &nbsp; Scott Hall 212</li>
+</ul>
+</section>
+</div><div class="column">
+<section id="office-hours-details" class="level3">
+<h3 class="anchored" data-anchor-id="office-hours-details">Office Hours Details</h3>
+<ul>
+<li><i class="fa-solid fa-calendar" aria-label="calendar"></i> &nbsp; Tuesday</li>
+<li><i class="fa-solid fa-clock" aria-label="clock"></i> &nbsp; 11:00 AM – 12:30 PM</li>
+<li><i class="fa-solid fa-location-dot" aria-label="location-dot"></i> &nbsp; Scott Hall 110</li>
+</ul>
+</section>
+</div>
+</div>
+</section>
+<section id="schedule" class="level2">
+<h2 class="anchored" data-anchor-id="schedule">Schedule</h2>
 <div id="listing-schedule" class="quarto-listing quarto-listing-container-table">
 <table class="quarto-listing-table table">
 <thead>
@@ -218,9 +243,27 @@ Links
 No matching items
 </div>
 </div>
+</section>
+<section id="additional-resources" class="level2">
+<h2 class="anchored" data-anchor-id="additional-resources">Additional resources</h2>
+<section id="data-sources" class="level3">
+<h3 class="anchored" data-anchor-id="data-sources">Data sources</h3>
+<ul>
+<li><a href="https://github.com/erikgahner/PolData">Political Science datasets</a></li>
+</ul>
+</section>
+<section id="visualization" class="level3">
+<h3 class="anchored" data-anchor-id="visualization">Visualization</h3>
+<ul>
+<li><p><a href="https://jrnold.github.io/r4ds-exercise-solutions/data-visualisation.html">Introduction to ggplot2</a></p></li>
+<li><p><a href="https://ggplot2-book.org">Maps/Networs/Advanced vizualisation with ggplot2</a></p></li>
+<li><p><a href="https://plotly.com/ggplot2/box-plots/">Making interactive plots with ggplot2</a></p></li>
+</ul>
 
 
 
+</section>
+</section>
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
@@ -305,8 +348,6 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
   });
   clipboard.on('success', onCopySuccess);
   if (window.document.getElementById('quarto-embedded-source-code-modal')) {
-    // For code content inside modals, clipBoardJS needs to be initialized with a container option
-    // TODO: Check when it could be a function (https://github.com/zenorocha/clipboard.js/issues/860)
     const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
       text: getTextToCopy,
       container: window.document.getElementById('quarto-embedded-source-code-modal')
@@ -417,7 +458,6 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       if (window.Quarto?.typesetMath) {
         window.Quarto.typesetMath(note);
       }
-      // TODO in 1.5, we should make sure this works without a callout special case
       if (note.classList.contains("callout")) {
         return note.outerHTML;
       } else {
