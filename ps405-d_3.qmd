@@ -1,0 +1,214 @@
+---
+title: "Multiple Linear Regression"
+subtitle: "Week 3"
+date: 2025-01-23
+format: 
+  html:
+    embed-resources: true
+toc: true
+---
+
+<center>
+<a href="https://artur-baranov.github.io/nu-ps405-ds/scripts/ps405-d_2.qmd" class="btn btn-primary" role="button" download="ps405-d_2.qmd" style="width:200px" target="_blank">Download script</a>
+</center>
+<br>
+<center>
+<a href="https://artur-baranov.github.io/nu-ps405-ds/data/WHR.csv" class="btn btn-primary" role="button" download="WHR.csv" style="width:200px" target="_blank">Download data</a>
+</center>
+
+
+# Review of the previous week
+
+::: callout-note
+## Review
+
+Load the `tidyverse` and `modelsummary` libraries
+
+```{r}
+#| message: false
+
+library(tidyverse)
+library(modelsummary)
+```
+
+Load the World Happiness Report data (`whr.csv`)
+
+```{r}
+whr = read.csv("data/WHR.csv")
+```
+
+Using `ggplot()`, draw a histogram of `Logged_GDP_per_capita` variable
+
+
+
+Add a `geom_vline()` to indicate an average
+
+
+
+Build a linear model, where Happiness Score (`Ladder_score`) is a dependent variable, and `Logged_GDP_per_capita` is independent variable
+
+
+
+Create a scatterplot using `ggplot()` and `geom_point()`, with `Logged_GDP_per_capita` on the X-axis and `Ladder_score` on the Y-axis
+
+
+
+Add a linear regression line to the plot (`geom_smooth()`). Don't forget to give it a title and label the axes.
+
+
+
+Present the data
+
+```{r}
+#| eval: false
+
+modelsummary(list("Model" = ...elt()),
+             ...length() = c("Intercept", 
+                             "GDP per capita (log)"),
+             ... = "BIC|AIC|RMSE|Log.Lik.",    
+             stars = TRUE) 
+```
+
+
+:::
+
+# Agenda for Today
+
+
+
+
+# Dummy Variables
+
+Quite often we deal with binary or dummy variables in statistics. Those can take the following shape:
+
+```{r}
+data.frame(
+  Percentage = c(35, 32, 21),
+  Green_Party = c(1, 0, 0),
+  Socialist_Party = c(0, 1, 0),
+  Conservative_Party = c(0, 0, 1),
+  Other_Parties = c(0, 0, 0)
+)
+```
+
+
+However, most frequently we will deal with such as below:
+
+```{r}
+data.frame(
+  Percentage = c(35, 32, 21, 12),
+  Parties = c("Green Party", "Socialist Party", "Conservative Party", "Other Parties")
+)
+```
+
+
+What is the class of such data?
+
+
+Dummy variables 
+
+[WhoGov codebook](https://politicscentre.nuffield.ox.ac.uk/media/4117/whogov_codebook.pdf)
+
+```{r}
+whogov = read.csv("data/WhoGov.csv")
+whr = read.csv("data/WHR.csv")
+```
+
+
+
+```{r}
+whogov = whogov %>%
+  mutate(indep = ifelse(leader_party == "independent", T, F))
+
+model = lm(n_total ~ indep, whogov)
+summary(model)
+```
+
+
+recode the reference category for interpretation
+
+
+
+## Fixed Effects
+
+Let's work with data from the George Ward's article "Happiness and voting: Evidence from four decades of elections in Europe". It's available [here](https://doi.org/10.1111/ajps.12492). Let us list some variables from the [codebook](https://doi.org/10.7910/DVN/QWLGGN):
+
+`vote_share_cab` - % votes won by cabinet parties
+
+`satislfe_survey_mean` - Life Satisfaction
+
+```{r}
+ward_data = read.csv("ward2020_subset.csv")
+
+ward_data$country = as.factor(ward_data$country)
+
+
+
+model = lm(vote_share_cab ~ satislfe_survey_mean +
+             country,
+           data = ward_data)
+
+
+library(ggeffects)
+
+
+ggplot(ward_data, aes(x = satislfe_survey_mean, y = vote_share_cab)) +
+  geom_point() +
+  geom_smooth(method = "lm")
+
+
+ggpredict(model, terms= c("satislfe_survey_mean", "country")) %>%
+  plot(show_data = T, show_ci  = FALSE, colors = "okabe-ito", alpha = 0.5, line_size = 1) 
+
+
+```
+
+
+## Interactions
+
+
+
+
+```{r}
+whr_subset = whr %>%
+  select(Country_name, Ladder_score, Social_support, Perceptions_of_corruption, Continent)
+
+whogov_subset = whogov %>%
+  filter(year == 2020) %>%
+  select(country_name, n_total, n_minister, system_category)
+
+whr_whogov = whr_subset %>%
+  left_join(whogov_subset, by = c("Country_name" = "country_name")) 
+
+whr_whogov = whr_whogov %>%
+  mutate(system_category = case_when(system_category == "Parliamentary democracy" ~ "democracy",
+                                     system_category == "Presidential democracy" ~ "democracy",
+                                     system_category =="Mixed democratic" ~ "democracy",
+                                     is.na(system_category) ~ NA,
+                                     T ~ "autocracy"))
+```
+
+```{r}
+library(ggeffects)
+
+whr_whogov$system_category = as.factor(whr_whogov$system_category)
+
+ggplot(whr_whogov) +
+  geom_point(aes(x = n_minister, y = Social_support, color = system_category))
+
+model = lm(Social_support ~ n_total * system_category, whr_whogov)
+
+ggpredict(model, terms= c("n_total", "system_category")) %>%
+  plot(show_ci = F) 
+```
+
+
+
+
+Fixed effects, viz
+
+
+
+Interactions
+
+polynomials and IV transformations 
