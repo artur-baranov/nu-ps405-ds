@@ -83,16 +83,14 @@ Quite often we deal with binary or dummy variables in statistics. Those can take
 
 ```{r}
 data.frame(
-  Percentage = c(35, 32, 21),
-  Green_Party = c(1, 0, 0),
-  Socialist_Party = c(0, 1, 0),
-  Conservative_Party = c(0, 0, 1),
-  Other_Parties = c(0, 0, 0)
+  Percentage = c(35, 32, 21, 12),
+  Green_Party = c(1, 0, 0, 0),
+  Socialist_Party = c(0, 1, 0, 0),
+  Conservative_Party = c(0, 0, 1, 0)
 )
 ```
 
-
-However, most frequently we will deal with such as below:
+However, more frequently, we work with representations like the one shown below:
 
 ```{r}
 data.frame(
@@ -102,26 +100,51 @@ data.frame(
 ```
 
 
-What is the class of such data?
+What is the class of such data in R?
 
-
-Dummy variables 
-
-[WhoGov codebook](https://politicscentre.nuffield.ox.ac.uk/media/4117/whogov_codebook.pdf)
+Today we are working with WhoGov dataset. As usual, I recomment taking a look at their [codebook](https://politicscentre.nuffield.ox.ac.uk/media/4117/whogov_codebook.pdf).
 
 ```{r}
 whogov = read.csv("data/WhoGov.csv")
-whr = read.csv("data/WHR.csv")
+```
+
+First of all, these are the following variables we are going to work with today:
+
+-   `country_name` is a country name
+
+-   `n_total` number of positions in the cabinet
+
+-   `n_individuals` number of unique persons in the cabinet
+
+-   `n_minister` number of cabinet ministers
+
+-   `leader_party` party of the leader
+
+-   `system_category` the regim etype
+
+Start with exploring the distribution of number of unique persons in the cabinet (`n_individuals`)
+
+```{r}
+#| message: false
+
+ggplot(whogov) +
+  geom_histogram(aes(x = n_individuals)) 
 ```
 
 
 
 ```{r}
 whogov = whogov %>%
-  mutate(indep = ifelse(leader_party == "independent", T, F))
+  mutate(indep = ifelse(leader_party == "independent", "Independent", "Non-independent"))
 
-model = lm(n_total ~ indep, whogov)
+model = lm(n_individuals ~ indep, whogov)
 summary(model)
+```
+
+
+```{r}
+ggplot(whogov) +
+  geom_boxplot(aes(y = n_individuals, x = indep)) 
 ```
 
 
@@ -138,7 +161,7 @@ Let's work with data from the George Ward's article "Happiness and voting: Evide
 `satislfe_survey_mean` - Life Satisfaction
 
 ```{r}
-ward_data = read.csv("ward2020_subset.csv")
+ward_data = read.csv("data/ward2020_subset.csv")
 
 ward_data$country = as.factor(ward_data$country)
 
@@ -175,7 +198,7 @@ whr_subset = whr %>%
 
 whogov_subset = whogov %>%
   filter(year == 2020) %>%
-  select(country_name, n_total, n_minister, system_category)
+  select(country_name, n_total, n_minister, n_individuals, system_category)
 
 whr_whogov = whr_subset %>%
   left_join(whogov_subset, by = c("Country_name" = "country_name")) 

@@ -8,10 +8,12 @@
   Week: 2
   date: 2025-01-16
   Links: "[{{< fa link >}}](/ps405-d_2.qmd)"
+  Data: "[{{< fa database >}}](data/WHR.csv){target='_blank'}"
   type: "schedule"
   
 - title: "Multiple Linear Regression"
   Week: 3
   date: 2025-01-23
   Links: "[{{< fa link >}}](/ps405-d_3.qmd)"
+  Data: "[{{< fa database >}}](https://artur-baranov.github.io/nu-ps405-ds/data/WHR.csv){target='_blank'}"
   type: "schedule"
