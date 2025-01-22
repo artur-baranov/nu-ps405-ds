@@ -15,11 +15,11 @@ toc: true
 -   The discussion section structure (review, new material and exercises). I would be happy to hear your feedback after the classes or via email.
 
 <center>
-<a href="https://artur-baranov.github.io/nu-ps405-ds/scripts/ps405-d_2.qmd" class="btn btn-primary" role="button" download="ps405-d_2.qmd" style="width:200px" target="_blank">Download script</a>
+<a href="https://artur-baranov.github.io/nu-ps405-ds/scripts/ps405-d_3.qmd" class="btn btn-primary" role="button" download="ps405-d_3.qmd" style="width:200px" target="_blank">Download script</a>
 </center>
 <br>
 <center>
-<a href="https://artur-baranov.github.io/nu-ps405-ds/data/WHR.csv" class="btn btn-primary" role="button" download="WHR.csv" style="width:200px" target="_blank">Download data</a>
+<a href="https://artur-baranov.github.io/nu-ps405-ds/data/WhoGov.csv" class="btn btn-primary" role="button" download="WhoGov.csv" style="width:200px" target="_blank">Download data</a>
 </center>
 
 
@@ -69,9 +69,9 @@ Present the data
 ```{r}
 #| eval: false
 
-modelsummary(list("Model" = ...elt()),
-             ...length() = c("Intercept", 
-                             "GDP per capita (log)"),
+modelsummary(list("Model" = ...),
+             ... = c("Intercept", 
+                     "GDP per capita (log)"),
              ... = "BIC|AIC|RMSE|Log.Lik.",    
              stars = TRUE) 
 ```
@@ -108,6 +108,8 @@ data.frame(
 
 
 What is the class of such data in R?
+
+## Dummy variables and OLS regression
 
 Today we are working with WhoGov dataset. As usual, I recomment taking a look at their [codebook](https://politicscentre.nuffield.ox.ac.uk/media/4117/whogov_codebook.pdf).
 
@@ -206,7 +208,7 @@ Take a moment and draw a scatterplot for `n_individuals` and `leaderexperience_c
 
 Now, let's add a categorical variable, `indep`, to the model. By doing so, we assume that the association between the leader's tenure and the number of individuals in the government differs depending on whether the leader is independent or partisan. 
 
-Practically, this could be done in multiple ways. First, let's discuss introduction of **fixed effects** to our model.
+Practically, this could be done in multiple ways. First, let's discuss introduction of **fixed effects** to our model. Moreover, this is a **Multiple linear regression**!
 
 ```{r}
 model_fe = lm(n_individuals ~ leaderexperience_continuous + indep, whogov) 
@@ -250,44 +252,43 @@ Some common fixed effects include:
 
 -   Policy presence or absence
 
-By introducing fixed effects, we are able to control for unobserved confounders that vary across the fixed effects (not within!). 
-
-
-```{r}
-whr_subset = whr %>%
-  select(Country_name, Ladder_score, Social_support, Perceptions_of_corruption, Continent)
-
-whogov_subset = whogov %>%
-  filter(year == 2020) %>%
-  select(country_name, n_total, n_minister, n_individuals, system_category, indep)
-
-whr_whogov = whr_subset %>%
-  left_join(whogov_subset, by = c("Country_name" = "country_name")) 
-
-whr_whogov = whr_whogov %>%
-  mutate(system_category = case_when(system_category == "Parliamentary democracy" ~ "democracy",
-                                     system_category == "Presidential democracy" ~ "democracy",
-                                     system_category == "Mixed democratic" ~ "democracy",
-                                     is.na(system_category) ~ NA,
-                                     T ~ "autocracy"))
-
-whr_whogov$system_category = as.factor(whr_whogov$system_category)
-```
-
+By introducing fixed effects, we are able to control for unobserved confounders that vary across the units (not within!). 
 
 ## Interactions
 
+Often dummy variables are used to introduce an interaction term in the model. We will explore the association between `Perceptions_of_corruption` and number of people in the cabinet (`n_individuals`) depending on the independence of the party leader.
+
+The task isn't trivial as now we planning to use data from two datasets, Let's subset those. 
 
 ```{r}
-ggplot(whr_whogov, aes(x = n_individuals, y = Ladder_score)) +
-  geom_point(aes(color = system_category)) +
-  geom_smooth(method = "lm")
+whr_subset = whr %>%
+  select(Country_name, Perceptions_of_corruption)
 
-model_in = lm(Social_support ~ n_individuals * indep, whr_whogov)
+whogov_subset = whogov %>%
+  filter(year == 2021) %>%
+  select(country_name, n_individuals, indep)
+```
+
+Now, we are merging them
+
+```{r}
+whr_whogov = whr_subset %>%
+  left_join(whogov_subset, by = c("Country_name" = "country_name")) 
+```
+
+Check the result
+
+```{r}
+head(whr_whogov)
+```
+
+
+```{r}
+model_in = lm(Perceptions_of_corruption ~ n_individuals * indep, whr_whogov)
 summary(model_in)
 
 ggpredict(model_in, terms= c("n_individuals", "indep")) %>%
-  plot(show_ci = F, show_data = T) 
+  plot(show_ci = F) 
 
 ```
 
@@ -309,11 +310,13 @@ relevel
 what does it mean? (maybe remove):
 
 ```{r}
+#| eval: false
 lm(Ladder_score ~ n_individuals + as.factor(Continent), whr_whogov) %>%
   summary()
 ```
 
 ```{r}
+#| eval: false
 lm(n_individuals ~ leaderexperience_continuous + system_category, whogov) %>%
   ggpredict(terms= c("leaderexperience_continuous", "system_category")) %>%
   plot(show_data = F, show_ci = F)

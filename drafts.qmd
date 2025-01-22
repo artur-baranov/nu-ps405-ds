@@ -130,3 +130,42 @@ ggpredict(model, terms= c("satislfe_survey_mean", "country")) %>%
 
 
 ```
+
+
+## Interactions
+
+
+```{r}
+whr_subset = whr %>%
+  select(Country_name, Ladder_score, Social_support, Perceptions_of_corruption, Continent)
+
+whogov_subset = whogov %>%
+  filter(year == 2020) %>%
+  select(country_name, n_total, n_minister, n_individuals, system_category, indep)
+
+whr_whogov = whr_subset %>%
+  left_join(whogov_subset, by = c("Country_name" = "country_name")) 
+
+whr_whogov = whr_whogov %>%
+  mutate(system_category = case_when(system_category == "Parliamentary democracy" ~ "democracy",
+                                     system_category == "Presidential democracy" ~ "democracy",
+                                     system_category == "Mixed democratic" ~ "democracy",
+                                     is.na(system_category) ~ NA,
+                                     T ~ "autocracy"))
+
+whr_whogov$system_category = as.factor(whr_whogov$system_category)
+```
+
+
+```{r}
+ggplot(whr_whogov, aes(x = n_individuals, y = Ladder_score)) +
+  geom_point(aes(color = system_category)) +
+  geom_smooth(method = "lm")
+
+model_in = lm(Social_support ~ n_individuals * indep, whr_whogov)
+summary(model_in)
+
+ggpredict(model_in, terms= c("n_individuals", "indep")) %>%
+  plot(show_ci = F, show_data = T) 
+
+```
