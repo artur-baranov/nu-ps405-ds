@@ -8,6 +8,12 @@ format:
 toc: true
 ---
 
+# Before we start
+
+-   Congrats with submitting the first HW! How are you feeling?
+
+-   The discussion section structure (review, new material and exercises). I would be happy to hear your feedback after the classes or via email.
+
 <center>
 <a href="https://artur-baranov.github.io/nu-ps405-ds/scripts/ps405-d_2.qmd" class="btn btn-primary" role="button" download="ps405-d_2.qmd" style="width:200px" target="_blank">Download script</a>
 </center>
@@ -26,6 +32,7 @@ Load the `tidyverse` and `modelsummary` libraries
 
 ```{r}
 #| message: false
+#| warning: false
 
 library(tidyverse)
 library(modelsummary)
@@ -112,15 +119,13 @@ First of all, these are the following variables we are going to work with today:
 
 -   `country_name` is a country name
 
--   `n_total` number of positions in the cabinet
-
 -   `n_individuals` number of unique persons in the cabinet
 
--   `n_minister` number of cabinet ministers
+-   `leaderexperience_continuous` the number of years the person has been leader of the country in total.
 
 -   `leader_party` party of the leader
 
--   `system_category` the regim etype
+-   `system_category` the regime type
 
 Start with exploring the distribution of number of unique persons in the cabinet (`n_individuals`)
 
@@ -131,7 +136,16 @@ ggplot(whogov) +
   geom_histogram(aes(x = n_individuals)) 
 ```
 
-Let's explore whether a leader of a country being independent from a party leads to more or fewer people in their cabinet. First, let's create a dummy variable indicating if a leader is independent or non-independent. You can use 1 or 0 instead, but to make it more readible we stick to more transparent labels.
+Present the descriptive statistics of `n_individuals` variable.
+
+```{r}
+#| eval: false
+
+...
+```
+
+
+Let's explore whether a leader of a country being independent from a party leads to more or fewer people in their cabinet. First, let's create a dummy variable indicating if a leader is independent or non-independent. You can use 1 or 0 instead, but to make it more readable we stick to more transparent labels.
 
 ```{r}
 whogov = whogov %>%
@@ -165,7 +179,7 @@ Now we can relevel the variable
 whogov$indep = relevel(whogov$indep, ref = "Non-independent")
 ```
 
-Compare the models. Does the result sound reasonable? Pretty much. This is simply an inverse. But things get way more interesting if categorial variable has more than 2 levels. You will see this later on.
+Compare the models. Does the result sound reasonable? Pretty much. This is simply an inverse. But things get way more interesting if categorical variable has more than 2 levels. You will see this later on. For now, let's interpret the result.
 
 ```{r}
 lm(n_individuals ~ indep, whogov) %>%
@@ -175,6 +189,69 @@ lm(n_individuals ~ indep, whogov) %>%
 
 ## Fixed Effects
 
+Let's explore how leader's tenure is associated with the number of individuals in the government. We start with the simple linear regression. Take a moment to interpret the result and $R^2$.
+
+```{r}
+lm(n_individuals ~ leaderexperience_continuous, whogov) %>%
+  summary()
+```
+
+Take a moment and draw a scatterplot for `n_individuals` and `leaderexperience_continuous`. Add a regression line to the plot.
+
+```{r}
+#| eval: false
+
+...
+```
+
+Now, let's add a categorical variable, `indep`, to the model. By doing so, we assume that the association between the leader's tenure and the number of individuals in the government differs depending on whether the leader is independent or partisan. 
+
+Practically, this could be done in multiple ways. First, let's discuss introduction of **fixed effects** to our model.
+
+```{r}
+model_fe = lm(n_individuals ~ leaderexperience_continuous + indep, whogov) 
+summary(model_fe)
+```
+
+We will use `ggeffects` library for visualization of regression with the fixed effects. This is sort of an addition to `ggplot2` library from `tidyverse`. Don't forget to install it using `install.packages()`!
+
+```{r}
+#| warning: false
+
+library(ggeffects)
+```
+
+Then, visualize the result. What can we see?
+
+```{r}
+ggpredict(model_fe, terms= c("leaderexperience_continuous", "indep")) %>%
+  plot()
+```
+
+Let's customize the plot. It should be relatively straightforward given we know `ggplot` functions. Details for the customization of `plot()` function can be found on [ggeffects](https://strengejacke.github.io/ggeffects/reference/plot.html) website.
+
+```{r}
+ggpredict(model_fe, terms= c("leaderexperience_continuous", "indep")) %>%
+  plot(show_ci = F) +
+  labs(title = "Fixed Effects Regression",
+       x = "Tenure of a Leader",
+       y = "Number of Individuals in a Cabinet",
+       color = "Partisanship") +
+  theme_bw()
+```
+
+Some common fixed effects include:
+
+-   Country/Region/State
+
+-   Individual leaders/Parties
+
+-   Year/Time
+
+-   Policy presence or absence
+
+By introducing fixed effects, we are able to control for unobserved confounders that vary across the fixed effects (not within!). 
+
 
 ```{r}
 whr_subset = whr %>%
@@ -182,7 +259,7 @@ whr_subset = whr %>%
 
 whogov_subset = whogov %>%
   filter(year == 2020) %>%
-  select(country_name, n_total, n_minister, n_individuals, system_category)
+  select(country_name, n_total, n_minister, n_individuals, system_category, indep)
 
 whr_whogov = whr_subset %>%
   left_join(whogov_subset, by = c("Country_name" = "country_name")) 
@@ -197,18 +274,6 @@ whr_whogov = whr_whogov %>%
 whr_whogov$system_category = as.factor(whr_whogov$system_category)
 ```
 
-```{r}
-library(ggeffects)
-```
-
-
-```{r}
-model_fe = lm(Ladder_score ~ n_individuals + system_category, whr_whogov) 
-
-ggpredict(model_fe, terms= c("n_individuals", "system_category")) %>%
-  plot(show_ci = T, show_data = T) 
-```
-
 
 ## Interactions
 
@@ -218,10 +283,10 @@ ggplot(whr_whogov, aes(x = n_individuals, y = Ladder_score)) +
   geom_point(aes(color = system_category)) +
   geom_smooth(method = "lm")
 
-model_in = lm(Ladder_score ~ n_individuals * system_category, whr_whogov)
+model_in = lm(Social_support ~ n_individuals * indep, whr_whogov)
 summary(model_in)
 
-ggpredict(model_in, terms= c("n_individuals", "system_category")) %>%
+ggpredict(model_in, terms= c("n_individuals", "indep")) %>%
   plot(show_ci = F, show_data = T) 
 
 ```
@@ -241,10 +306,31 @@ polynomials and IV transformations
 
 relevel
 
-what does it mean?:
+what does it mean? (maybe remove):
 
 ```{r}
 lm(Ladder_score ~ n_individuals + as.factor(Continent), whr_whogov) %>%
   summary()
 ```
 
+```{r}
+lm(n_individuals ~ leaderexperience_continuous + system_category, whogov) %>%
+  ggpredict(terms= c("leaderexperience_continuous", "system_category")) %>%
+  plot(show_data = F, show_ci = F)
+```
+
+
+
+# Check List
+
+<input type="checkbox"/> I know that wrong class of a variable can hinder statistical models and visualizations
+
+<input type="checkbox"/> I know how dummy variables can look like
+
+<input type="checkbox"/> I know how to relevel a categorical variable
+
+<input type="checkbox"/> I know how introduce fixed effects into the model (and I know that I should make it `as.factor()`!)
+
+<input type="checkbox"/> I know how to introduce interaction effects into the model
+
+<input type="checkbox"/> I know how to customize `ggeffects()` plots
