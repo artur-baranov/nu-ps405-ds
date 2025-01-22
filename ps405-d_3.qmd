@@ -131,65 +131,49 @@ ggplot(whogov) +
   geom_histogram(aes(x = n_individuals)) 
 ```
 
-
+Let's explore whether a leader of a country being independent from a party leads to more or fewer people in their cabinet. First, let's create a dummy variable indicating if a leader is independent or non-independent. You can use 1 or 0 instead, but to make it more readible we stick to more transparent labels.
 
 ```{r}
 whogov = whogov %>%
   mutate(indep = ifelse(leader_party == "independent", "Independent", "Non-independent"))
-
-model = lm(n_individuals ~ indep, whogov)
-summary(model)
 ```
 
+Now, build a simple model and explore the effect.
 
 ```{r}
-ggplot(whogov) +
-  geom_boxplot(aes(y = n_individuals, x = indep)) 
+lm(n_individuals ~ indep, whogov) %>%
+  summary()
 ```
 
+What if we want to relevel the `indep` variable to know the effect relative to Non-independent leader?
 
-recode the reference category for interpretation
+```{r}
+#| eval: false
 
+whogov$indep = relevel(whogov$indep, ref = "Non-independent")
+```
+
+Oops! This is why classes of data are important. Fix it!
+
+```{r}
+whogov$indep = as.factor(whogov$indep)
+```
+
+Now we can relevel the variable
+
+```{r}
+whogov$indep = relevel(whogov$indep, ref = "Non-independent")
+```
+
+Compare the models. Does the result sound reasonable? Pretty much. This is simply an inverse. But things get way more interesting if categorial variable has more than 2 levels. You will see this later on.
+
+```{r}
+lm(n_individuals ~ indep, whogov) %>%
+  summary()
+```
 
 
 ## Fixed Effects
-
-Let's work with data from the George Ward's article "Happiness and voting: Evidence from four decades of elections in Europe". It's available [here](https://doi.org/10.1111/ajps.12492). Let us list some variables from the [codebook](https://doi.org/10.7910/DVN/QWLGGN):
-
-`vote_share_cab` - % votes won by cabinet parties
-
-`satislfe_survey_mean` - Life Satisfaction
-
-```{r}
-ward_data = read.csv("data/ward2020_subset.csv")
-
-ward_data$country = as.factor(ward_data$country)
-
-
-
-model = lm(vote_share_cab ~ satislfe_survey_mean +
-             country,
-           data = ward_data)
-
-
-library(ggeffects)
-
-
-ggplot(ward_data, aes(x = satislfe_survey_mean, y = vote_share_cab)) +
-  geom_point() +
-  geom_smooth(method = "lm")
-
-
-ggpredict(model, terms= c("satislfe_survey_mean", "country")) %>%
-  plot(show_data = T, show_ci  = FALSE, colors = "okabe-ito", alpha = 0.5, line_size = 1) 
-
-
-```
-
-
-## Interactions
-
-
 
 
 ```{r}
@@ -206,23 +190,40 @@ whr_whogov = whr_subset %>%
 whr_whogov = whr_whogov %>%
   mutate(system_category = case_when(system_category == "Parliamentary democracy" ~ "democracy",
                                      system_category == "Presidential democracy" ~ "democracy",
-                                     system_category =="Mixed democratic" ~ "democracy",
+                                     system_category == "Mixed democratic" ~ "democracy",
                                      is.na(system_category) ~ NA,
                                      T ~ "autocracy"))
+
+whr_whogov$system_category = as.factor(whr_whogov$system_category)
 ```
 
 ```{r}
 library(ggeffects)
+```
 
-whr_whogov$system_category = as.factor(whr_whogov$system_category)
 
-ggplot(whr_whogov) +
-  geom_point(aes(x = n_minister, y = Social_support, color = system_category))
+```{r}
+model_fe = lm(Ladder_score ~ n_individuals + system_category, whr_whogov) 
 
-model = lm(Social_support ~ n_total * system_category, whr_whogov)
+ggpredict(model_fe, terms= c("n_individuals", "system_category")) %>%
+  plot(show_ci = T, show_data = T) 
+```
 
-ggpredict(model, terms= c("n_total", "system_category")) %>%
-  plot(show_ci = F) 
+
+## Interactions
+
+
+```{r}
+ggplot(whr_whogov, aes(x = n_individuals, y = Ladder_score)) +
+  geom_point(aes(color = system_category)) +
+  geom_smooth(method = "lm")
+
+model_in = lm(Ladder_score ~ n_individuals * system_category, whr_whogov)
+summary(model_in)
+
+ggpredict(model_in, terms= c("n_individuals", "system_category")) %>%
+  plot(show_ci = F, show_data = T) 
+
 ```
 
 
@@ -235,3 +236,15 @@ Fixed effects, viz
 Interactions
 
 polynomials and IV transformations 
+
+# Exercises
+
+relevel
+
+what does it mean?:
+
+```{r}
+lm(Ladder_score ~ n_individuals + as.factor(Continent), whr_whogov) %>%
+  summary()
+```
+

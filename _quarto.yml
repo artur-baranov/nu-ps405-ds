@@ -8,6 +8,7 @@ project:
     
 website:
   title: "PS405 Linear Models"
+  favicon: fav.png
   navbar:
     left:
       - text: " "

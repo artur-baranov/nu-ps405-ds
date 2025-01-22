@@ -55,6 +55,6 @@ This site is designed to support students enrolled in the PS405 Linear Models co
 
 -   [Introduction to ggplot2](https://jrnold.github.io/r4ds-exercise-solutions/data-visualisation.html)
 
--   [Maps/Networs/Advanced vizualisation with ggplot2](https://ggplot2-book.org)
+-   [Maps/Networks/Advanced vizualisation with ggplot2](https://ggplot2-book.org)
 
 -   [Making interactive plots with ggplot2](https://plotly.com/ggplot2/box-plots/)

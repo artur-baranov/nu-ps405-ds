@@ -94,3 +94,39 @@ lm(turnout ~ legislative_constraints, legislative_data) %>%
 library(estimatr)
 
 ```
+
+
+
+## Fixed Effects
+
+Let's work with data from the George Ward's article "Happiness and voting: Evidence from four decades of elections in Europe". It's available [here](https://doi.org/10.1111/ajps.12492). Let us list some variables from the [codebook](https://doi.org/10.7910/DVN/QWLGGN):
+
+`vote_share_cab` - % votes won by cabinet parties
+
+`satislfe_survey_mean` - Life Satisfaction
+
+```{r}
+ward_data = read.csv("data/ward2020_subset.csv")
+
+ward_data$country = as.factor(ward_data$country)
+
+
+
+model = lm(vote_share_cab ~ satislfe_survey_mean +
+             country,
+           data = ward_data)
+
+
+library(ggeffects)
+
+
+ggplot(ward_data, aes(x = satislfe_survey_mean, y = vote_share_cab)) +
+  geom_point() +
+  geom_smooth(method = "lm")
+
+
+ggpredict(model, terms= c("satislfe_survey_mean", "country")) %>%
+  plot(show_data = T, show_ci  = FALSE, colors = "okabe-ito", alpha = 0.5, line_size = 1) 
+
+
+```
