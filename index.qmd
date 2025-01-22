@@ -9,7 +9,7 @@ listing:
       type: "schedule"
     contents: classes.yaml
     type: table
-    fields: [Week, title, Links, Data]
+    fields: [Week, title, Link, Code, Data]
     filter-ui: false
     sort: "week"
     sort-ui: false

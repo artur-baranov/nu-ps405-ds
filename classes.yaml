@@ -1,19 +1,22 @@
 - title: "Last Quarter's Review"
   Week: 1
   date: 2025-01-09
-  Links: "[{{< fa link >}}](/ps405-d_1.qmd)"
+  Link: "[{{< fa link >}}](/ps405-d_1.qmd)"
+  Code: "[{{< fa file-code >}}](scripts/ps405-d_1.qmd){target='_blank'}"
   type: "schedule"
   
 - title: "Simple Linear Regression"
   Week: 2
   date: 2025-01-16
-  Links: "[{{< fa link >}}](/ps405-d_2.qmd)"
+  Link: "[{{< fa link >}}](/ps405-d_2.qmd)"
+  Code: "[{{< fa file-code >}}](scripts/ps405-d_2.qmd){target='_blank'}"
   Data: "[{{< fa database >}}](data/WHR.csv){target='_blank'}"
   type: "schedule"
   
 - title: "Multiple Linear Regression"
   Week: 3
   date: 2025-01-23
-  Links: "[{{< fa link >}}](/ps405-d_3.qmd)"
-  Data: "[{{< fa database >}}](https://artur-baranov.github.io/nu-ps405-ds/data/WHR.csv){target='_blank'}"
+  Link: "[{{< fa link >}}](/ps405-d_3.qmd)"
+  Code: "[{{< fa file-code >}}](scripts/ps405-d_3.qmd){target='_blank'}"
+  Data: "[{{< fa database >}}](data/WhoGov.csv){target='_blank'}"
   type: "schedule"

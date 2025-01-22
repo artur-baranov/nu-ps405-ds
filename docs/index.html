@@ -80,9 +80,9 @@ ul.task-list li input[type="checkbox"] {
     }
 
     const options = {
-      valueNames: ['listing-Week','listing-title','listing-Links','listing-Data',{ data: ['index'] },{ data: ['categories'] },{ data: ['listing-title-sort'] },{ data: ['listing-date-sort'] }],
+      valueNames: ['listing-Week','listing-title','listing-Link','listing-Code','listing-Data',{ data: ['index'] },{ data: ['categories'] },{ data: ['listing-title-sort'] },{ data: ['listing-date-sort'] }],
       
-      searchColumns: ["listing-title","listing-Week","listing-date","listing-Links","listing-type","listing-Data"],
+      searchColumns: ["listing-title","listing-Week","listing-date","listing-Link","listing-Code","listing-type","listing-Data"],
     };
 
     window['quarto-listings'] = window['quarto-listings'] || {};
@@ -210,7 +210,10 @@ Week
 Title
 </th>
 <th>
-Links
+Link
+</th>
+<th>
+Code
 </th>
 <th>
 Data
@@ -226,7 +229,10 @@ Data
 <span class="listing-title">Last Quarter’s Review</span>
 </td>
 <td>
-<span class="listing-Links"><a href="./ps405-d_1.html"><i class="fa-solid fa-link" aria-label="link"></i></a></span>
+<span class="listing-Link"><a href="./ps405-d_1.html"><i class="fa-solid fa-link" aria-label="link"></i></a></span>
+</td>
+<td>
+<span class="listing-Code"><a href="scripts/ps405-d_1.qmd" target="_blank"><i class="fa-solid fa-file-code" aria-label="file-code"></i></a></span>
 </td>
 <td>
 <span class="listing-Data">&nbsp;</span>
@@ -240,7 +246,10 @@ Data
 <span class="listing-title">Simple Linear Regression</span>
 </td>
 <td>
-<span class="listing-Links"><a href="./ps405-d_2.html"><i class="fa-solid fa-link" aria-label="link"></i></a></span>
+<span class="listing-Link"><a href="./ps405-d_2.html"><i class="fa-solid fa-link" aria-label="link"></i></a></span>
+</td>
+<td>
+<span class="listing-Code"><a href="scripts/ps405-d_2.qmd" target="_blank"><i class="fa-solid fa-file-code" aria-label="file-code"></i></a></span>
 </td>
 <td>
 <span class="listing-Data"><a href="data/WHR.csv" target="_blank"><i class="fa-solid fa-database" aria-label="database"></i></a></span>
@@ -254,10 +263,13 @@ Data
 <span class="listing-title">Multiple Linear Regression</span>
 </td>
 <td>
-<span class="listing-Links"><a href="./ps405-d_3.html"><i class="fa-solid fa-link" aria-label="link"></i></a></span>
+<span class="listing-Link"><a href="./ps405-d_3.html"><i class="fa-solid fa-link" aria-label="link"></i></a></span>
 </td>
 <td>
-<span class="listing-Data"><a href="https://artur-baranov.github.io/nu-ps405-ds/data/WHR.csv" target="_blank"><i class="fa-solid fa-database" aria-label="database"></i></a></span>
+<span class="listing-Code"><a href="scripts/ps405-d_3.qmd" target="_blank"><i class="fa-solid fa-file-code" aria-label="file-code"></i></a></span>
+</td>
+<td>
+<span class="listing-Data"><a href="data/WhoGov.csv" target="_blank"><i class="fa-solid fa-database" aria-label="database"></i></a></span>
 </td>
 </tr>
 </tbody>
