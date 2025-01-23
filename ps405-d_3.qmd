@@ -297,6 +297,13 @@ ggpredict(model_in, terms= c("n_individuals", "indep")) %>%
   theme_bw()
 ```
 
+And you can easily simulate the data (i.e., calculate the marginal effect) using `ggpredict()`. For example,
+
+```{r}
+ggpredict(model_in, terms= c("n_individuals [12]", "indep [Independent]"))
+```
+
+
 # IV Transformations
 
 One of the assumptions for OLS is that there is a linear relationship between the dependent and independent variables. However, this quite often not the case. Let's reverse the correction made in World Happiness report data. See below. Does it look linear?
