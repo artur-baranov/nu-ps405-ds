@@ -20,3 +20,11 @@
   Code: "[{{< fa file-code >}}](scripts/ps405-d_3.qmd){target='_blank'}"
   Data: "[{{< fa database >}}](data/WhoGov.csv){target='_blank'}"
   type: "schedule"
+  
+- title: "Confidence Intervals and Hypothesis Testing"
+  Week: 4
+  date: 2025-01-30
+  Link: "[{{< fa link >}}](/ps405-d_4.qmd)"
+  Code: "[{{< fa file-code >}}](scripts/ps405-d_4.qmd){target='_blank'}"
+  Data: "{{< fa database >}}"
+  type: "schedule"

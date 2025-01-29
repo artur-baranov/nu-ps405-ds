@@ -45,7 +45,19 @@ This site is designed to support students enrolled in the PS405 Linear Models co
 :::{#schedule}
 :::
 
-## Additional resources
+## Pset Grade Increase Policy
+
+To improve your grade for the problem set, you should submit the exercises from the corresponding lab session held during the week the homework was assigned. Exercises can be found at the end of each lab. You can increase grades for every problem set, except for the last one before the final. The maximum possible increase is two points.
+
+For instance, if you wish to improve the grade for the first homework, which was assigned on January 16th, you should submit the completed exercises from the second lab, which took place on the same day. If you prefer not to check the dates each time, given that homework is assigned each week starting from week 2, you can use the formula: 
+
+$$
+\text{Lab Number}|\text{Pset is assigned each week} = \text{Pset Number} + 1
+$$
+
+After the grades are released, you have one week to submit the HTML or PDF file via email to artur.baranov@u.northwestern.edu. 
+
+## Additional Resources
 
 ### Data sources
 

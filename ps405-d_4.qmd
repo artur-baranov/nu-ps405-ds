@@ -1,0 +1,331 @@
+---
+title: "Confidence Intervals and Hypothesis Testing"
+subtitle: "Week 4"
+date: 2025-01-30
+format: 
+  html:
+    embed-resources: true
+toc: true
+---
+
+# Before we start
+
+-   Congrats passing through the first quiz! How are you feeling?
+
+-   Grades for the psets are out.
+
+
+<center>
+<a href="https://artur-baranov.github.io/nu-ps405-ds/scripts/ps405-d_4.qmd" class="btn btn-primary" role="button" download="ps405-d_4.qmd" style="width:200px" target="_blank">Download script</a>
+</center>
+<br>
+<center>
+<a href="https://artur-baranov.github.io/nu-ps405-ds/data/WhoGov.csv" class="btn btn-primary" role="button" download="WhoGov.csv" style="width:200px" target="_blank">Download data</a>
+</center>
+
+
+# Review of the previous week
+
+::: callout-note
+## Review
+
+Start with loading the `tidyverse` library and the World Happiness Report data.
+
+```{r}
+#| message: false
+library(tidyverse)
+
+whr = read.csv("data/WHR.csv")
+```
+
+How is the `Continent` associated with happiness (`Ladder_score`)? Set up the linear model and present the regression output.
+
+```{r}
+#| eval: false
+
+...
+```
+
+Load the `ggeffects` library.
+
+```{r}
+#| eval: false
+
+...
+```
+
+
+Using `ggpredict()` plot the model.
+
+```{r}
+#| eval: false
+
+...(model) %>%
+  ...()
+```
+
+
+Using `relevel()` transform the `Continent` variable so the `North America` becomes a reference category. Don't forget that the variable should be of class factor!
+
+```{r}
+#| eval: false
+
+...
+```
+
+Run the model again, present the output. 
+
+```{r}
+#| eval: false
+
+...
+```
+
+Draw the plot to gain a better understanding of what's going on. What has changed? Why does the result look different?
+
+```{r}
+#| eval: false
+
+...
+```
+
+
+:::
+
+# Review of the Homework
+
+-   Don't load data multiple times
+
+-   Don't leave `install.packages()` when you render the script
+
+-   Don't forget to use `stars = TRUE` for `modelsummary()`
+
+
+## $\LaTeX$ issues
+
+Integration of R, Python, markdown, Latex and other useful languages incredibly useful. But it comes to a price that researchers should be careful. Any $\LaTeX$ code should go within two `$` dollar signs `$`. For example, an inline formula looks like this: \$ Y = 10 \$, which produces the following result: $Y = 10$. Alternativelym you can use a double dollar sign to start a "chunk" for latex. For example:
+
+$$
+Y = \beta_0 + \beta_1 + u
+$$
+
+## Useful functions
+
+Sometimes you might want to visualize some mathematical functions using `geom_function()`. In the HW, you were asked to plot an OLS regression vs the true data generating process. For this purpose example below is super useful (however, `geom_abline()` for this particular task is perfect, too).  
+
+```{r}
+#| message: false
+#| warning: false
+
+set.seed(123)
+
+example_data = data.frame(x = rnorm(100,
+                                    mean = 2,
+                                    sd = 15),
+                          y = rnorm(100,
+                                    mean = 2,
+                                    sd = 15) * rnorm(100))
+
+ggplot(example_data, aes(x = x, y = y)) +
+  geom_point() +
+  geom_smooth(aes(color = "Fitted"), method = "lm", se = F) +
+  geom_function(aes(color = "Known"), fun = function(x){1 + 0.5 * x}, size = 1.2) 
+```
+
+
+Sometimes it's useful to visualize, say, **polynomials**! How does $x^3$ look like?
+
+```{r}
+ggplot() +
+  geom_function(fun = function(x){x^2}) +
+  geom_vline(xintercept = 0) +
+  xlim(-1, 1)
+```
+
+# Agenda 
+
+-   Go over hard concepts: fixed effects, interactions and transformations
+
+-   Refreshing confidence intervals
+
+-   Hypothesis testing
+
+
+# Right hand side extensions
+
+Today we are again working with WhoGov dataset. As usual, take a look at the [codebook](https://politicscentre.nuffield.ox.ac.uk/media/4117/whogov_codebook.pdf).
+
+These are the following variables we are going to work with:
+
+-   `country_name` is a country name
+
+-   `n_individuals` number of unique persons in the cabinet
+
+-   `leaderexperience_continuous` the number of years the person has been leader of the country in total.
+
+-   `leader_party` party of the leader
+
+```{r}
+whogov = read.csv("data/WhoGov.csv")
+```
+
+
+## Fixed Effects
+
+When we introduce a dummy variable into the model, we quite often are interested in controling for unobserved heterogeneity by allowing each category to have its own intercept. This is refered to as **fixed effects**.
+
+First, let's create a dummy variable indicating if a leader is independent or non-independent. You can use 1 or 0 instead, but to make it more readable here we stick to more transparent labels.
+
+```{r}
+whogov = whogov %>%
+  mutate(indep = ifelse(leader_party == "independent", "Independent", "Partisan"))
+```
+
+Don't forget about the class of the variable!
+
+```{r}
+whogov$indep = as.factor(whogov$indep)
+```
+
+Take a moment to think about what unobserved heterogeneity we can control for by including whether a leader is independent or partisan in the model.
+
+```{r}
+model_fe = lm(n_individuals ~ leaderexperience_continuous + indep, whogov) 
+summary(model_fe)
+```
+To understand what's going on in the model we might want to visualize the result. Load the `ggeffects` library.
+
+```{r}
+#| warning: false
+
+library(ggeffects)
+```
+
+Then, visualize the result. What can we see?
+
+```{r}
+#| warning: false
+
+ggpredict(model_fe, terms = c("leaderexperience_continuous", "indep")) %>%
+  plot() +
+  labs(title = "Fixed Effects Regression",
+       x = "Tenure of a Leader",
+       y = "Number of Individuals in a Cabinet",
+       color = "Leader's Status") +
+  theme_bw()
+```
+
+
+## Interactions
+
+Often dummy variables are used to introduce an interaction term in the model. We will explore the association between `Perceptions_of_corruption` and number of people in the cabinet (`n_individuals`) depending on the independence of the party leader.
+
+The task isn't trivial as now we planning to use data from two datasets, Let's subset those. 
+
+```{r}
+whr_subset = whr %>%
+  select(Country_name, Perceptions_of_corruption)
+
+whogov_subset = whogov %>%
+  filter(year == 2021) %>%
+  select(country_name, n_individuals, indep)
+```
+
+Now, we are merging them. Once again, there is a great resource for [joins](https://thomasadventure.blog/posts/r-merging-datasets/) (check "the {dplyr} way")!
+
+```{r}
+whr_whogov = whr_subset %>%
+  left_join(whogov_subset, by = c("Country_name" = "country_name")) 
+```
+
+Check the result of the `left_join()`
+
+```{r}
+head(whr_whogov)
+```
+
+Now, let's interact the variable
+
+```{r}
+model_in = lm(Perceptions_of_corruption ~ n_individuals * indep, whr_whogov)
+summary(model_in)
+```
+
+Let's plot the result. 
+
+```{r}
+#| warning: false
+
+ggpredict(model_in, terms= c("n_individuals", "indep")) %>%
+  plot(show_ci = FALSE) +
+  labs(title = "Regression with Interaction Term",
+       x = "Number of Individuals in a Cabinet",
+       y = "Perception of Corruption",
+       color = "Leader's Status") +
+  theme_bw()
+```
+
+I guess after solving pset and quiz you realize why interpreting interactions is hard? You can easily simulate the data (i.e., calculate the marginal effect) using `ggpredict()`. For example,
+
+```{r}
+ggpredict(model_in, terms= c("n_individuals [12]", "indep [Independent]"))
+```
+
+
+## IV Transformations
+
+One of the assumptions for OLS is that there is a linear relationship between the dependent and independent variables. However, this quite often not the case. Let's reverse the correction made in World Happiness report data. See below. Does it look linear?
+
+```{r}
+ggplot(whr) +
+  geom_point(aes(x = exp(Logged_GDP_per_capita), y = Ladder_score)) +
+  labs(x = "GDP per capita")
+```
+
+It doesn't. It's hard to describe this relationship in a linear manner. Natural log would explain this better, right?
+
+```{r}
+ggplot(whr) +
+  geom_point(aes(x = exp(Logged_GDP_per_capita), y = Ladder_score)) +
+  geom_function(fun = function(x){log(x) - 4}) +
+  labs(x = "GDP per capita")
+```
+
+This is why we use the natural logarithm to transform GDP per capita. The transformation reveals a linear relationship between the two variables, allowing us to capture non-linear patterns in a linear format when using OLS regression. Another commonly used transformation is quadratic ($x^2$), which serves the same purpose of addressing non-linear relationships. We call latter ones **polynomial terms**.
+
+```{r}
+ggplot(whr, aes(x = Logged_GDP_per_capita, y = Ladder_score)) +
+  geom_point() +
+  geom_smooth(method = "lm")
+```
+
+# Hypothesis Testing
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# Check List
+
+<input type="checkbox"/> I know how to introduce fixed effects, interactions and polynomials to the linear model
+
+<input type="checkbox"/> I know how to simulate the results of fixed effects and interactions 
+
+
+
+
+
+
+
+
+
