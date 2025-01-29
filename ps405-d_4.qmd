@@ -1,5 +1,5 @@
 ---
-title: "Confidence Intervals and Hypothesis Testing"
+title: "Review and Confidence Intervals"
 subtitle: "Week 4"
 date: 2025-01-30
 format: 
@@ -172,7 +172,7 @@ whogov = read.csv("data/WhoGov.csv")
 
 ## Fixed Effects
 
-When we introduce a dummy variable into the model, we quite often are interested in controling for unobserved heterogeneity by allowing each category to have its own intercept. This is refered to as **fixed effects**.
+When we introduce a dummy variable into the model, we quite often are interested in controlling for unobserved heterogeneity by allowing each category to have its own intercept. This is referred to as **fixed effects**.
 
 First, let's create a dummy variable indicating if a leader is independent or Partisan You can use 1 or 0 instead, but to make it more readable here we stick to more transparent labels.
 
@@ -193,6 +193,7 @@ Take a moment to think about what unobserved heterogeneity we can control for by
 model_fe = lm(n_individuals ~ leaderexperience_continuous + indep, whogov) 
 summary(model_fe)
 ```
+
 To understand what's going on in the model we might want to visualize the result. Load the `ggeffects` library.
 
 ```{r}
@@ -300,8 +301,11 @@ ggplot(whr, aes(x = Logged_GDP_per_capita, y = Ladder_score)) +
   geom_point() +
   geom_smooth(method = "lm")
 ```
+# Confidence Intervals
 
-true value simulation:
+Intuition is straightforward: it's a range within which the true value lies, with a given probability, typically 95%.
+
+For example, we simulate the data from two different distributions (although, both are normal). The distribution X has the true $\mu$ equal to 0, whereas distribution Y has $\mu = 2$. Let's plot it! Are these distributions different? 
 
 ```{r}
 set.seed(123)
@@ -309,50 +313,54 @@ x = rnorm(100,
           mean = 0,
           sd = 1)
 
-ggplot() +
-  geom_histogram(aes(x = x), bins = 10) +
-  geom_vline(aes(color = "Known", xintercept = 0 + 1.96 * 1 / sqrt(100))) +
-  geom_vline(aes(color = "Known", xintercept = 0 - 1.96 * 1 / sqrt(100))) +
-  geom_vline(aes(color = "Calculated", xintercept = mean(x) + 1.96 * sd(x) / sqrt(100))) +
-  geom_vline(aes(color = "Calculated", xintercept = mean(x) - 1.96 * sd(x) / sqrt(100))) +
-  labs(color = "") +
-  theme_bw()
-```
-
-# Confidence Intervals
-
-
-```{r}
 set.seed(111)
-
 y = rnorm(100,
           mean = 2,
           sd = 2)
 
 ggplot() +
   geom_histogram(aes(x = x, fill = "Distribution X"), alpha = 0.5, bins = 10) +
-  geom_histogram(aes(x = y, fill = "Distribution Y"), alpha = 0.5, bins = 10) 
+  geom_histogram(aes(x = y, fill = "Distribution Y"), alpha = 0.5, bins = 10) +
+  labs(fill = "")
 ```
 
 # Hypothesis test
 
-Are these distribution different?
+Don't make inferences based solely on the plots!
 
 ```{r}
 t.test(x, y)
 ```
 
+Now, let's visualize their confidence intervals. First, we simply create a dataframe for our convenience
+
 ```{r}
-data.frame(x, y) %>%
-  pivot_longer(cols = c("x", "y"),
-               values_to = "value",
-               names_to = "distribution") %>%
+x_distribution = data.frame(value = x,
+                            distribution = "X distribution")
+
+y_distribution = data.frame(value = y,
+                            distribution = "Y distribution")
+
+xy_distirbutions = rbind(x_distribution, y_distribution)
+
+head(xy_distirbutions)
+```
+
+Then, let's calculate statistics. You should spend some time looking through this code and match it with the slides!
+
+```{r}
+ci_xy = xy_distirbutions %>%
   group_by(distribution) %>%
   summarize(
       mean_value = mean(value, na.rm = TRUE),
       lower = mean_value - 1.96 * sd(value, na.rm = TRUE) / sqrt(n()),
-      upper = mean_value + 1.96 * sd(value, na.rm = TRUE) / sqrt(n())) %>%
-ggplot() +
+      upper = mean_value + 1.96 * sd(value, na.rm = TRUE) / sqrt(n()))
+```
+
+Finally, visualize the confidence intervals
+
+```{r}
+ggplot(ci_xy) +
   geom_linerange(aes(x = distribution,
                      ymin = lower,
                      ymax = upper),
@@ -362,8 +370,13 @@ ggplot() +
              size = 5)
 ```
 
+# Exercises
 
 
+::: {.callout-tip icon="false"}
+## Solution
+
+:::
 
 
 
@@ -373,11 +386,8 @@ ggplot() +
 
 <input type="checkbox"/> I know how to simulate the results of fixed effects and interactions 
 
+<input type="checkbox"/> I know what the confidence interval is
 
-
-
-
-
-
+<input type="checkbox"/> I know how to test if two distributions are different
 
 

@@ -21,7 +21,7 @@
   Data: "[{{< fa database >}}](data/WhoGov.csv){target='_blank'}"
   type: "schedule"
   
-- title: "Confidence Intervals and Hypothesis Testing"
+- title: "Review and Confidence Intervals"
   Week: 4
   date: 2025-01-30
   Link: "[{{< fa link >}}](/ps405-d_4.qmd)"
