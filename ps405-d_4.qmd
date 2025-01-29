@@ -92,7 +92,7 @@ Draw the plot to gain a better understanding of what's going on. What has change
 
 :::
 
-# Review of the Homework
+# Review of the homework
 
 -   Don't load data multiple times
 
@@ -174,7 +174,7 @@ whogov = read.csv("data/WhoGov.csv")
 
 When we introduce a dummy variable into the model, we quite often are interested in controling for unobserved heterogeneity by allowing each category to have its own intercept. This is refered to as **fixed effects**.
 
-First, let's create a dummy variable indicating if a leader is independent or non-independent. You can use 1 or 0 instead, but to make it more readable here we stick to more transparent labels.
+First, let's create a dummy variable indicating if a leader is independent or Partisan You can use 1 or 0 instead, but to make it more readable here we stick to more transparent labels.
 
 ```{r}
 whogov = whogov %>%
@@ -291,24 +291,76 @@ ggplot(whr) +
   labs(x = "GDP per capita")
 ```
 
-This is why we use the natural logarithm to transform GDP per capita. The transformation reveals a linear relationship between the two variables, allowing us to capture non-linear patterns in a linear format when using OLS regression. Another commonly used transformation is quadratic ($x^2$), which serves the same purpose of addressing non-linear relationships. We call latter ones **polynomial terms**.
+This is why we use the natural logarithm to transform GDP per capita. The transformation reveals a linear relationship between the two variables, allowing us to capture non-linear patterns in a linear format when using OLS regression. Another commonly used transformation is quadratic ($x^2$), which serves the same purpose of addressing non-linear relationships. We call latter ones **polynomials**.
 
 ```{r}
+#| message: false
+
 ggplot(whr, aes(x = Logged_GDP_per_capita, y = Ladder_score)) +
   geom_point() +
   geom_smooth(method = "lm")
 ```
 
-# Hypothesis Testing
+true value simulation:
+
+```{r}
+set.seed(123)
+x = rnorm(100,
+          mean = 0,
+          sd = 1)
+
+ggplot() +
+  geom_histogram(aes(x = x), bins = 10) +
+  geom_vline(aes(color = "Known", xintercept = 0 + 1.96 * 1 / sqrt(100))) +
+  geom_vline(aes(color = "Known", xintercept = 0 - 1.96 * 1 / sqrt(100))) +
+  geom_vline(aes(color = "Calculated", xintercept = mean(x) + 1.96 * sd(x) / sqrt(100))) +
+  geom_vline(aes(color = "Calculated", xintercept = mean(x) - 1.96 * sd(x) / sqrt(100))) +
+  labs(color = "") +
+  theme_bw()
+```
+
+# Confidence Intervals
 
 
+```{r}
+set.seed(111)
 
+y = rnorm(100,
+          mean = 2,
+          sd = 2)
 
+ggplot() +
+  geom_histogram(aes(x = x, fill = "Distribution X"), alpha = 0.5, bins = 10) +
+  geom_histogram(aes(x = y, fill = "Distribution Y"), alpha = 0.5, bins = 10) 
+```
 
+# Hypothesis test
 
+Are these distribution different?
 
+```{r}
+t.test(x, y)
+```
 
-
+```{r}
+data.frame(x, y) %>%
+  pivot_longer(cols = c("x", "y"),
+               values_to = "value",
+               names_to = "distribution") %>%
+  group_by(distribution) %>%
+  summarize(
+      mean_value = mean(value, na.rm = TRUE),
+      lower = mean_value - 1.96 * sd(value, na.rm = TRUE) / sqrt(n()),
+      upper = mean_value + 1.96 * sd(value, na.rm = TRUE) / sqrt(n())) %>%
+ggplot() +
+  geom_linerange(aes(x = distribution,
+                     ymin = lower,
+                     ymax = upper),
+                 size = 2) +
+  geom_point(aes(x = distribution,
+                 y = mean_value),
+             size = 5)
+```
 
 
 
