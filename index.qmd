@@ -55,9 +55,13 @@ $$
 \text{Lab Number}|\text{Pset is assigned each week} = \text{Pset Number} + 1
 $$
 
-After the grades are released, you have one week to submit the HTML or PDF file via email to artur.baranov@u.northwestern.edu. 
+After the grades are released, you have one week to submit the `.qmd` file via email to artur.baranov@u.northwestern.edu. 
 
 ## Additional Resources
+
+### Helpful Regression Resources
+
+- [Step-by-step regression guide](https://evalsp24.classes.andrewheiss.com/example/regression.html)
 
 ### Data sources
 

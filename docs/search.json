@@ -53,7 +53,7 @@
     "href": "index.html#schedule",
     "title": "PS405 Linear Models",
     "section": "Schedule",
-    "text": "Schedule\n\n\n\n\n\nWeek\n\n\nTitle\n\n\nLink\n\n\nCode\n\n\nData\n\n\n\n\n\n\n1\n\n\nLast Quarter’s Review\n\n\n\n\n\n\n\n\n \n\n\n\n\n2\n\n\nSimple Linear Regression\n\n\n\n\n\n\n\n\n\n\n\n\n\n3\n\n\nMultiple Linear Regression\n\n\n\n\n\n\n\n\n\n\n\n\n\n4\n\n\nConfidence Intervals and Hypothesis Testing\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nNo matching items"
+    "text": "Schedule\n\n\n\n\n\nWeek\n\n\nTitle\n\n\nLink\n\n\nCode\n\n\nData\n\n\n\n\n\n\n1\n\n\nLast Quarter’s Review\n\n\n\n\n\n\n\n\n \n\n\n\n\n2\n\n\nSimple Linear Regression\n\n\n\n\n\n\n\n\n\n\n\n\n\n3\n\n\nMultiple Linear Regression\n\n\n\n\n\n\n\n\n\n\n\n\n\n4\n\n\nReview and Confidence Intervals\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nNo matching items"
   },
   {
     "objectID": "index.html#description",
@@ -67,7 +67,7 @@
     "href": "index.html#additional-resources",
     "title": "PS405 Linear Models",
     "section": "Additional Resources",
-    "text": "Additional Resources\n\nData sources\n\nPolitical Science datasets\n\n\n\nVisualization\n\nIntroduction to ggplot2\nMaps/Networks/Advanced vizualisation with ggplot2\nMaking interactive plots with ggplot2"
+    "text": "Additional Resources\n\nHelpful Regression Resources\n\nStep-by-step regression guide\n\n\n\nData sources\n\nPolitical Science datasets\n\n\n\nVisualization\n\nIntroduction to ggplot2\nMaps/Networks/Advanced vizualisation with ggplot2\nMaking interactive plots with ggplot2"
   },
   {
     "objectID": "ps405-d_3.html",
@@ -116,7 +116,7 @@
     "href": "index.html#pset-grade-increase-policy",
     "title": "PS405 Linear Models",
     "section": "Pset Grade Increase Policy",
-    "text": "Pset Grade Increase Policy\nTo improve your grade for the problem set, you should submit the exercises from the corresponding lab session held during the week the homework was assigned. Exercises can be found at the end of each lab. You can increase grades for every problem set, except for the last one before the final. The maximum possible increase is two points.\nFor instance, if you wish to improve the grade for the first homework, which was assigned on January 16th, you should submit the completed exercises from the second lab, which took place on the same day. If you prefer not to check the dates each time, given that homework is assigned each week starting from week 2, you can use the formula:\n\\[\n\\text{Lab Number}|\\text{Pset is assigned each week} = \\text{Pset Number} + 1\n\\]\nAfter the grades are released, you have one week to submit the HTML or PDF file via email to artur.baranov@u.northwestern.edu."
+    "text": "Pset Grade Increase Policy\nTo improve your grade for the problem set, you should submit the exercises from the corresponding lab session held during the week the homework was assigned. Exercises can be found at the end of each lab. You can increase grades for every problem set, except for the last one before the final. The maximum possible increase is two points.\nFor instance, if you wish to improve the grade for the first homework, which was assigned on January 16th, you should submit the completed exercises from the second lab, which took place on the same day. If you prefer not to check the dates each time, given that homework is assigned each week starting from week 2, you can use the formula:\n\\[\n\\text{Lab Number}|\\text{Pset is assigned each week} = \\text{Pset Number} + 1\n\\]\nAfter the grades are released, you have one week to submit the .qmd file via email to artur.baranov@u.northwestern.edu."
   },
   {
     "objectID": "ps405-d_4.html",
@@ -166,5 +166,12 @@
     "title": "Review and Confidence Intervals",
     "section": "IV Transformations",
     "text": "IV Transformations\nOne of the assumptions for OLS is that there is a linear relationship between the dependent and independent variables. However, this quite often not the case. Let’s reverse the correction made in World Happiness report data. See below. Does it look linear?\n\nggplot(whr) +\n  geom_point(aes(x = exp(Logged_GDP_per_capita), y = Ladder_score)) +\n  labs(x = \"GDP per capita\")\n\n\n\n\n\n\n\n\nIt doesn’t. It’s hard to describe this relationship in a linear manner. Natural log would explain this better, right?\n\nggplot(whr) +\n  geom_point(aes(x = exp(Logged_GDP_per_capita), y = Ladder_score)) +\n  geom_function(fun = function(x){log(x) - 4}) +\n  labs(x = \"GDP per capita\")\n\n\n\n\n\n\n\n\nThis is why we use the natural logarithm to transform GDP per capita. The transformation reveals a linear relationship between the two variables, allowing us to capture non-linear patterns in a linear format when using OLS regression. Another commonly used transformation is quadratic (\\(x^2\\)), which serves the same purpose of addressing non-linear relationships. We call latter ones polynomials.\n\nggplot(whr, aes(x = Logged_GDP_per_capita, y = Ladder_score)) +\n  geom_point() +\n  geom_smooth(method = \"lm\")"
+  },
+  {
+    "objectID": "data_process.html",
+    "href": "data_process.html",
+    "title": "Untitled",
+    "section": "",
+    "text": "library(tidyverse)\n\n── Attaching core tidyverse packages ──────────────────────── tidyverse 2.0.0 ──\n✔ dplyr     1.1.4     ✔ readr     2.1.5\n✔ forcats   1.0.0     ✔ stringr   1.5.1\n✔ ggplot2   3.5.1     ✔ tibble    3.2.1\n✔ lubridate 1.9.4     ✔ tidyr     1.3.1\n✔ purrr     1.0.2     \n── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──\n✖ dplyr::filter() masks stats::filter()\n✖ dplyr::lag()    masks stats::lag()\nℹ Use the conflicted package (&lt;http://conflicted.r-lib.org/&gt;) to force all conflicts to become errors\n\n\n\nsipri = read.csv(\"import-export-values_1950-2024.csv\")\nsipri = sipri %&gt;%\n  select(-X2024)\n\n\nsipri = sipri %&gt;%\n  pivot_longer(2:75,\n               names_to = \"Year\",\n               values_to = \"Import\")\n\nsipri = sipri %&gt;%\n  mutate(Year = str_remove(Year, \"X\"))\n\nsipri = na.omit(sipri)\n\n\nload(url(\"https://github.com/vdeminstitute/vdemdata/raw/6bee8e170578fe8ccdc1414ae239c5e870996bc0/data/vdem.RData\"))\n\ne_v2x_polyarchy_5C\n\nvdem_sub = vdem %&gt;%\n  select(year, country_name, e_v2x_polyarchy_4C)\n\nvdem_sub$year = as.character(vdem_sub$year)\n\nmerger = sipri %&gt;%\n  left_join(vdem_sub, by = c('Year' = 'year', 'Recipient' = 'country_name'))\n\nmerger = na.omit(merger)\n\nmerger = merger %&gt;%\n  mutate(Regime = case_when(e_v2x_polyarchy_4C == 0 ~ \"Autocratic\",\n                            e_v2x_polyarchy_4C == 0.333 ~ \"Electoral Authoritarian\",\n                            e_v2x_polyarchy_4C == 0.667 ~ \"Minimally Democratic\",\n                            e_v2x_polyarchy_4C == 1 ~ \"Democratic\"))\n\nmerger = merger %&gt;%\n  select(-e_v2x_polyarchy_4C)\n\n# write.csv(merger, \"sipri.csv\", row.names = F)"
   }
 ]

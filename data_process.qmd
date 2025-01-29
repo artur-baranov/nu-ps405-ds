@@ -1,0 +1,57 @@
+---
+title: "Untitled"
+---
+
+```{r}
+library(tidyverse)
+```
+
+
+```{r}
+sipri = read.csv("import-export-values_1950-2024.csv")
+sipri = sipri %>%
+  select(-X2024)
+
+
+sipri = sipri %>%
+  pivot_longer(2:75,
+               names_to = "Year",
+               values_to = "Import")
+
+sipri = sipri %>%
+  mutate(Year = str_remove(Year, "X"))
+
+sipri = na.omit(sipri)
+
+```
+
+
+```{r}
+load(url("https://github.com/vdeminstitute/vdemdata/raw/6bee8e170578fe8ccdc1414ae239c5e870996bc0/data/vdem.RData"))
+```
+
+e_v2x_polyarchy_5C 
+
+```{r}
+vdem_sub = vdem %>%
+  select(year, country_name, e_v2x_polyarchy_4C)
+
+vdem_sub$year = as.character(vdem_sub$year)
+
+merger = sipri %>%
+  left_join(vdem_sub, by = c('Year' = 'year', 'Recipient' = 'country_name'))
+
+merger = na.omit(merger)
+
+merger = merger %>%
+  mutate(Regime = case_when(e_v2x_polyarchy_4C == 0 ~ "Autocratic",
+                            e_v2x_polyarchy_4C == 0.333 ~ "Electoral Authoritarian",
+                            e_v2x_polyarchy_4C == 0.667 ~ "Minimally Democratic",
+                            e_v2x_polyarchy_4C == 1 ~ "Democratic"))
+
+merger = merger %>%
+  select(-e_v2x_polyarchy_4C)
+
+# write.csv(merger, "sipri.csv", row.names = F)
+```
+

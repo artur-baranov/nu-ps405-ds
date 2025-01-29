@@ -20,7 +20,7 @@ toc: true
 </center>
 <br>
 <center>
-<a href="https://artur-baranov.github.io/nu-ps405-ds/data/WhoGov.csv" class="btn btn-primary" role="button" download="WhoGov.csv" style="width:200px" target="_blank">Download data</a>
+<a href="https://artur-baranov.github.io/nu-ps405-ds/data/spiri.csv" class="btn btn-primary" role="button" download="WhoGov.csv" style="width:200px" target="_blank">Download data</a>
 </center>
 
 
@@ -355,6 +355,8 @@ ci_xy = xy_distirbutions %>%
       mean_value = mean(value, na.rm = TRUE),
       lower = mean_value - 1.96 * sd(value, na.rm = TRUE) / sqrt(n()),
       upper = mean_value + 1.96 * sd(value, na.rm = TRUE) / sqrt(n()))
+
+ci_xy
 ```
 
 Finally, visualize the confidence intervals
@@ -372,12 +374,151 @@ ggplot(ci_xy) +
 
 # Exercises
 
+We are working with [SIPRI Arms Transfers Database](https://www.sipri.org/databases/armstransfers). It contains information on all transfers of major conventional arms.
+
+First, load it.
 
 ::: {.callout-tip icon="false"}
 ## Solution
 
+```{r}
+#| eval: false
+
+sipri = ...
+```
+
 :::
 
+Draw a histogram of `Import` variable
+
+::: {.callout-tip icon="false"}
+## Solution
+
+```{r}
+#| eval: false
+
+...
+```
+
+:::
+
+Using `table()` check the `Regime` variable. 
+
+::: {.callout-tip icon="false"}
+## Solution
+
+YOUR SOLUTION HERE
+
+:::
+
+Check the `class()` of the `Regime` variable. Is it correct? Explain. Correct if needed.
+
+::: {.callout-tip icon="false"}
+## Solution
+
+YOUR SOLUTION HERE
+
+:::
+
+Using `filter()`, leave only `Autocratic` type of `Regime` and save to `autocracies_import` dataframe.
+
+::: {.callout-tip icon="false"}
+## Solution
+
+```{r}
+#| eval: false
+
+autocracies_import = ...
+```
+
+:::
+
+Using `filter()`, leave only `Democratic` type of `Regime` and save to `democracies_import` dataframe.
+
+::: {.callout-tip icon="false"}
+## Solution
+
+```{r}
+#| eval: false
+
+autocracies_import = ...
+```
+
+:::
+
+Using `rbind()`, bind the rows of `autocracies_import` and `democracies_import` dataframes. Save it to a new dataframe `autdem_import`.
+
+::: {.callout-tip icon="false"}
+## Solution
+
+```{r}
+#| eval: false
+
+autdem_import = ...
+```
+
+:::
+
+Draw a boxplot (`geom_boxplot()`), where X is `Regime`, and Y is `Import`. What can you see? Are these groups different?
+
+::: {.callout-tip icon="false"}
+## Solution
+
+```{r}
+#| eval: false
+
+autdem_import %>%
+  ggplot() ...
+```
+
+:::
+
+Now, let's caulculate a confidence interval. First, `group_by()` by the `Regime` type, and `summarize()` average `Import` in democracies and autocracies, and lower and upper bounds of confidence interval. Assume the variables are distributed normally.
+
+::: {.callout-tip icon="false"}
+## Solution
+
+```{r}
+#| eval: false
+
+ci_autdem = autdem_import %>%
+  group_by(...) %>%
+  ...(
+      mean_value = ...(..., na.rm = TRUE),
+      lower = mean_value - 1.96 * sd(..., na.rm = TRUE) / sqrt(n()),
+      upper = ... + 1.96 * sd(..., na.rm = TRUE) / sqrt(n()))
+```
+
+:::
+
+Visualize the confidence intervals using `geom_linerange()` and `geom_point()`. Are these distributions different?
+
+::: {.callout-tip icon="false"}
+## Solution
+
+```{r}
+#| eval: false
+
+ggplot(...) +
+  ...(...) +
+  geom_point(aes(x = ...,
+                 y = mean_value))
+```
+
+:::
+
+Finally, to double check the conclusion, run the `t.test()`. What is your final say? Are arms imports in democracies and autocracies different? Why?
+
+::: {.callout-tip icon="false"}
+## Solution
+
+```{r}
+#| eval: false
+
+...
+```
+
+:::
 
 
 # Check List
@@ -388,6 +529,6 @@ ggplot(ci_xy) +
 
 <input type="checkbox"/> I know what the confidence interval is
 
-<input type="checkbox"/> I know how to test if two distributions are different
+<input type="checkbox"/> I know how to test whether two distributions are different
 
 
