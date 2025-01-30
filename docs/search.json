@@ -130,7 +130,7 @@
     "href": "ps405-d_4.html#latex-issues",
     "title": "Review and Confidence Intervals",
     "section": "\\(\\LaTeX\\) issues",
-    "text": "\\(\\LaTeX\\) issues\nIntegration of R, Python, markdown, Latex and other useful languages incredibly useful. But it comes to a price that researchers should be careful. Any \\(\\LaTeX\\) code should go within two $ dollar signs $. For example, an inline formula looks like this: $ Y = 10 $, which produces the following result: \\(Y = 10\\). Alternativelym you can use a double dollar sign to start a “chunk” for latex. For example:\n\\[\nY = \\beta_0 + \\beta_1 + u\n\\]"
+    "text": "\\(\\LaTeX\\) issues\nIntegration of R, Python, markdown, Latex and other useful languages incredibly useful. But it comes to a price that researchers should be careful. Any \\(\\LaTeX\\) code should go within two $ dollar signs $. For example, an inline formula looks like this: $ Y = 10 $, which produces the following result: \\(Y = 10\\). Alternativelym you can use a double dollar sign to start a “chunk” for latex. For example:\n\\[\nY = \\beta_0 + \\beta_1X + u\n\\]"
   },
   {
     "objectID": "ps405-d_4.html#useful-functions",

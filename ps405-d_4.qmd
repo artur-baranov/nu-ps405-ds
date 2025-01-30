@@ -20,7 +20,7 @@ toc: true
 </center>
 <br>
 <center>
-<a href="https://artur-baranov.github.io/nu-ps405-ds/data/spiri.csv" class="btn btn-primary" role="button" download="WhoGov.csv" style="width:200px" target="_blank">Download data</a>
+<a href="https://artur-baranov.github.io/nu-ps405-ds/data/sipri.csv" class="btn btn-primary" role="button" download="sipri.csv" style="width:200px" target="_blank">Download data</a>
 </center>
 
 
@@ -103,10 +103,10 @@ Draw the plot to gain a better understanding of what's going on. What has change
 
 ## $\LaTeX$ issues
 
-Integration of R, Python, markdown, Latex and other useful languages incredibly useful. But it comes to a price that researchers should be careful. Any $\LaTeX$ code should go within two `$` dollar signs `$`. For example, an inline formula looks like this: \$ Y = 10 \$, which produces the following result: $Y = 10$. Alternativelym you can use a double dollar sign to start a "chunk" for latex. For example:
+Integration of R, Python, markdown, Latex and other useful languages incredibly useful. But it comes to a price that researchers should be careful. Any $\LaTeX$ code should go within two `$` dollar signs `$`. For example, an inline formula looks like this: \$ Y = 10 \$, which produces the following result: $Y = 10$. Alternatively, you can use a double dollar sign to start a "chunk" for latex. For example:
 
 $$
-Y = \beta_0 + \beta_1 + u
+Y = \beta_0 + \beta_1X + u
 $$
 
 ## Useful functions
@@ -148,8 +148,6 @@ ggplot() +
 
 -   Refreshing confidence intervals
 
--   Hypothesis testing
-
 
 # Right hand side extensions
 
@@ -174,7 +172,7 @@ whogov = read.csv("data/WhoGov.csv")
 
 When we introduce a dummy variable into the model, we quite often are interested in controlling for unobserved heterogeneity by allowing each category to have its own intercept. This is referred to as **fixed effects**.
 
-First, let's create a dummy variable indicating if a leader is independent or Partisan You can use 1 or 0 instead, but to make it more readable here we stick to more transparent labels.
+First, let's create a dummy variable indicating if a leader is independent or Partisan. You can use 1 or 0 instead, but to make it more readable here we stick to more transparent labels.
 
 ```{r}
 whogov = whogov %>%
@@ -193,6 +191,16 @@ Take a moment to think about what unobserved heterogeneity we can control for by
 model_fe = lm(n_individuals ~ leaderexperience_continuous + indep, whogov) 
 summary(model_fe)
 ```
+
+Let's relevel to get the results for Independent candidates.
+
+```{r}
+whogov$indep = relevel(whogov$indep, ref = "Partisan")
+model_fe = lm(n_individuals ~ leaderexperience_continuous + indep, whogov) 
+summary(model_fe)
+```
+
+
 
 To understand what's going on in the model we might want to visualize the result. Load the `ggeffects` library.
 
@@ -286,8 +294,8 @@ ggplot(whr) +
 It doesn't. It's hard to describe this relationship in a linear manner. Natural log would explain this better, right?
 
 ```{r}
-ggplot(whr) +
-  geom_point(aes(x = exp(Logged_GDP_per_capita), y = Ladder_score)) +
+ggplot(whr, aes(x = exp(Logged_GDP_per_capita), y = Ladder_score)) +
+  geom_point() +
   geom_function(fun = function(x){log(x) - 4}) +
   labs(x = "GDP per capita")
 ```
@@ -301,6 +309,7 @@ ggplot(whr, aes(x = Logged_GDP_per_capita, y = Ladder_score)) +
   geom_point() +
   geom_smooth(method = "lm")
 ```
+
 # Confidence Intervals
 
 Intuition is straightforward: it's a range within which the true value lies, with a given probability, typically 95%.
