@@ -1,0 +1,112 @@
+---
+title: "Presenting Results of Regression"
+subtitle: "Week 4"
+date: 2025-02-06
+format: 
+  html:
+    embed-resources: true
+toc: true
+---
+
+# Review of the previous week
+
+::: callout-note
+## Review
+
+Start with loading the `tidyverse` library and the Who Governs data.
+
+```{r}
+#| message: false
+library(tidyverse)
+
+whogov = read.csv("data/WhoGov.csv")
+```
+
+Calculate confidence intervals of `n_total` for each `system_category`.
+
+Visualize the calculated confidence intervals.
+
+:::
+
+# Review of the homework
+
+The `ggeffects` library is incredibly helpful! And quite simple. You can use it for plotting the categorical data. One thing to note, make sure it's a `factor()`!
+
+```{r}
+#| eval: false
+
+library(ggeffects)
+
+int = lm(alertness ~ coffee * time, data = coffee_data)
+summary(int)
+
+
+ggpredict(int, terms = c("time", "coffee")) %>%
+  plot(connect_lines = TRUE) 
+```
+
+# Agenda
+
+
+
+
+
+# Devtools in R
+
+Sometimes, it is helpful to utilize versions of packages that are under development. Those are impossible to install directly, but you can download them frob GitHub. To simplify this process, you need special package called `devtools`.
+
+```{r}
+#| eval: false
+
+install.packages("devtools")
+```
+
+Now, install the `vdemdata` library. This way we'll be able to load the most current V-Dem dataset directly to the R.
+
+```{r}
+#| eval: false
+
+devtools::install_github("vdeminstitute/vdemdata")
+```
+
+Let's test it. We see the dataset is here! But for the future, this is the way to install packages that are not released yet.
+
+```{r}
+library(vdemdata)
+vdem %>%
+  select(country_name, year, histname, v2x_polyarchy) %>%
+  head()
+```
+
+
+# Practicing joins
+
+We are working with [SIPRI Arms Transfers Database](https://www.sipri.org/databases/armstransfers). It contains information on all transfers of major conventional arms. In addition, some variables are taken from V-Dem.
+
+```{r}
+sipri = read.csv("data/sipri.csv")
+```
+
+
+
+
+
+Let us add some variables from V-Dem.
+
+Present the model
+
+LaTeX
+
+
+Report the results, tables
+
+Report the results, CI effects
+
+Report the results, plot
+
+Report the results, simulations
+
+
+Why voters who value democracy participate in democratic backsliding
+State Control and the Effects of Foreign Relations on Bilateral Trade
+

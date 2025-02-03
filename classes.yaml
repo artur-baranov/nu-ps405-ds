@@ -28,3 +28,11 @@
   Code: "[{{< fa file-code >}}](scripts/ps405-d_4.qmd){target='_blank'}"
   Data: "[{{< fa database >}}](data/sipri.csv){target='_blank'}"
   type: "schedule"
+  
+- title: "Presenting Results of Regression"
+  Week: 5
+  date: 2025-02-06
+  Link: "[{{< fa link >}}](/ps405-d_5.qmd)"
+  Code: "[{{< fa file-code >}}](scripts/ps405-d_5.qmd){target='_blank'}"
+  Data: "[{{< fa database >}}](data/sipri.csv){target='_blank'}"
+  type: "schedule"
