@@ -79,22 +79,112 @@ vdem %>%
 ```
 
 
-# Practicing joins
+# Merging Datasets and Exploring the Data
 
-We are working with [SIPRI Arms Transfers Database](https://www.sipri.org/databases/armstransfers). It contains information on all transfers of major conventional arms. In addition, some variables are taken from V-Dem.
+We are working with [SIPRI Arms Transfers Database](https://www.sipri.org/databases/armstransfers). It contains information on all transfers of major conventional arms. 
+
+-   `Recipient` of arms
+
+-   `Year`
+
+-   `Import` of arms
+
+-   `Regime` a V-Dem variable for political regime
 
 ```{r}
 sipri = read.csv("data/sipri.csv")
 ```
 
-Let us add some variables from V-Dem.
+Now, subset some variables from V-Dem. We are choosing the following variables:
+
+-   `country_name`
+
+-   `year`
+
+-   `e_gdp` GDP of a country
+
+-   `e_miinteco` Armed conflict, international
+
+-   `e_miinterc` Armed conflict, internal 
+
+```{r}
+vdem_variables = vdem %>%
+  select(country_name, year, e_gdp, e_miinteco, e_miinterc)
+```
+
+Note the syntax below. We are joining two dataframes by two variables: `Recipient` and `Year`, but in the V-Dem data those have different name or spelling. 
+
+```{r}
+sipri_vdem = sipri %>%
+  left_join(vdem_variables, by = c("Recipient" = "country_name", 
+                                   "Year" = "year"))
+
+head(sipri_vdem)
+```
+
+For our convenience, rename the variables in the newly created dataframe.
+
+```{r}
+sipri_vdem = sipri_vdem %>%
+  rename(GDP = e_gdp,
+         International_conflict = e_miinteco,
+         Internal_conflict = e_miinterc)
+
+head(sipri_vdem)
+```
+
+Explore the `GDP` variable. Does it need a transformation?
+
+```{r}
+ggplot(sipri_vdem) +
+  geom_histogram(aes(x = GDP))
+```
+
+It might be the case. But to double-check our assumption, let's draw a boxplot. Take the `log()` of GDP directly in the plot. Did it get better?
+
+```{r}
+ggplot(sipri_vdem) +
+  geom_boxplot(aes(y = GDP))
+```
+
+Therefore, let's create a new variable `Log_GDP`.
+
+```{r}
+sipri_vdem = sipri_vdem %>%
+  mutate(Log_GDP = log(GDP))
+```
+
+
+# Model Building 
+
+```{r}
+model_basic = lm(Import ~ Log_GDP, sipri_vdem)
+summary(model_basic)
+```
+
+```{r}
+model_fe = lm(Import ~ Log_GDP + Regime + International_conflict, sipri_vdem)
+summary(model_fe)
+
+ggpredict(model_fe, terms = c("Log_GDP", "International_conflict", "Regime")) %>%
+  plot()
+```
+
+
+```{r}
+library(ggeffects)
+model_int = lm(Import ~ Log_GDP + Regime * International_conflict, sipri_vdem)
+summary(model_int)
+
+ggpredict(model_int, terms = c("Log_GDP", "International_conflict", "Regime")) %>%
+  plot() 
+```
+
 
 Present the model
 
 
-
-
-LaTeX
+LaTeX: write out the formula
 
 
 Report the results, tables
@@ -109,3 +199,7 @@ Report the results, simulations
 Why voters who value democracy participate in democratic backsliding
 State Control and the Effects of Foreign Relations on Bilateral Trade
 
+
+# Exercises
+
+practice joins
