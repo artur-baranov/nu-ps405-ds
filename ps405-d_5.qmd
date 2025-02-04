@@ -1,6 +1,6 @@
 ---
 title: "Presenting Results of Regression"
-subtitle: "Week 4"
+subtitle: "Week 5"
 date: 2025-02-06
 format: 
   html:
@@ -26,20 +26,20 @@ Calculate confidence intervals of `n_total` for each `system_category`.
 
 Visualize the calculated confidence intervals.
 
+ggeffects
+
 :::
 
 # Review of the homework
 
-The `ggeffects` library is incredibly helpful! And quite simple. You can use it for plotting the categorical data. One thing to note, make sure it's a `factor()`!
+The `ggeffects` library is incredibly helpful! And quite simple. You can use it for plotting the categorical data. One thing to note, make sure it's a `factor()`! Check it out below.
 
 ```{r}
-#| eval: false
+#| warning: false
 
 library(ggeffects)
 
 int = lm(alertness ~ coffee * time, data = coffee_data)
-summary(int)
-
 
 ggpredict(int, terms = c("time", "coffee")) %>%
   plot(connect_lines = TRUE) 
@@ -87,13 +87,12 @@ We are working with [SIPRI Arms Transfers Database](https://www.sipri.org/databa
 sipri = read.csv("data/sipri.csv")
 ```
 
-
-
-
-
 Let us add some variables from V-Dem.
 
 Present the model
+
+
+
 
 LaTeX
 
