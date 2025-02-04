@@ -457,7 +457,7 @@ Create a model, interacting `n_individuals` and `Continent`. Plot the results us
 ```{r}
 #| eval: false
 
-lm(Ladder_score ~ ... * ..., whr_whogov_useu) ...
+lm(Ladder_score ~ ... * ..., whr_whogov_euna) ...
   ggpredict(...) %>%
   ...(show_ci = FALSE)
 ```

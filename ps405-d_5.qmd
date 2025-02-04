@@ -136,6 +136,8 @@ head(sipri_vdem)
 Explore the `GDP` variable. Does it need a transformation?
 
 ```{r}
+#| warning: false
+
 ggplot(sipri_vdem) +
   geom_histogram(aes(x = GDP))
 ```
@@ -154,8 +156,22 @@ sipri_vdem = sipri_vdem %>%
   mutate(Log_GDP = log(GDP))
 ```
 
+To explore multiple variables at once, it is useful to plot them in `pairs` plot. There's a library `GGally` which is based on `ggplot2`, and it's quite straightforward. Be careful with the wrong class identification! Can you notice anything?
+
+```{r}
+#| warning: false
+#| message: false
+
+library(GGally)
+
+sipri_vdem %>%
+  ggpairs(columns = c("Import", "Regime", "Log_GDP", "International_conflict", "Internal_conflict"))
+```
+
 
 # Model Building 
+
+Let's set up a basic model. We are interested in explaining the `Import` of arms. Is it related to the economic capacity of the state? We can use proxy `Log_GDP`.
 
 ```{r}
 model_basic = lm(Import ~ Log_GDP, sipri_vdem)
