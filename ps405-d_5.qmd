@@ -171,25 +171,35 @@ sipri_vdem %>%
 
 # Model Building 
 
-Let's set up a basic model. We are interested in explaining the `Import` of arms. Is it related to the economic capacity of the state? We can use proxy `Log_GDP`.
+Let's set up a basic model. We are interested in explaining the `Import` of arms. Is it related to the economic capacity of the state? We can use proxy `Log_GDP`. We can interpret and plot it quite easily, right? But does the intercept make sense?
 
 ```{r}
 model_basic = lm(Import ~ Log_GDP, sipri_vdem)
 summary(model_basic)
 ```
 
+However, simple models are rare to see in academic articles. Let's run a Multiple Linear Regression with fixed effects. Add `International_conflict` and `Regime` to the model. You can interpret these coefficients easily, too.
+
 ```{r}
-model_fe = lm(Import ~ Log_GDP + Regime + International_conflict, sipri_vdem)
+model_fe = lm(Import ~ Log_GDP + International_conflict+ Regime, sipri_vdem)
 summary(model_fe)
+```
+
+To get a better idea what's going on, you can plot these three independent variables. But what if there are more?
+
+```{r}
+#| warning: false
 
 ggpredict(model_fe, terms = c("Log_GDP", "International_conflict", "Regime")) %>%
   plot()
 ```
 
 
+
 ```{r}
-library(ggeffects)
-model_int = lm(Import ~ Log_GDP + Regime * International_conflict, sipri_vdem)
+#| warning: false
+
+model_int = lm(Import ~ Log_GDP * International_conflict + Regime, sipri_vdem)
 summary(model_int)
 
 ggpredict(model_int, terms = c("Log_GDP", "International_conflict", "Regime")) %>%
@@ -197,11 +207,17 @@ ggpredict(model_int, terms = c("Log_GDP", "International_conflict", "Regime")) %
 ```
 
 
+
+
 Present the model
 
 
-LaTeX: write out the formula
 
+It gets harder to interpret the results. Let's write out the model. Then, by plugging the coefficients we can calculate the predicted value for any GDP value, regime type and presence or absence of international conflict.
+
+$$
+\text{Import} = \beta_0 + \beta_1(\text{Log_GDP}) + \beta_2(\text{Regime}) + \beta_3(\text{International conflict})
+$$
 
 Report the results, tables
 
@@ -209,7 +225,7 @@ Report the results, CI effects
 
 Report the results, plot
 
-Report the results, simulations
+Report the results, simulations and marginal effects
 
 
 Why voters who value democracy participate in democratic backsliding
