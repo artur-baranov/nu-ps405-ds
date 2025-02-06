@@ -63,6 +63,10 @@ After the grades are released, you have one week to submit the `.qmd` file via e
 
 -   [Step-by-step regression guide](https://evalsp24.classes.andrewheiss.com/example/regression.html)
 
+### Data Wrangling
+
+-   [Joins Tutorial](https://rpubs.com/williamsurles/293454)
+
 ### Data sources
 
 -   [Political Science datasets](https://github.com/erikgahner/PolData)
