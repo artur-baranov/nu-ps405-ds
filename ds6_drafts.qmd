@@ -1,0 +1,27 @@
+---
+title: "Untitled"
+---
+
+```{r}
+library(haven)
+library(tidyverse)
+eubarometer = read_dta("data/eurobarometer100_2.dta")
+```
+
+
+d70 - LIFE SATISFACTION
+qa1_1 - SITUATION: COUNTRY GENERAL
+qa3_1 - IMPORTANT ISSUES CNTRY: CRIME
+
+```{r}
+sub = eubarometer %>%
+  select(d70, qa1_1, qa3_1, qa5_15, d73_3)
+
+# sub$qa1_1 %>% hist()
+
+model = lm(d70 ~ ., sub)
+summary(model)
+
+plot(model, 1)
+```
+
