@@ -1,0 +1,41 @@
+---
+title: "Robust Standard Errors"
+subtitle: "Week 6"
+date: 2025-02-13
+format: 
+  html:
+    embed-resources: true
+toc: true
+---
+
+# Before we start
+
+-   Any questions?
+
+<center>
+<a href="https://artur-baranov.github.io/nu-ps405-ds/scripts/ps405-d_5.qmd" class="btn btn-primary" role="button" download="ps405-d_5.qmd" style="width:200px" target="_blank">Download script</a>
+</center>
+<br>
+<center>
+<a href="https://artur-baranov.github.io/nu-ps405-ds/data/sipri.csv" class="btn btn-primary" role="button" download="sipri.csv" style="width:200px" target="_blank">Download data</a>
+</center>
+
+# Review of the previous week
+
+::: callout-note
+## Review
+
+:::
+
+
+
+Homoscedasticity assumption 
+
+Ways to solve the problem:
+
+-   Use another model (e.g., if you're dealing with binary dependent variable, you can use logit)
+
+-   Transform DV
+
+lm_robust
+
