@@ -42,5 +42,5 @@
   date: 2025-02-13
   Link: "[{{< fa link >}}](/ps405-d_6.qmd)"
   Code: "[{{< fa file-code >}}](scripts/ps405-d_6.qmd){target='_blank'}"
-  Data: "[{{< fa database >}}](data/sipri.csv){target='_blank'}"
+  Data: "{{< fa database >}}"
   type: "schedule"
