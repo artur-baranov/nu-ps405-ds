@@ -53,7 +53,7 @@
     "href": "index.html#schedule",
     "title": "PS405 Linear Models",
     "section": "Schedule",
-    "text": "Schedule\n\n\n\n\n\nWeek\n\n\nTitle\n\n\nLink\n\n\nCode\n\n\nData\n\n\n\n\n\n\n1\n\n\nLast Quarter’s Review\n\n\n\n\n\n\n\n\n \n\n\n\n\n2\n\n\nSimple Linear Regression\n\n\n\n\n\n\n\n\n\n\n\n\n\n3\n\n\nMultiple Linear Regression\n\n\n\n\n\n\n\n\n\n\n\n\n\n4\n\n\nReview and Confidence Intervals\n\n\n\n\n\n\n\n\n\n\n\n\n\n5\n\n\nPresenting Results of Regression\n\n\n\n\n\n\n\n\n\n\n\n\n\n6\n\n\nRobust Standard Errors\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nNo matching items"
+    "text": "Schedule\n\n\n\n\n\nWeek\n\n\nTitle\n\n\nLink\n\n\nCode\n\n\nData\n\n\n\n\n\n\n1\n\n\nLast Quarter’s Review\n\n\n\n\n\n\n\n\n \n\n\n\n\n2\n\n\nSimple Linear Regression\n\n\n\n\n\n\n\n\n\n\n\n\n\n3\n\n\nMultiple Linear Regression\n\n\n\n\n\n\n\n\n\n\n\n\n\n4\n\n\nReview and Confidence Intervals\n\n\n\n\n\n\n\n\n\n\n\n\n\n5\n\n\nPresenting Results of Regression\n\n\n\n\n\n\n\n\n\n\n\n\n\n6\n\n\nPractice and Replication\n\n\n\n\n\n\n\n\n\n\n\n\n\n7\n\n\nRobust Standard Errors\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nNo matching items"
   },
   {
     "objectID": "index.html#description",
@@ -247,6 +247,13 @@
   {
     "objectID": "ps405-d_6.html",
     "href": "ps405-d_6.html",
+    "title": "Practice and Replication",
+    "section": "",
+    "text": "Before we start\n\nAny questions?\n\n\nDownload script\n\n\n\nDownload data\n\n\n\nReview of the previous week\n\n\n\n\n\n\nReview\n\n\n\n\n\n\n\n\nReview of the homework\n\nLinear Probability Model"
+  },
+  {
+    "objectID": "ps405-d_7.html",
+    "href": "ps405-d_7.html",
     "title": "Robust Standard Errors",
     "section": "",
     "text": "Before we start\n\nAny questions?\n\n\nDownload script\n\n\n\nDownload data\n\n\n\nReview of the previous week\n\n\n\n\n\n\nReview\n\n\n\n\n\n\nHomoscedasticity assumption\nWays to solve the problem:\n\nUse another model (e.g., if you’re dealing with binary dependent variable, you can use logit)\nTransform DV\n\nlm_robust"

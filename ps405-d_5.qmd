@@ -395,7 +395,7 @@ model_int_groupped %>%
 
 ## Marginal Effects
 
-Calculate the "typical" observation (or simply the average observation) across all indepdenent variables.
+Calculate the "typical" observation (or simply the average observation) across all independent variables.
 
 ```{r}
 typical_obs = sipri_vdem %>%
@@ -414,7 +414,7 @@ This would be our baseline. We can calculate the predicted value for the typical
 ggpredict(model_int, typical_obs)
 ```
 
-However, the most interesting is to know how the DV change if the IV changes (holding everything else constant). Basically, we are trying to get a simple intepreation, as it is with the simple additive OLS. You can easily calculate the **average** marginal effect with one unit change in some X with `ggeffects` library. Moreover, you can illustrate how the predicted values change in comparison to the most typical observation.
+However, the most interesting is to know how the DV change if the IV changes (holding everything else constant). Basically, we are trying to get a simple interpretation, as it is with the simple additive OLS. You can easily calculate the **average** marginal effect with one unit change in some X with `ggeffects` library. Moreover, you can illustrate how the predicted values change in comparison to the most typical observation.
 
 ```{r}
 marginal_effects = list(Log_GDP = c(8.984952, 8, 8.5, 9.5, 10),
