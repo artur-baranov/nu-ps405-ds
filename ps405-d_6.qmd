@@ -17,7 +17,7 @@ toc: true
 </center>
 <br>
 <center>
-<a href="https://artur-baranov.github.io/nu-ps405-ds/data/ward2020.Rdata" class="btn btn-primary" role="button" download="ward2020.Rdata" style="width:200px" target="_blank">Download data</a>
+<a href="https://artur-baranov.github.io/nu-ps405-ds/data/ward2020.RData" class="btn btn-primary" role="button" download="ward2020.RData" style="width:200px" target="_blank">Download data</a>
 </center>
 
 # Review of the previous week
