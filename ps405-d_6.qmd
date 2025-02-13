@@ -28,6 +28,7 @@ toc: true
 Load the `tidyverse` library and sipri dataset
 
 ```{r}
+#| message: false
 library(tidyverse)
 
 sipri = read.csv("data/sipri.csv")
