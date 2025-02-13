@@ -307,15 +307,134 @@ modelsummary(list("Pooled Model" = lm_pooling,
 
 # Exercises
 
+Let's explore Comparative Political Dataset. Take a look on their [codebook](https://cpds-data.org/wp-content/uploads/2024/11/codebook_cpds.pdf). 
+
+Load the data from the Canvas, or by clicking this button:
+
+<a href="https://artur-baranov.github.io/nu-ps405-ds/data/cpds.xlsx" class="btn btn-primary" role="button" download="cpds.xlsx" style="width:200px" target="_blank">Download data</a>
+</center>
+
+Using the `readxl` library, load the dataset.
+
+::: {.callout-tip icon="false"}
+## Solution
+
+```{r}
+#| eval: false
+
+library(...)
+
+cpds = read_excel("data/cpds.xlsx")
+```
+
+
+:::
+
+The dataset contains the information on political systems of different countries in different years. Let's explore the following variables:
+
+-   `country` name
+
+-   `year` of the observation
+
+-   `gov_right1` - cabinet posts of right-wing parties in percentage of total cabinet posts
+
+-   `outlays` - total outlays (disbursements) of general government as a percentage of GDP
+
+Subset these variables from the dataset.
+
+::: {.callout-tip icon="false"}
+## Solution
+
+```{r}
+#| eval: false
+
+cpds_sub = ...
+```
+
+
+:::
+
+
+Visualize the distribution of the `gov_right1` variable.
 
 ::: {.callout-tip icon="false"}
 ## Solution
 
 YOUR SOLUTION HERE
 
+:::
+
+Check the class of `outlays` variable. Using the `head()` function, explore the first 6 rows of the `cpds_sub` dataframe. Does the class seem right? If not, correct. 
+
+::: {.callout-tip icon="false"}
+## Solution
+
+YOUR SOLUTION HERE
 
 :::
 
+Using `ggpairs()` from `GGally` library, explore the distribution of `gov_right1` and `outlays` variables, and their relationship. What do you notice?
+
+::: {.callout-tip icon="false"}
+## Solution
+
+YOUR SOLUTION HERE
+
+:::
+
+Set up a linear model. Predict `gov_right1` by `outlays`. Interpret the results.
+
+::: {.callout-tip icon="false"}
+## Solution
+
+YOUR SOLUTION HERE
+
+:::
+
+Using $\LaTeX$ write out the formula of the regression. Don't forget about the subscripts.
+
+::: {.callout-tip icon="false"}
+## Solution
+
+YOUR SOLUTION HERE
+
+:::
+
+Include the `year` fixed effects. Make sure it is of right class. Does the result hold? Interpret the coefficient for `outlays`.
+
+::: {.callout-tip icon="false"}
+## Solution
+
+YOUR SOLUTION HERE
+
+:::
+
+Now, let's set up a two-way fixed effect. Introduce the `country` fixed effects. Make sure it is of right class. Did the result change? Interpret the results for `outlays`.
+
+::: {.callout-tip icon="false"}
+## Solution
+
+YOUR SOLUTION HERE
+
+:::
+
+Let's explore this model. Using `ggpredict()` plot the terms in the following order: `outlays`, `country`, `year`. Choose the following countries: `Austria, Canada, Sweden`, and the following years: `1961, 1996, 2016`. Do the slopes and confidence intervals explain the significance of the `outlays` variable?
+
+::: {.callout-tip icon="false"}
+## Solution
+
+YOUR SOLUTION HERE
+
+:::
+
+Using `modelsummary()`, present the results for all the models. Don't forget to customize the output.
+
+::: {.callout-tip icon="false"}
+## Solution
+
+YOUR SOLUTION HERE
+
+:::
 
 # Check List
 
