@@ -42,7 +42,7 @@
   date: 2025-02-13
   Link: "[{{< fa link >}}](/ps405-d_6.qmd)"
   Code: "[{{< fa file-code >}}](scripts/ps405-d_6.qmd){target='_blank'}"
-  Data: "{{< fa database >}}"
+  Data: "[{{< fa database >}}](data/ward2020.RData){target='_blank'}"
   type: "schedule"
   
 - title: "Robust Standard Errors"
