@@ -4750,6 +4750,8 @@ vertical-align: -.125em;
   <ul>
   <li><a href="#before-we-start" id="toc-before-we-start" class="nav-link active" data-scroll-target="#before-we-start">Before we start</a></li>
   <li><a href="#review-of-the-previous-week" id="toc-review-of-the-previous-week" class="nav-link" data-scroll-target="#review-of-the-previous-week">Review of the previous week</a></li>
+  <li><a href="#agenda" id="toc-agenda" class="nav-link" data-scroll-target="#agenda">Agenda</a></li>
+  <li><a href="#country-year-fixed-effects-model" id="toc-country-year-fixed-effects-model" class="nav-link" data-scroll-target="#country-year-fixed-effects-model">Country-Year Fixed Effects Model</a></li>
   </ul>
 </nav>
     </div>
@@ -4788,11 +4790,11 @@ vertical-align: -.125em;
 <li>Any questions?</li>
 </ul>
 <center>
-<a href="https://artur-baranov.github.io/nu-ps405-ds/scripts/ps405-d_5.qmd" class="btn btn-primary" role="button" download="ps405-d_5.qmd" style="width:200px" target="_blank">Download script</a>
+<a href="https://artur-baranov.github.io/nu-ps405-ds/scripts/ps405-d_7.qmd" class="btn btn-primary" role="button" download="ps405-d_7.qmd" style="width:200px" target="_blank">Download script</a>
 </center>
 <br>
 <center>
-<a href="https://artur-baranov.github.io/nu-ps405-ds/data/sipri.csv" class="btn btn-primary" role="button" download="sipri.csv" style="width:200px" target="_blank">Download data</a>
+<a href="https://artur-baranov.github.io/nu-ps405-ds/data/cpsd.xlsx" class="btn btn-primary" role="button" download="cpsd.xlsx" style="width:200px" target="_blank">Download data</a>
 </center>
 </section>
 <section id="review-of-the-previous-week" class="level1">
@@ -4810,6 +4812,19 @@ Review
 
 </div>
 </div>
+</section>
+<section id="agenda" class="level1">
+<h1>Agenda</h1>
+</section>
+<section id="country-year-fixed-effects-model" class="level1">
+<h1>Country-Year Fixed Effects Model</h1>
+<p>Let’s explore Comparative Political Dataset. It consists of political and institutional country-level data. Take a look on their <a href="https://cpds-data.org/wp-content/uploads/2024/11/codebook_cpds.pdf">codebook</a>.</p>
+<p>Today we are working with the following variables.</p>
+<ul>
+<li><p><code>prefisc_gini</code> - Gini index. What is it?</p></li>
+<li><p><code>openc</code> - Openness of the economy</p></li>
+<li><p><code>servadmi_pmp</code> - Public and mandatory private employment services and administration as a percentage of GDP.</p></li>
+</ul>
 <p>Homoscedasticity assumption</p>
 <p>Ways to solve the problem:</p>
 <ul>
@@ -4817,6 +4832,7 @@ Review
 <li><p>Transform DV</p></li>
 </ul>
 <p>lm_robust</p>
+<p>clustered</p>
 
 
 </section>
