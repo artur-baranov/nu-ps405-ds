@@ -1,0 +1,63 @@
+---
+title: "Untitled"
+---
+
+```{r}
+library(tidyverse)
+library(readxl)
+library(estimatr)
+library(modelsummary)
+
+df = read_excel("data/cpds.xlsx")
+```
+
+outlays Total outlays (disbursements) of general government as a percentage of GDP
+
+gov_right1 Government composition: cabinet posts of right-wing parties in percentage of total cabinet
+posts. 
+
+prefisc_gini ~ openc + servadmi_pmp + year + country
+
+-   `prefisc_gini` - Gini index
+
+-   `openc` - Openness of the economy
+
+-   `servadmi_pmp` - Public and mandatory private employment services and administration as a percentage of GDP.
+
+
+
+```{r}
+df$outlays = as.numeric(df$outlays)
+df$emprot_reg = as.numeric(df$emprot_reg)
+df$openc = as.numeric(df$openc)
+
+model = lm(prefisc_gini ~ openc + servadmi_pmp + country + year, df)
+model_rob = lm_robust(prefisc_gini ~ openc + servadmi_pmp + country + year, df, se_type = "HC2")
+
+summary(model)
+summary(model_rob) 
+
+modelsummary(list(model, model_rob), 
+             stars = T,
+             coef_omit = c("country|year"))
+```
+
+
+```{r}
+plot(model, 1)
+plot(model, 2)
+
+library(lmtest)
+bptest(model)
+```
+
+
+```{r}
+ggplot() +
+  geom_point(aes(y = model$residuals,
+                 x = predict(model))) +
+  geom_hline(yintercept = 0)
+
+```
+
+
