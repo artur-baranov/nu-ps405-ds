@@ -50,5 +50,5 @@
   date: 2025-02-20
   Link: "[{{< fa link >}}](/ps405-d_7.qmd)"
   Code: "[{{< fa file-code >}}](scripts/ps405-d_7.qmd){target='_blank'}"
-  Data: "[{{< fa database >}}](data/cpsd.xlsx){target='_blank'}"
+  Data: "[{{< fa database >}}](data/cpds.xlsx){target='_blank'}"
   type: "schedule"
