@@ -27,9 +27,9 @@ prefisc_gini ~ openc + servadmi_pmp + year + country
 
 
 ```{r}
-df$outlays = as.numeric(df$outlays)
-df$emprot_reg = as.numeric(df$emprot_reg)
-df$openc = as.numeric(df$openc)
+# df$outlays = as.numeric(df$outlays)
+# df$emprot_reg = as.numeric(df$emprot_reg)
+# df$openc = as.numeric(df$openc)
 
 model = lm(prefisc_gini ~ openc + servadmi_pmp + country + year, df)
 model_rob = lm_robust(prefisc_gini ~ openc + servadmi_pmp + country + year, df, se_type = "HC2")

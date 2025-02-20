@@ -45,10 +45,10 @@
   Data: "[{{< fa database >}}](data/ward2020.RData){target='_blank'}"
   type: "schedule"
   
-- title: "Robust Standard Errors"
+- title: "Robust and Clustered Standard Errors"
   Week: 7
   date: 2025-02-20
   Link: "[{{< fa link >}}](/ps405-d_7.qmd)"
   Code: "[{{< fa file-code >}}](scripts/ps405-d_7.qmd){target='_blank'}"
-  Data: "{{< fa database >}}"
+  Data: "[{{< fa database >}}](data/cpsd.xlsx){target='_blank'}"
   type: "schedule"
