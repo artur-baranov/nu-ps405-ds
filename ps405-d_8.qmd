@@ -1,0 +1,56 @@
+---
+title: "Model Diagnostics"
+subtitle: "Week 8"
+date: 2025-02-27
+format: 
+  html:
+    embed-resources: true
+toc: true
+---
+
+# Before we start
+
+-   Any questions?
+
+-   We're almost done with the class! [insert a survey] What you think we should recap?
+
+<center>
+<a href="https://artur-baranov.github.io/nu-ps405-ds/scripts/ps405-d_8.qmd" class="btn btn-primary" role="button" download="ps405-d_8.qmd" style="width:200px" target="_blank">Download script</a>
+</center>
+<br>
+<center>
+<a href="https://artur-baranov.github.io/nu-ps405-ds/data/cpds.xlsx" class="btn btn-primary" role="button" download="cpds.xlsx" style="width:200px" target="_blank">Download data</a>
+</center>
+
+# Review of the previous week
+
+::: callout-note
+## Review
+
+Load `tidyverse` library
+
+```{r}
+library(tidyverse)
+```
+
+Load the Comparative Political Dataset data (`cpds.xlsx`).
+
+```{r}
+library(readxl)
+cpds = read_excel("data/cpds.xlsx")
+```
+
+:::
+
+
+# Agenda
+
+-   Continuing the diagnostics
+
+-   Cook's distance
+
+
+```{r}
+cooks.distance()
+```
+

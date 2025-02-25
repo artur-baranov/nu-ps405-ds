@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.6.39">
+<meta name="generator" content="quarto-1.5.57">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -70,10 +70,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script src="site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="site_libs/quarto-html/anchor.min.js"></script>
 <link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting-e26003cea8cd680ca0c55a263523d882.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap-84c2eb65fbc3a45e2d271b7546780b8d.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -170,37 +170,18 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 ✔ dplyr     1.1.4     ✔ readr     2.1.5
 ✔ forcats   1.0.0     ✔ stringr   1.5.1
 ✔ ggplot2   3.5.1     ✔ tibble    3.2.1
-✔ lubridate 1.9.3     ✔ tidyr     1.3.1
-✔ purrr     1.0.2     
+✔ lubridate 1.9.4     ✔ tidyr     1.3.1
+✔ purrr     1.0.4     
 ── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──
 ✖ dplyr::filter() masks stats::filter()
 ✖ dplyr::lag()    masks stats::lag()
 ℹ Use the conflicted package (&lt;http://conflicted.r-lib.org/&gt;) to force all conflicts to become errors</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(readxl)</span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(estimatr)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stderr">
-<pre><code>Warning: package 'estimatr' was built under R version 4.4.2</code></pre>
-</div>
-<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(modelsummary)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stderr">
-<pre><code>Warning: package 'modelsummary' was built under R version 4.4.2</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>`modelsummary` 2.0.0 now uses `tinytable` as its default table-drawing
-  backend. Learn more at: https://vincentarelbundock.github.io/tinytable/
-
-Revert to `kableExtra` for one session:
-
-  options(modelsummary_factory_default = 'kableExtra')
-  options(modelsummary_factory_latex = 'kableExtra')
-  options(modelsummary_factory_html = 'kableExtra')
-
-Silence this message forever:
-
-  config_modelsummary(startup_message = FALSE)</code></pre>
-</div>
-<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>df <span class="ot">=</span> <span class="fu">read_excel</span>(<span class="st">"data/cpds.xlsx"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(estimatr)</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(modelsummary)</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>df <span class="ot">=</span> <span class="fu">read_excel</span>(<span class="st">"data/cpds.xlsx"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>outlays Total outlays (disbursements) of general government as a percentage of GDP</p>
 <p>gov_right1 Government composition: cabinet posts of right-wing parties in percentage of total cabinet posts.</p>
@@ -211,14 +192,14 @@ Silence this message forever:
 <li><p><code>servadmi_pmp</code> - Public and mandatory private employment services and administration as a percentage of GDP.</p></li>
 </ul>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co"># df$outlays = as.numeric(df$outlays)</span></span>
-<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="co"># df$emprot_reg = as.numeric(df$emprot_reg)</span></span>
-<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="co"># df$openc = as.numeric(df$openc)</span></span>
-<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>model <span class="ot">=</span> <span class="fu">lm</span>(prefisc_gini <span class="sc">~</span> openc <span class="sc">+</span> servadmi_pmp <span class="sc">+</span> country <span class="sc">+</span> year, df)</span>
-<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>model_rob <span class="ot">=</span> <span class="fu">lm_robust</span>(prefisc_gini <span class="sc">~</span> openc <span class="sc">+</span> servadmi_pmp <span class="sc">+</span> country <span class="sc">+</span> year, df, <span class="at">se_type =</span> <span class="st">"HC2"</span>)</span>
-<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(model)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># df$outlays = as.numeric(df$outlays)</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="co"># df$emprot_reg = as.numeric(df$emprot_reg)</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="co"># df$openc = as.numeric(df$openc)</span></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>model <span class="ot">=</span> <span class="fu">lm</span>(prefisc_gini <span class="sc">~</span> openc <span class="sc">+</span> servadmi_pmp <span class="sc">+</span> country <span class="sc">+</span> year, df)</span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>model_rob <span class="ot">=</span> <span class="fu">lm_robust</span>(prefisc_gini <span class="sc">~</span> openc <span class="sc">+</span> servadmi_pmp <span class="sc">+</span> country <span class="sc">+</span> year, df, <span class="at">se_type =</span> <span class="st">"HC2"</span>)</span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(model)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>
 Call:
@@ -270,7 +251,7 @@ Residual standard error: 2.154 on 449 degrees of freedom
 Multiple R-squared:  0.7234,    Adjusted R-squared:  0.7049 
 F-statistic: 39.14 on 30 and 449 DF,  p-value: &lt; 2.2e-16</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(model_rob) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(model_rob) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>
 Call:
@@ -348,19 +329,26 @@ year                   1.694e-01 449
 Multiple R-squared:  0.7234 ,   Adjusted R-squared:  0.7049 
 F-statistic: 104.2 on 30 and 449 DF,  p-value: &lt; 2.2e-16</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="fu">modelsummary</span>(<span class="fu">list</span>(model, model_rob), </span>
-<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>             <span class="at">stars =</span> T,</span>
-<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>             <span class="at">coef_omit =</span> <span class="fu">c</span>(<span class="st">"country|year"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">modelsummary</span>(<span class="fu">list</span>(model, model_rob), </span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>             <span class="at">stars =</span> T,</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>             <span class="at">coef_omit =</span> <span class="fu">c</span>(<span class="st">"country|year"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <!-- preamble start -->
 
     <script>
-      function styleCell_jd3lodcvowaudjl288ub(i, j, css_id) {
-        var table = document.getElementById("tinytable_jd3lodcvowaudjl288ub");
-        table.rows[i].cells[j].classList.add(css_id);
+
+      function styleCell_afsfg0aw29d4yfdiamjp(i, j, css_id) {
+          var table = document.getElementById("tinytable_afsfg0aw29d4yfdiamjp");
+          var cell = table.rows[i]?.cells[j];  // Safe navigation to avoid errors
+          if (cell) {
+              console.log(`Styling cell at (${i}, ${j}) with class ${css_id}`);
+              cell.classList.add(css_id);
+          } else {
+              console.warn(`Cell at (${i}, ${j}) not found.`);
+          }
       }
       function insertSpanRow(i, colspan, content) {
-        var table = document.getElementById('tinytable_jd3lodcvowaudjl288ub');
+        var table = document.getElementById('tinytable_afsfg0aw29d4yfdiamjp');
         var newRow = table.insertRow(i);
         var newCell = newRow.insertCell(0);
         newCell.setAttribute("colspan", colspan);
@@ -368,8 +356,8 @@ F-statistic: 104.2 on 30 and 449 DF,  p-value: &lt; 2.2e-16</code></pre>
         // this may be unsafe, but innerText does not interpret <br>
         newCell.innerHTML = content;
       }
-      function spanCell_jd3lodcvowaudjl288ub(i, j, rowspan, colspan) {
-        var table = document.getElementById("tinytable_jd3lodcvowaudjl288ub");
+      function spanCell_afsfg0aw29d4yfdiamjp(i, j, rowspan, colspan) {
+        var table = document.getElementById("tinytable_afsfg0aw29d4yfdiamjp");
         const targetRow = table.rows[i];
         const targetCell = targetRow.cells[j];
         for (let r = 0; r < rowspan; r++) {
@@ -395,63 +383,42 @@ F-statistic: 104.2 on 30 and 449 DF,  p-value: &lt; 2.2e-16</code></pre>
         targetCell.rowSpan = rowspan;
         targetCell.colSpan = colspan;
       }
-window.addEventListener('load', function () { styleCell_jd3lodcvowaudjl288ub(0, 0, 'tinytable_css_id8572c8bhba8fkon84mae') })
-window.addEventListener('load', function () { styleCell_jd3lodcvowaudjl288ub(0, 1, 'tinytable_css_idwer2o6ts2srsme6g89ki') })
-window.addEventListener('load', function () { styleCell_jd3lodcvowaudjl288ub(0, 2, 'tinytable_css_idwer2o6ts2srsme6g89ki') })
-window.addEventListener('load', function () { styleCell_jd3lodcvowaudjl288ub(1, 0, 'tinytable_css_idb935doaw78dospg1qamk') })
-window.addEventListener('load', function () { styleCell_jd3lodcvowaudjl288ub(1, 1, 'tinytable_css_ideflbo5ior049hvce1vqi') })
-window.addEventListener('load', function () { styleCell_jd3lodcvowaudjl288ub(1, 2, 'tinytable_css_ideflbo5ior049hvce1vqi') })
-window.addEventListener('load', function () { styleCell_jd3lodcvowaudjl288ub(2, 0, 'tinytable_css_idb935doaw78dospg1qamk') })
-window.addEventListener('load', function () { styleCell_jd3lodcvowaudjl288ub(2, 1, 'tinytable_css_ideflbo5ior049hvce1vqi') })
-window.addEventListener('load', function () { styleCell_jd3lodcvowaudjl288ub(2, 2, 'tinytable_css_ideflbo5ior049hvce1vqi') })
-window.addEventListener('load', function () { styleCell_jd3lodcvowaudjl288ub(3, 0, 'tinytable_css_idb935doaw78dospg1qamk') })
-window.addEventListener('load', function () { styleCell_jd3lodcvowaudjl288ub(3, 1, 'tinytable_css_ideflbo5ior049hvce1vqi') })
-window.addEventListener('load', function () { styleCell_jd3lodcvowaudjl288ub(3, 2, 'tinytable_css_ideflbo5ior049hvce1vqi') })
-window.addEventListener('load', function () { styleCell_jd3lodcvowaudjl288ub(4, 0, 'tinytable_css_idb935doaw78dospg1qamk') })
-window.addEventListener('load', function () { styleCell_jd3lodcvowaudjl288ub(4, 1, 'tinytable_css_ideflbo5ior049hvce1vqi') })
-window.addEventListener('load', function () { styleCell_jd3lodcvowaudjl288ub(4, 2, 'tinytable_css_ideflbo5ior049hvce1vqi') })
-window.addEventListener('load', function () { styleCell_jd3lodcvowaudjl288ub(5, 0, 'tinytable_css_idb935doaw78dospg1qamk') })
-window.addEventListener('load', function () { styleCell_jd3lodcvowaudjl288ub(5, 1, 'tinytable_css_ideflbo5ior049hvce1vqi') })
-window.addEventListener('load', function () { styleCell_jd3lodcvowaudjl288ub(5, 2, 'tinytable_css_ideflbo5ior049hvce1vqi') })
-window.addEventListener('load', function () { styleCell_jd3lodcvowaudjl288ub(6, 0, 'tinytable_css_ide8l8qqso5dnaeuvycvh0') })
-window.addEventListener('load', function () { styleCell_jd3lodcvowaudjl288ub(6, 1, 'tinytable_css_idtbzd5zeebw6utgvoy0bf') })
-window.addEventListener('load', function () { styleCell_jd3lodcvowaudjl288ub(6, 2, 'tinytable_css_idtbzd5zeebw6utgvoy0bf') })
-window.addEventListener('load', function () { styleCell_jd3lodcvowaudjl288ub(7, 0, 'tinytable_css_idb935doaw78dospg1qamk') })
-window.addEventListener('load', function () { styleCell_jd3lodcvowaudjl288ub(7, 1, 'tinytable_css_ideflbo5ior049hvce1vqi') })
-window.addEventListener('load', function () { styleCell_jd3lodcvowaudjl288ub(7, 2, 'tinytable_css_ideflbo5ior049hvce1vqi') })
-window.addEventListener('load', function () { styleCell_jd3lodcvowaudjl288ub(8, 0, 'tinytable_css_idb935doaw78dospg1qamk') })
-window.addEventListener('load', function () { styleCell_jd3lodcvowaudjl288ub(8, 1, 'tinytable_css_ideflbo5ior049hvce1vqi') })
-window.addEventListener('load', function () { styleCell_jd3lodcvowaudjl288ub(8, 2, 'tinytable_css_ideflbo5ior049hvce1vqi') })
-window.addEventListener('load', function () { styleCell_jd3lodcvowaudjl288ub(9, 0, 'tinytable_css_idb935doaw78dospg1qamk') })
-window.addEventListener('load', function () { styleCell_jd3lodcvowaudjl288ub(9, 1, 'tinytable_css_ideflbo5ior049hvce1vqi') })
-window.addEventListener('load', function () { styleCell_jd3lodcvowaudjl288ub(9, 2, 'tinytable_css_ideflbo5ior049hvce1vqi') })
-window.addEventListener('load', function () { styleCell_jd3lodcvowaudjl288ub(10, 0, 'tinytable_css_idb935doaw78dospg1qamk') })
-window.addEventListener('load', function () { styleCell_jd3lodcvowaudjl288ub(10, 1, 'tinytable_css_ideflbo5ior049hvce1vqi') })
-window.addEventListener('load', function () { styleCell_jd3lodcvowaudjl288ub(10, 2, 'tinytable_css_ideflbo5ior049hvce1vqi') })
-window.addEventListener('load', function () { styleCell_jd3lodcvowaudjl288ub(11, 0, 'tinytable_css_idb935doaw78dospg1qamk') })
-window.addEventListener('load', function () { styleCell_jd3lodcvowaudjl288ub(11, 1, 'tinytable_css_ideflbo5ior049hvce1vqi') })
-window.addEventListener('load', function () { styleCell_jd3lodcvowaudjl288ub(11, 2, 'tinytable_css_ideflbo5ior049hvce1vqi') })
-window.addEventListener('load', function () { styleCell_jd3lodcvowaudjl288ub(12, 0, 'tinytable_css_idb935doaw78dospg1qamk') })
-window.addEventListener('load', function () { styleCell_jd3lodcvowaudjl288ub(12, 1, 'tinytable_css_ideflbo5ior049hvce1vqi') })
-window.addEventListener('load', function () { styleCell_jd3lodcvowaudjl288ub(12, 2, 'tinytable_css_ideflbo5ior049hvce1vqi') })
-window.addEventListener('load', function () { styleCell_jd3lodcvowaudjl288ub(13, 0, 'tinytable_css_idb935doaw78dospg1qamk') })
-window.addEventListener('load', function () { styleCell_jd3lodcvowaudjl288ub(13, 1, 'tinytable_css_ideflbo5ior049hvce1vqi') })
-window.addEventListener('load', function () { styleCell_jd3lodcvowaudjl288ub(13, 2, 'tinytable_css_ideflbo5ior049hvce1vqi') })
-window.addEventListener('load', function () { styleCell_jd3lodcvowaudjl288ub(14, 0, 'tinytable_css_idb935doaw78dospg1qamk') })
-window.addEventListener('load', function () { styleCell_jd3lodcvowaudjl288ub(14, 1, 'tinytable_css_idb935doaw78dospg1qamk') })
-window.addEventListener('load', function () { styleCell_jd3lodcvowaudjl288ub(14, 2, 'tinytable_css_idb935doaw78dospg1qamk') })
+      // tinytable span after
+      window.addEventListener('load', function () {
+          var cellsToStyle = [
+            // tinytable style arrays after
+          { positions: [ { i: 13, j: 1 }, { i: 13, j: 2 },  ], css_id: 'tinytable_css_yefzhh6ooitzbx0udxcr',}, 
+          { positions: [ { i: 6, j: 0 },  ], css_id: 'tinytable_css_l14kuplov2jx3eyg3cg8',}, 
+          { positions: [ { i: 6, j: 1 }, { i: 6, j: 2 },  ], css_id: 'tinytable_css_kzpk69isazqqvthpp0u9',}, 
+          { positions: [ { i: 0, j: 0 },  ], css_id: 'tinytable_css_folou1u94th4vls678uw',}, 
+          { positions: [ { i: 1, j: 0 }, { i: 2, j: 0 }, { i: 3, j: 0 }, { i: 4, j: 0 }, { i: 5, j: 0 }, { i: 10, j: 0 }, { i: 7, j: 0 }, { i: 8, j: 0 }, { i: 9, j: 0 }, { i: 11, j: 0 }, { i: 12, j: 0 },  ], css_id: 'tinytable_css_fe82hzfid6rz12vk3p6d',}, 
+          { positions: [ { i: 2, j: 1 }, { i: 3, j: 1 }, { i: 4, j: 1 }, { i: 5, j: 1 }, { i: 5, j: 2 }, { i: 7, j: 1 }, { i: 8, j: 1 }, { i: 9, j: 1 }, { i: 10, j: 1 }, { i: 11, j: 1 }, { i: 12, j: 1 }, { i: 12, j: 2 }, { i: 1, j: 1 }, { i: 1, j: 2 }, { i: 2, j: 2 }, { i: 3, j: 2 }, { i: 4, j: 2 }, { i: 9, j: 2 }, { i: 10, j: 2 }, { i: 7, j: 2 }, { i: 8, j: 2 }, { i: 11, j: 2 },  ], css_id: 'tinytable_css_9r040fri017ybdqg0f9d',}, 
+          { positions: [ { i: 0, j: 1 }, { i: 0, j: 2 },  ], css_id: 'tinytable_css_89gmkpwojiwnr3f8hwmr',}, 
+          { positions: [ { i: 13, j: 0 },  ], css_id: 'tinytable_css_1lsi9fi888b29nwrt74v',}, 
+          ];
+
+          // Loop over the arrays to style the cells
+          cellsToStyle.forEach(function (group) {
+              group.positions.forEach(function (cell) {
+                  styleCell_afsfg0aw29d4yfdiamjp(cell.i, cell.j, group.css_id);
+              });
+          });
+      });
     </script>
 
     <style>
-    .table td.tinytable_css_id8572c8bhba8fkon84mae, .table th.tinytable_css_id8572c8bhba8fkon84mae {  text-align: left;  border-bottom: solid 0.1em #d3d8dc; }
-    .table td.tinytable_css_idwer2o6ts2srsme6g89ki, .table th.tinytable_css_idwer2o6ts2srsme6g89ki {  text-align: center;  border-bottom: solid 0.1em #d3d8dc; }
-    .table td.tinytable_css_idb935doaw78dospg1qamk, .table th.tinytable_css_idb935doaw78dospg1qamk {  text-align: left; }
-    .table td.tinytable_css_ideflbo5ior049hvce1vqi, .table th.tinytable_css_ideflbo5ior049hvce1vqi {  text-align: center; }
-    .table td.tinytable_css_ide8l8qqso5dnaeuvycvh0, .table th.tinytable_css_ide8l8qqso5dnaeuvycvh0 {  border-bottom: solid 0.05em black;  text-align: left; }
-    .table td.tinytable_css_idtbzd5zeebw6utgvoy0bf, .table th.tinytable_css_idtbzd5zeebw6utgvoy0bf {  border-bottom: solid 0.05em black;  text-align: center; }
+      /* tinytable css entries after */
+      .table td.tinytable_css_yefzhh6ooitzbx0udxcr, .table th.tinytable_css_yefzhh6ooitzbx0udxcr { text-align: center; border-bottom: solid #d3d8dc 0.1em; }
+      .table td.tinytable_css_l14kuplov2jx3eyg3cg8, .table th.tinytable_css_l14kuplov2jx3eyg3cg8 { text-align: left; border-bottom: solid black 0.05em; }
+      .table td.tinytable_css_kzpk69isazqqvthpp0u9, .table th.tinytable_css_kzpk69isazqqvthpp0u9 { text-align: center; border-bottom: solid black 0.05em; }
+      .table td.tinytable_css_folou1u94th4vls678uw, .table th.tinytable_css_folou1u94th4vls678uw { text-align: left; border-top: solid #d3d8dc 0.1em; border-bottom: solid #d3d8dc 0.05em; }
+      .table td.tinytable_css_fe82hzfid6rz12vk3p6d, .table th.tinytable_css_fe82hzfid6rz12vk3p6d { text-align: left; }
+      .table td.tinytable_css_9r040fri017ybdqg0f9d, .table th.tinytable_css_9r040fri017ybdqg0f9d { text-align: center; }
+      .table td.tinytable_css_89gmkpwojiwnr3f8hwmr, .table th.tinytable_css_89gmkpwojiwnr3f8hwmr { text-align: center; border-top: solid #d3d8dc 0.1em; border-bottom: solid #d3d8dc 0.05em; }
+      .table td.tinytable_css_1lsi9fi888b29nwrt74v, .table th.tinytable_css_1lsi9fi888b29nwrt74v { text-align: left; border-bottom: solid #d3d8dc 0.1em; }
     </style>
     <div class="container">
-      <table class="table table-borderless" id="tinytable_jd3lodcvowaudjl288ub" style="width: auto; margin-left: auto; margin-right: auto;" data-quarto-disable-processing="true">
+      <table class="table table-borderless" id="tinytable_afsfg0aw29d4yfdiamjp" style="width: auto; margin-left: auto; margin-right: auto;" data-quarto-disable-processing="true">
         <thead>
         
               <tr>
@@ -463,69 +430,69 @@ window.addEventListener('load', function () { styleCell_jd3lodcvowaudjl288ub(14,
         <tfoot><tr><td colspan="3">+ p &lt; 0.1, * p &lt; 0.05, ** p &lt; 0.01, *** p &lt; 0.001</td></tr></tfoot>
         <tbody>
                 <tr>
-                  <td>(Intercept) </td>
+                  <td>(Intercept)</td>
                   <td>-239.165***</td>
                   <td>-239.165***</td>
                 </tr>
                 <tr>
-                  <td>            </td>
-                  <td>(28.318)   </td>
-                  <td>(29.332)   </td>
+                  <td></td>
+                  <td>(28.318)</td>
+                  <td>(29.332)</td>
                 </tr>
                 <tr>
-                  <td>openc       </td>
-                  <td>0.006      </td>
-                  <td>0.006      </td>
+                  <td>openc</td>
+                  <td>0.006</td>
+                  <td>0.006</td>
                 </tr>
                 <tr>
-                  <td>            </td>
-                  <td>(0.005)    </td>
-                  <td>(0.005)    </td>
+                  <td></td>
+                  <td>(0.005)</td>
+                  <td>(0.005)</td>
                 </tr>
                 <tr>
                   <td>servadmi_pmp</td>
-                  <td>3.886*     </td>
-                  <td>3.886+     </td>
+                  <td>3.886*</td>
+                  <td>3.886+</td>
                 </tr>
                 <tr>
-                  <td>            </td>
-                  <td>(1.771)    </td>
-                  <td>(2.165)    </td>
+                  <td></td>
+                  <td>(1.771)</td>
+                  <td>(2.165)</td>
                 </tr>
                 <tr>
-                  <td>Num.Obs.    </td>
-                  <td>480        </td>
-                  <td>480        </td>
+                  <td>Num.Obs.</td>
+                  <td>480</td>
+                  <td>480</td>
                 </tr>
                 <tr>
-                  <td>R2          </td>
-                  <td>0.723      </td>
-                  <td>0.723      </td>
+                  <td>R2</td>
+                  <td>0.723</td>
+                  <td>0.723</td>
                 </tr>
                 <tr>
-                  <td>R2 Adj.     </td>
-                  <td>0.705      </td>
-                  <td>0.705      </td>
+                  <td>R2 Adj.</td>
+                  <td>0.705</td>
+                  <td>0.705</td>
                 </tr>
                 <tr>
-                  <td>AIC         </td>
-                  <td>2130.8     </td>
-                  <td>2130.8     </td>
+                  <td>AIC</td>
+                  <td>2130.8</td>
+                  <td>2130.8</td>
                 </tr>
                 <tr>
-                  <td>BIC         </td>
-                  <td>2264.3     </td>
-                  <td>2264.3     </td>
+                  <td>BIC</td>
+                  <td>2264.3</td>
+                  <td>2264.3</td>
                 </tr>
                 <tr>
-                  <td>Log.Lik.    </td>
-                  <td>-1033.379  </td>
-                  <td>           </td>
+                  <td>Log.Lik.</td>
+                  <td>-1033.379</td>
+                  <td></td>
                 </tr>
                 <tr>
-                  <td>RMSE        </td>
-                  <td>2.08       </td>
-                  <td>2.08       </td>
+                  <td>RMSE</td>
+                  <td>2.08</td>
+                  <td>2.08</td>
                 </tr>
         </tbody>
       </table>
@@ -534,7 +501,7 @@ window.addEventListener('load', function () { styleCell_jd3lodcvowaudjl288ub(14,
 </div>
 </div>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(model, <span class="dv">1</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(model, <span class="dv">1</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
@@ -542,7 +509,7 @@ window.addEventListener('load', function () { styleCell_jd3lodcvowaudjl288ub(14,
 </figure>
 </div>
 </div>
-<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(model, <span class="dv">2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(model, <span class="dv">2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
@@ -550,7 +517,7 @@ window.addEventListener('load', function () { styleCell_jd3lodcvowaudjl288ub(14,
 </figure>
 </div>
 </div>
-<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(lmtest)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(lmtest)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stderr">
 <pre><code>Loading required package: zoo</code></pre>
 </div>
@@ -563,7 +530,7 @@ Attaching package: 'zoo'</code></pre>
 
     as.Date, as.Date.numeric</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="fu">bptest</span>(model)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="fu">bptest</span>(model)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>
     studentized Breusch-Pagan test
@@ -573,10 +540,10 @@ BP = 113.83, df = 30, p-value = 1.082e-11</code></pre>
 </div>
 </div>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>() <span class="sc">+</span></span>
-<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="fu">aes</span>(<span class="at">y =</span> model<span class="sc">$</span>residuals,</span>
-<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>                 <span class="at">x =</span> <span class="fu">predict</span>(model))) <span class="sc">+</span></span>
-<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_hline</span>(<span class="at">yintercept =</span> <span class="dv">0</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>() <span class="sc">+</span></span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="fu">aes</span>(<span class="at">y =</span> model<span class="sc">$</span>residuals,</span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>                 <span class="at">x =</span> <span class="fu">predict</span>(model))) <span class="sc">+</span></span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_hline</span>(<span class="at">yintercept =</span> <span class="dv">0</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
@@ -672,6 +639,8 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
   });
   clipboard.on('success', onCopySuccess);
   if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+    // For code content inside modals, clipBoardJS needs to be initialized with a container option
+    // TODO: Check when it could be a function (https://github.com/zenorocha/clipboard.js/issues/860)
     const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
       text: getTextToCopy,
       container: window.document.getElementById('quarto-embedded-source-code-modal')
@@ -782,6 +751,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       if (window.Quarto?.typesetMath) {
         window.Quarto.typesetMath(note);
       }
+      // TODO in 1.5, we should make sure this works without a callout special case
       if (note.classList.contains("callout")) {
         return note.outerHTML;
       } else {
