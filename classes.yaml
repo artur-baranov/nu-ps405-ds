@@ -53,7 +53,7 @@
   Data: "[{{< fa database >}}](data/cpds.xlsx){target='_blank'}"
   type: "schedule"
   
-- title: "Diagnostics: Outliers"
+- title: "Model Diagnostics"
   Week: 8
   date: 2025-02-27
   Link: "[{{< fa link >}}](/ps405-d_8.qmd)"

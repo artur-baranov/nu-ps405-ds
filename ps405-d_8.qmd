@@ -12,7 +12,9 @@ toc: true
 
 -   Any questions?
 
--   We're almost done with the class! [insert a survey] What you think we should recap?
+-   We're almost done with the class! What you think we should recap? Feel free to leave any thoughts in this [form](https://forms.gle/uCBiJp8fB1a5xcCs7) after the class
+
+-   To get the extra points for the exercises you will need to complete only 5 exercises. 
 
 <center>
 <a href="https://artur-baranov.github.io/nu-ps405-ds/scripts/ps405-d_8.qmd" class="btn btn-primary" role="button" download="ps405-d_8.qmd" style="width:200px" target="_blank">Download script</a>
@@ -40,6 +42,28 @@ library(readxl)
 cpds = read_excel("data/cpds.xlsx")
 ```
 
+
+prop Electoral system
+
+effpar_ele Effective number of parties 
+
+
+```{r}
+library(lmtest)
+lm(effpar_ele ~ as.factor(prop) + country + as.factor(year), cpds) %>%
+  summary()
+```
+
+```{r}
+library(estimatr)
+
+lm_robust(effpar_ele ~ as.factor(prop), cpds,
+          fixed_effects =  country + as.factor(year),
+          se_type = "HC2")
+
+```
+
+
 :::
 
 
@@ -54,3 +78,4 @@ cpds = read_excel("data/cpds.xlsx")
 cooks.distance()
 ```
 
+4 / N - k (covariates) - 1
