@@ -67,7 +67,7 @@ After the grades are released, you have one week to submit the `.qmd` file via e
 
 -   [Joins Tutorial](https://rpubs.com/williamsurles/293454)
 
-### Data sources
+### Data Sources
 
 -   [Political Science datasets](https://github.com/erikgahner/PolData)
 

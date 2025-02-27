@@ -1,0 +1,154 @@
+---
+title: "Lab 8 Extra"
+subtitle: "ESS Data Wrangling"
+format: 
+  html:
+    embed-resources: true
+---
+
+# Introduction
+
+First of all, I'm glad you opened this link! Feel free to copy the code for your purposes.
+
+Not all data comes in a neat and clean way. Here I'll show you how I prepared the data for [Lab 8](https://artur-baranov.github.io/nu-ps405-ds/ps405-d_8.html).
+
+# Turning to Business
+
+As usual, let's load the library `tidyverse` for data wrangling and `kableExtra` for better display of the results in HTML document. 
+
+```{r}
+#| warning: false
+#| message: false
+library(tidyverse)
+library(kableExtra)
+```
+
+Now, let's load the raw dataset. 
+
+```{r}
+df = read.csv("data_raw/ESS11-subset.csv")
+```
+
+Here is how it looks like:
+
+```{r}
+df %>%
+  head() %>%
+  kable()
+```
+
+You can notice a lot of variables there, and observations for one country repeated multiple times. As it's a survey data, ESS asks a lot of people from each European Union country. In the Lab we use aggregated data for each country, thus we need to calculate the average.
+
+Take a look on their codebook [here](https://ess.sikt.no/en/). Check how the "`pplfair` - Most people try to take advantage of you, or try to be fair" variable is coded:
+
+| Value | Category                                |
+|-------|-----------------------------------------|
+| 0     | Most people try to take advantage of me |
+| 1     | 1                                       |
+| 2     | 2                                       |
+| 3     | 3                                       |
+| 4     | 4                                       |
+| 5     | 5                                       |
+| 6     | 6                                       |
+| 7     | 7                                       |
+| 8     | 8                                       |
+| 9     | 9                                       |
+| 10    | Most people try to be fair              |
+| 77    | Refusal*                                |
+| 88    | Don't know*                             |
+| 99    | No answer*                              |
+
+Thus, we need to recode values `77`, `88` and `99` to something else, otherwise our aggregated values can get over 10 when the scale doesn't assume it. Let's see:
+
+```{r}
+#| warning: false
+#| message: false
+df %>%
+  ggplot(aes(x = pplfair)) +
+  geom_histogram() 
+```
+
+Let's record the average without correcting the data.
+
+```{r}
+avg_raw = mean(df$pplfair)
+```
+You can see how I recode the variables below using `case_when()` from `tidyverse`. I rely on documentation of the European Social Survey, as you should do too! This weird `NA_real_` makes values simply NA. Syntax is not as straightforward, take some time to understand what's going on!
+
+```{r}
+df = df %>%
+  mutate(pplfair = case_when(pplfair == 99 ~ NA_real_,
+                             pplfair == 88 ~ NA_real_,
+                             pplfair == 77 ~ NA_real_,
+                             TRUE ~ pplfair),
+         trstplt = case_when(trstplt == 99 ~ NA_real_,
+                             trstplt == 88 ~ NA_real_,
+                             trstplt == 77 ~ NA_real_,
+                             TRUE ~ trstplt),
+         trstprt = case_when(trstprt == 99 ~ NA_real_,
+                             trstprt == 88 ~ NA_real_,
+                             trstprt == 77 ~ NA_real_,
+                             TRUE ~ trstprt),
+         rlgdgr = case_when(rlgdgr == 99 ~ NA_real_,
+                             rlgdgr == 88 ~ NA_real_,
+                             rlgdgr == 77 ~ NA_real_,
+                             TRUE ~ rlgdgr),
+         happy = case_when(happy == 99 ~ NA_real_,
+                             happy == 88 ~ NA_real_,
+                             happy == 77 ~ NA_real_,
+                             TRUE ~ happy),
+         edulvlb = case_when(edulvlb < 610 ~ 1,
+                             edulvlb == 610 | edulvlb == 620 ~ 2,
+                             edulvlb == 710 | edulvlb == 720 ~ 3,
+                             edulvlb == 800 ~ 4,
+                             TRUE ~ NA_real_))
+
+
+```
+
+Now, let's calculate average. Don't forget, now we have NAs, so we need to use `na.rm = TRUE` to avoid errors.
+
+```{r}
+avg_corr = mean(df$pplfair, na.rm = TRUE)
+```
+Now, compare. This might be quite meaningful!
+
+```{r}
+data.frame(`Raw` = avg_raw, `Recoded` = avg_corr) %>%
+  kable()
+```
+
+Now, let's group the data by country to aggregate variables to the country level.
+
+```{r}
+df_groupped = df %>%
+  group_by(cntry) %>%
+  summarize(pplfair = mean(pplfair, na.rm = T),
+            trstplt = mean(trstplt, na.rm = T),
+            trstprt = mean(trstprt, na.rm = T),
+            rlgdgr = mean(rlgdgr, na.rm = T),
+            happy = mean(happy, na.rm = T),
+            edulvlb = mean(edulvlb, na.rm = T))
+
+head(df_groupped) %>%
+  kable()
+```
+
+Finally, save the data. This is the data we have been working in the Lab 8.
+
+```{r}
+#| eval: false
+
+write.csv(df_groupped, "data/ess.csv", row.names = F)
+```
+
+
+
+
+
+
+
+
+
+
+
