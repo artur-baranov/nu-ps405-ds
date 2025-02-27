@@ -54,7 +54,7 @@ Using `plot()` present residuals vs fitted graph. Is it homoscedastic?
 
 ```
 
-Add `country` and `year` fixed effects. Don;t forget about the variables' class!
+Add `country` and `year` fixed effects. Don't forget about the variables' class!
 
 ```{r}
 
@@ -110,7 +110,7 @@ Using `modelsummary()` present three models: with fixed effects, with fixed effe
 
 # Homoscedasticity 
 
-Today we are working with European Social Survey. You can access their documentation [here](https://ess.sikt.no/en/). We are interested in explaining why people trust or distrust each other. I have pre-processed the data for you. You can find how I did it [here](https://artur-baranov.github.io/nu-ps405-ds/ps405-d_8_extra.html).
+Today we are working with European Social Survey. You can access their documentation [here](https://ess.sikt.no/en/). I have pre-processed the data for you. You can find how I did it [here](https://artur-baranov.github.io/nu-ps405-ds/ps405-d_8_extra.html). We are interested in explaining why people trust or distrust each other. 
 
 We are going to use the following variables:
 
@@ -128,7 +128,7 @@ Load the dataset.
 ess = read.csv("data/ess.csv")
 ```
 
-Let's wrangle the data first. To ease the compheresnion, rename the variables.
+Let's wrangle the data first. To ease the comprehension, rename the variables.
 
 ```{r}
 ess = ess %>%
@@ -202,7 +202,7 @@ Visualize what we've got. With the given cutoff, there are three influential obs
 
 ```{r}
 plot(model_trust, 4)
-abline(h=cutoff, lty=2)
+abline(h = cutoff, lty = 2)
 ```
 
 Alternatively, we can use `ggplot()`.
@@ -235,7 +235,7 @@ modelsummary(models,
 
 # Normality of Errors
 
-Another important prerequisit is the normal distribution of errors (i.e., normality). Once again, we can use `plot()`. First, visualize plot without outliers.
+Another important prerequisite is the normal distribution of errors (i.e., normality). Once again, we can use `plot()`. First, visualize plot without outliers.
 
 ```{r}
 plot(model_trust_wo, 2)
@@ -263,7 +263,7 @@ ggplot(model_trust) +
 ```
 
 
-Ok, what to do if residuals are not normally distributed? transform DV and/or IV. Quite in a similar way we did it in [Lab 5](https://artur-baranov.github.io/nu-ps405-ds/ps405-d_5.html). A slightly more formal way of doing this is available [here](https://www.r-bloggers.com/2022/10/box-cox-transformation-in-r/).
+Ok, what to do if residuals are not normally distributed? Transform DV and/or IV. Quite in a similar way we did it in [Lab 5](https://artur-baranov.github.io/nu-ps405-ds/ps405-d_5.html). A slightly more formal way of doing this is available [here](https://www.r-bloggers.com/2022/10/box-cox-transformation-in-r/).
 
 Let's present the summary diagnostics. 
 
