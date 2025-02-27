@@ -1,0 +1,438 @@
+---
+title: "Model Diagnostics"
+subtitle: "Week 8"
+date: 2025-02-27
+format: 
+  html:
+    embed-resources: true
+toc: true
+---
+
+# Before we start
+
+-   Any questions?
+
+-   We're almost done with the class! What you think we should recap? Feel free to leave any thoughts in this [form](https://forms.gle/uCBiJp8fB1a5xcCs7) after the class. When thinking about what we have covered, don't forget that each lab has "Check list" in the end.
+
+-   To get the extra points for the exercises you will need to complete only 5 exercises. 
+
+<center>
+<a href="https://artur-baranov.github.io/nu-ps405-ds/scripts/ps405-d_8.qmd" class="btn btn-primary" role="button" download="ps405-d_8.qmd" style="width:200px" target="_blank">Download script</a>
+</center>
+<br>
+<center>
+<a href="https://artur-baranov.github.io/nu-ps405-ds/data/ess.csv" class="btn btn-primary" role="button" download="ess.csv" style="width:200px" target="_blank">Download data</a>
+</center>
+
+# Review of the previous week
+
+::: callout-note
+## Review
+
+Load `tidyverse` library
+
+```{r}
+#| message: false
+library(tidyverse)
+```
+
+Load the Comparative Political Dataset data (`cpds.xlsx`).
+
+```{r}
+
+```
+
+Let's attempt to explain Total expenditure on health as a percentage of GDP (`health_pmp`). Regress it against Total labour force as a percentage of population (`labfopar`) and Total reported union members (`grossu`). Set up a model using `lm()`.
+
+```{r}
+
+```
+
+Using `plot()` present residuals vs fitted graph. Is it homoscedastic?
+
+```{r}
+
+```
+
+Add `country` and `year` fixed effects. Don't forget about the variables' class!
+
+```{r}
+
+```
+
+Now, plot the residuals vs fitted. How did it change? Is it homoscedastic?
+
+```{r}
+
+```
+
+Using `bptest()` from `lmtest` library test your assumption. Interpret the result.
+
+```{r}
+
+```
+
+Using `lm_robust()` from `estimatr` library run the same model with `HC2` standard errors. Did the result change?
+
+```{r}
+#| eval: false
+
+model_se = ...
+```
+
+Run the same model, but cluster the standard errors by `country`. 
+
+```{r}
+#| eval: false
+
+model_cl = ...
+```
+
+Using `modelsummary()` present three models: with fixed effects, with fixed effects and robust standard errors, and with fixed effects and robsut standard errors clustered by country. Briefly compare them.
+
+```{r}
+
+```
+
+
+:::
+
+
+# Agenda
+
+-   Refreshing homoscedasticity assumption
+
+-   Discuss Influential Points and outliers
+
+-   Check for Normality of Errors
+
+-   Test models for Multicollinearity 
+
+# Homoscedasticity 
+
+Today we are working with European Social Survey. You can access their documentation [here](https://ess.sikt.no/en/). I have pre-processed the data for you. You can find how I did it [here](https://artur-baranov.github.io/nu-ps405-ds/ps405-d_8_extra.html). We are interested in explaining why people trust or distrust each other. 
+
+We are going to use the following variables:
+
+-   `pplfair`: Most people try to take advantage of you, or try to be fair (0: Most people try to take advantage of me; 10: Most people try to be fair)
+
+-   `trstplt`: Trust in politicians (0: no trust; 10: complete trust)
+
+-   `trstprt`: Trust in political parties
+
+-   `edulvlb`: Education level
+
+Load the dataset.
+
+```{r}
+ess = read.csv("data/ess.csv")
+```
+
+Let's wrangle the data first. To ease the comprehension, rename the variables.
+
+```{r}
+ess = ess %>%
+  rename(trust = pplfair,
+         trust_politicians = trstplt,
+         trust_parties = trstprt,
+         education = edulvlb)
+
+head(ess)
+```
+
+Set up the model. Analyze the regression output.
+
+```{r}
+model_trust = lm(trust ~ trust_politicians + education + trust_parties, ess)
+summary(model_trust)
+```
+
+Let's plot the residuals vs fitted graph. Is it homoscedastic?
+
+```{r}
+plot(model_trust, 1)
+```
+
+Alternatively, feel free to use `ggplot()` for this purpose.
+
+```{r}
+#| message: false
+
+ggplot(model_trust, aes(.fitted, .resid)) +
+  geom_point() +
+  geom_hline(yintercept = 0) +
+  geom_smooth(se = FALSE)
+```
+
+
+Let's test our assumption. All good! Refer to the Lab 7 if you are interested in how to approach fixing the heteroscedasticity problem.
+
+```{r}
+#| message: false
+#| warning: false
+
+library(lmtest)
+bptest(model_trust)
+```
+
+
+# Influential Points
+
+Influential points can drive our results significantly! Let's try to find if we have any in our small dataset. Here we are going to use Cook's Distance. Generally, there are various thresholds suggetions, but in this class we stick to the following formula:
+
+$$
+D = \frac{4}{N-k-1}
+$$
+Where $N$ is the number of observations and $k$ is the number of covariates. You don't have to know it, but the denominator is basically Degrees of freedom for residuals. 
+
+Calculate the cutoff
+
+```{r}
+cutoff = 4 / (model_trust$df.residual)
+cutoff
+```
+
+Calculate the Cook's distance for observations
+
+```{r}
+cooks.distance(model_trust)
+```
+
+Visualize what we've got. With the given cutoff, there are three influential observations
+
+```{r}
+plot(model_trust, 4)
+abline(h = cutoff, lty = 2)
+```
+
+Alternatively, we can use `ggplot()`.
+
+```{r}
+ggplot(model_trust, aes(seq_along(.cooksd), .cooksd)) +
+  geom_col() +
+  geom_hline(yintercept = cutoff)
+```
+
+Set up models with and without influential points. Our goal is to understand their impact: do they drive the results? What have changed? General advice: stick to the more conservative model.
+
+```{r}
+#| message: false
+#| warning: false
+
+library(modelsummary)
+
+model_trust_wo = lm(trust ~ trust_politicians + education + trust_parties, ess[-c(1, 4, 8),])
+
+models = list(
+  "Full Model" = model_trust,
+  "Without Outliers" = model_trust_wo)
+
+modelsummary(models, 
+             gof_omit = "AIC|BIC|Log.Lik.|F|RMSE", 
+             stars = T)
+```
+
+
+# Normality of Errors
+
+Another important prerequisite is the normal distribution of errors (i.e., normality). Once again, we can use `plot()`. First, visualize plot without outliers.
+
+```{r}
+plot(model_trust_wo, 2)
+```
+
+Now, with outliers. Compare two graphs.
+
+```{r}
+plot(model_trust, 2)
+```
+
+How different are they? We need to use formal tests. How would you interpret Shapiro-Wilk test below?
+
+```{r}
+shapiro.test(model_trust$residuals)
+shapiro.test(model_trust_wo$residuals)
+```
+
+Of course, you can visualize this with `ggplot()`, too. More details on visualizing base R diagnostics plots in ggplot is available [here](https://ggplot2.tidyverse.org/reference/fortify.lm.html).
+
+```{r}
+ggplot(model_trust) +
+  stat_qq(aes(sample = .stdresid)) +
+  geom_abline()
+```
+
+
+Ok, what to do if residuals are not normally distributed? Transform DV and/or IV. Quite in a similar way we did it in [Lab 5](https://artur-baranov.github.io/nu-ps405-ds/ps405-d_5.html). A slightly more formal way of doing this is available [here](https://www.r-bloggers.com/2022/10/box-cox-transformation-in-r/).
+
+Let's present the summary diagnostics. 
+
+```{r}
+par(mfrow = c(2, 2))
+plot(model_trust)
+```
+
+Check other possible diagnostics plots below.
+
+```{r}
+#| eval: false
+
+?plot.lm()
+```
+
+
+# Multicollinearity
+
+Finally, multicollinearity. We do not want to have perfectly collinear variables. Let's check is using `ggpairs()` from `GGally` library.
+
+```{r}
+#| warning: false
+#| message: false
+
+library(GGally)
+ggpairs(ess, columns = c("trust", "trust_politicians", "trust_parties", "education"))
+```
+
+Apparently, trust in politicians and trust in political parties capture overlapping concepts. However, their $\rho = 0.99$. More formally, we can calculate variance inflation factor. Use `vif()` function from `car` library. Rule of thumb is: if VIF is greater than 10, we have multicollinearity.
+
+```{r}
+#| warning: false
+#| message: false
+
+library(car)
+vif(model_trust)
+```
+
+Let's exclude trust in political parties (`trust_parties`). Model specification is crucial!
+
+```{r}
+model_trust_excl = lm(trust ~ trust_politicians + education, ess)
+
+
+modelsummary(list("Model Base" = model_trust,
+                  "Model Without Multicollinearity" = model_trust_excl),
+             stars = T,
+             gof_omit = "AIC|BIC|Log.Lik.|F|RMSE")
+```
+
+Ok, excluded one variable. What's next? **Go over the diagnostics again with the corrected model!**
+
+# Exercises
+
+Let's explore other variables' effects. First, rename the variable `rlgdgr` (How religious are you) to `religion`
+
+::: {.callout-tip icon="false"}
+## Solution
+
+YOUR SOLUTION HERE
+
+:::
+
+Using `ggplot()` draw distribution of `religion` variable
+
+::: {.callout-tip icon="false"}
+## Solution
+
+YOUR SOLUTION HERE
+
+:::
+
+Set up a linear model: predict `trust` by `trust_politicians`, `education` and `religion`. Briefly describe the results: which variables are statistically significant and what is the direction of association (negative/positive).
+
+::: {.callout-tip icon="false"}
+## Solution
+
+
+YOUR SOLUTION HERE
+
+:::
+
+Draw Cook's distance. Use the same threshold formula as we used in the lab. Are there any influential points?
+
+::: {.callout-tip icon="false"}
+## Solution
+
+YOUR SOLUTION HERE
+
+:::
+
+Set up a model without outliers. How different are the results?
+
+::: {.callout-tip icon="false"}
+## Solution
+
+YOUR SOLUTION HERE
+
+:::
+
+
+# Additional Exercises
+
+For the extra credit you don't have to do the exercises below. These are optional!
+
+Draw a redisuals vs fitted plot. Use either `plot()` or `ggplot()`. Is the homoscedasticity assumption satisfied?
+
+::: {.callout-tip icon="false"}
+## Solution
+
+YOUR SOLUTION HERE
+
+:::
+
+Using `bptest()` from `lmtest` library, test it formally. Interpret the results
+
+::: {.callout-tip icon="false"}
+## Solution
+
+YOUR SOLUTION HERE
+
+:::
+
+Draw a qqplot using `plot()`. Is the normality assumption satisfied?
+
+::: {.callout-tip icon="false"}
+## Solution
+
+YOUR SOLUTION HERE
+
+:::
+
+Test it formally using Shapiro-Wilk test (`shapiro.test()`). Interpret the results.
+
+::: {.callout-tip icon="false"}
+## Solution
+
+YOUR SOLUTION HERE
+
+:::
+
+Using `vif()` from `car` library check if there is multicollinearity.
+
+::: {.callout-tip icon="false"}
+## Solution
+
+YOUR SOLUTION HERE
+
+:::
+
+Briefly summarize the diagnostics. What are the problems with the model? How substantive are they?
+
+::: {.callout-tip icon="false"}
+## Solution
+
+YOUR SOLUTION HERE
+
+:::
+
+
+# Check List
+
+<input type="checkbox"/> I know how to interpret the residuals vs fitted plot, and I know how to test for homoscedasticity formally using `bptest()`!
+
+<input type="checkbox"/> I know what Cook's distance is, and I know that there are various formulas to calculate the threshold
+
+<input type="checkbox"/> I am not afraid of using qqPlot to get the sense if residuals are distributed normally
+
+<input type="checkbox"/> I know what Shapiro Wilk test, and I will use it to test if my data is distributed normally
+
+<input type="checkbox"/> I know what variance inflation factor is, and I will use `vif()` to search for variables with value greater than 10
