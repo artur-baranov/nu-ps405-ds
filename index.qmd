@@ -16,6 +16,7 @@ listing:
 ---
 
 ## Description
+<center>PS 405 • Winter 2025<p style="color:#4E2A84;">Northwestern University</p></center>
 
 This site is designed to support students enrolled in the PS405 Linear Models course. Here, you will find lab materials, which are also available on Canvas. In the section, we will focus on coding and practicing the concepts covered in the lectures.
 
