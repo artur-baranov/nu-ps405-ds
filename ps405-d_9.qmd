@@ -1,5 +1,5 @@
 ---
-title: "Ешеду"
+title: "GLMs and Quarter Review"
 subtitle: "Week 9"
 date: 2025-03-06
 format: 
@@ -7,5 +7,7 @@ format:
     embed-resources: true
 toc: true
 ---
+
+
 
 https://rstudio.github.io/cheatsheets/
