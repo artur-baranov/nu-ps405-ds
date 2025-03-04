@@ -67,7 +67,7 @@
     "href": "index.html#additional-resources",
     "title": "PS405 Linear Models",
     "section": "Additional Resources",
-    "text": "Additional Resources\n\nHelpful Regression Resources\n\nStep-by-step regression guide\n\n\n\nData Wrangling\n\nJoins Tutorial\n\n\n\nData Sources\n\nPolitical Science datasets\n\n\n\nVisualization\n\nIntroduction to ggplot2\nMaps/Networks/Advanced vizualisation with ggplot2\nMaking interactive plots with ggplot2\n\n\n\nCheatsheets\n\nTidyverse cheatsheets"
+    "text": "Additional Resources\n\nHelpful Regression Resources\n\nStep-by-step regression guide\n\n\n\nData Wrangling\n\nJoins Tutorial\n\n\n\nData Sources\n\nPolitical Science datasets\n\n\n\nVisualization\n\nIntroduction to ggplot2\nMaps/Networks/Advanced visualization with ggplot2\nMaking interactive plots with ggplot2\n\n\n\nCheatsheets\n\nTidyverse cheatsheets"
   },
   {
     "objectID": "ps405-d_3.html",
@@ -303,9 +303,9 @@
   {
     "objectID": "ps405-d_9.html",
     "href": "ps405-d_9.html",
-    "title": "Ешеду",
+    "title": "GLMs and Quarter Review",
     "section": "",
-    "text": "https://rstudio.github.io/cheatsheets/"
+    "text": "Before we start\n\nAny questions?\n\n\nDownload script\n\n\n\nDownload data\n\n\n\nReview of the previous week\n\n\n\n\n\n\nReview\n\n\n\nLoad tidyverse library\n\nlibrary(tidyverse)\n\nLoad the European Social Value data (ess.csv).\nRename the variables:\n\npplfair to trust\ntrstplt to trust_politicians\nrlgdgr to religion.\n\nRun the following model. DV: happy, IVs: trust, trust_politicians and religion. Present the summary().\nUsing bptest() from the lmtest library, test if the model is homoscedastic. Interpret the results of Breusch-Pagan test.\nDraw residuals vs fitted plot. Does it match the BP test results? You can use plot(..., which = 1).\nCalculate the cutoff for the Cook’s distance using the formula: \\(\\frac{4}{N-k-1}\\). Plot the Cook’s distance using plot() and add a cutoff line using abline(). Are there any influential points?\nSet up a model without influential points. How different the estimates are? Present a simple modelsummary() comparison.\n\nmodel_no = lm(happy ~ trust + trust_politicians + religion, ess[-c(...),])\n\nlibrary(...)\nmodelsummary(list(...),\n             stars = T)\n\nDraw a Q-Q plot using plot(..., which = 2) for the full model. Are the residuals distributed normally?\nUsing shapiro.test() test the normality of the residuals in the model. Interpret the results.\nWhat else we have to check? How would you do that? No code needed but feel free to rely on the previous lab for this question.\n\n\nhttps://rstudio.github.io/cheatsheets/"
   },
   {
     "objectID": "ps405-d_8_extra.html",

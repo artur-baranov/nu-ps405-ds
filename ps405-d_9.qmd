@@ -9,5 +9,103 @@ toc: true
 ---
 
 
+# Before we start
+
+-   Any questions?
+
+
+<center>
+<a href="https://artur-baranov.github.io/nu-ps405-ds/scripts/ps405-d_9.qmd" class="btn btn-primary" role="button" download="ps405-d_9.qmd" style="width:200px" target="_blank">Download script</a>
+</center>
+<br>
+<center>
+<a href="https://artur-baranov.github.io/nu-ps405-ds/data/..." class="btn btn-primary" role="button" download="..." style="width:200px" target="_blank">Download data</a>
+</center>
+
+
+# Review of the previous week
+
+::: callout-note
+## Review
+
+Load `tidyverse` library
+
+```{r}
+#| message: false
+library(tidyverse)
+```
+
+Load the European Social Value data (`ess.csv`).
+
+```{r}
+
+```
+
+Rename the variables: 
+
+-   `pplfair` to `trust`
+
+-   `trstplt` to `trust_politicians`
+
+-   `rlgdgr` to `religion`.
+
+```{r}
+
+```
+
+Run the following model. DV: `happy`, IVs: `trust`, `trust_politicians` and `religion`. Present the `summary()`.
+
+```{r}
+
+```
+
+Using `bptest()` from the `lmtest` library, test if the model is homoscedastic. Interpret the results of Breusch-Pagan test.
+
+```{r}
+
+```
+
+Draw residuals vs fitted plot. Does it match the BP test results? You can use `plot(..., which = 1)`.
+
+```{r}
+
+```
+
+Calculate the cutoff for the Cook's distance using the formula: $\frac{4}{N-k-1}$. Plot the Cook's distance using `plot()` and add a cutoff line using `abline()`. Are there any influential points?
+
+```{r}
+
+```
+
+Set up a model without influential points. How different the estimates are? Present a simple `modelsummary()` comparison.
+
+```{r}
+#| eval: false
+
+model_no = lm(happy ~ trust + trust_politicians + religion, ess[-c(...),])
+
+library(...)
+modelsummary(list(...),
+             stars = T)
+```
+
+Draw a Q-Q plot using `plot(..., which = 2)` for the full model. Are the residuals distributed normally?
+
+```{r}
+
+```
+
+Using `shapiro.test()` test the normality of the `residuals` in the model. Interpret the results.
+
+```{r}
+
+```
+
+What else we have to check? How would you do that? No code needed but feel free to rely on the previous lab for this question.
+
+:::
+
+
+
 
 https://rstudio.github.io/cheatsheets/
