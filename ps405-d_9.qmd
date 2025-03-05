@@ -47,7 +47,7 @@ Rename the variables:
 
 -   `trstplt` to `trust_politicians`
 
--   `rlgdgr` to `religion`.
+-   `rlgdgr` to `religion`
 
 ```{r}
 
@@ -106,6 +106,52 @@ What else we have to check? How would you do that? No code needed but feel free 
 :::
 
 
+# Agenda
+
+-   Recap of what we did
+
+-   And a short introduction to GLM alongside
+
+# Model Building
+
+Today we are working with Transitional Justice Evaluation Tools dataset. Let's load the data.
+
+```{r}
+#| eval: false
+
+tjet = read.csv("data/tjet.csv")
+```
+
+Let's check the first observations
+
+```{r}
+#| eval: false
+
+head(tjet)
+```
+
+
+We are going to us the following variables:
+
+
+-   `dtr`	democratic transition sample, binary
+
+-   `tcs_operated`	truth commission operated, binary
+
+-   `trials_domestic`	count of domestic trials per country and start year, by country of the accused
+
+
+
+```{r}
+mod = glm(dtr ~ trials_domestic + tcs_operated, tjet, family = binomial(link = "logit")) 
+summary(mod)
+
+library(ggeffects)
+ggpredict(mod, term = c("trials_domestic", "tcs_operated")) %>%
+  plot(show_data = T)
+```
 
 
 https://rstudio.github.io/cheatsheets/
+
+What's next?
