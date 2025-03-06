@@ -66,5 +66,5 @@
   date: 2025-03-06
   Link: "[{{< fa link >}}](/ps405-d_9.qmd)"
   Code: "[{{< fa file-code >}}](scripts/ps405-d_9.qmd){target='_blank'}"
-  Data: "[{{< fa database >}}](data/...){target='_blank'}"
+  Data: "[{{< fa database >}}](data/tjet.csv){target='_blank'}"
   type: "schedule"
