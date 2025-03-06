@@ -1,0 +1,379 @@
+---
+title: "GLMs and Quarter Review"
+subtitle: "Week 9"
+date: 2025-03-06
+format: 
+  html:
+    embed-resources: true
+toc: true
+---
+
+
+# Before we start
+
+<center>
+<a href="https://artur-baranov.github.io/nu-ps405-ds/scripts/ps405-d_9.qmd" class="btn btn-primary" role="button" download="ps405-d_9.qmd" style="width:200px" target="_blank">Download script</a>
+</center>
+<br>
+<center>
+<a href="https://artur-baranov.github.io/nu-ps405-ds/data/tjet.csv" class="btn btn-primary" role="button" download="tjet.csv" style="width:200px" target="_blank">Download data</a>
+</center>
+
+
+# Optional Review of the previous week
+
+::: callout-note
+## Review
+
+Load `tidyverse` library
+
+```{r}
+#| message: false
+library(tidyverse)
+```
+
+Load the European Social Value data (`ess.csv`).
+
+```{r}
+
+```
+
+Rename the variables: 
+
+-   `pplfair` to `trust`
+
+-   `trstplt` to `trust_politicians`
+
+-   `rlgdgr` to `religion`
+
+```{r}
+
+```
+
+Run the following model. DV: `happy`, IVs: `trust`, `trust_politicians` and `religion`. Present the `summary()`.
+
+```{r}
+
+```
+
+Using `bptest()` from the `lmtest` library, test if the model is homoscedastic. Interpret the results of Breusch-Pagan test.
+
+```{r}
+
+```
+
+Draw residuals vs fitted plot. Does it match the BP test results? You can use `plot(..., which = 1)`.
+
+```{r}
+
+```
+
+Calculate the cutoff for the Cook's distance using the formula: $\frac{4}{N-k-1}$. Plot the Cook's distance using `plot()` and add a cutoff line using `abline()`. Are there any influential points?
+
+```{r}
+
+```
+
+Set up a model without influential points. How different the estimates are? Present a simple `modelsummary()` comparison.
+
+```{r}
+#| eval: false
+
+model_no = lm(happy ~ trust + trust_politicians + religion, ess[-c(...),])
+
+library(...)
+modelsummary(list(...),
+             stars = T)
+```
+
+Draw a Q-Q plot using `plot(..., which = 2)` for the full model. Are the residuals distributed normally?
+
+```{r}
+
+```
+
+Using `shapiro.test()` test the normality of the `residuals` in the model. Interpret the results.
+
+```{r}
+
+```
+
+What else we have to check? How would you do that? No code needed but feel free to rely on the previous lab for this question.
+
+:::
+
+
+# Agenda
+
+-   Recap of what we did
+
+-   And a short introduction to GLM alongside 
+
+# Recap
+
+Today we are working with Transitional Justice Evaluation Tools dataset. You can explore their codebook [here](https://transitionaljusticedata.org/en/downloads.html). Let's load the data.
+
+```{r}
+#| eval: false
+
+tjet = read.csv("data/tjet.csv")
+```
+
+Print out the first observations
+
+```{r}
+#| eval: false
+
+...(tjet)
+```
+
+We are going to use the following variables:
+
+-   `country` and `year`
+
+-   `dtr`	democratic transition
+
+-   `tcs_operated`	truth commission operated
+
+-   `trials_domestic`	count of domestic trials per country and start year
+
+-   `region`	United Nations region
+
+
+Subset the above variables. You can do this with `select()`
+
+```{r}
+#| eval: false
+
+tjet_sub = ... %>%
+  ...(country, year, dtr, tcs_operated, trials_domestic, region) 
+```
+
+Leave more recent observations. Say, starting year 1975. 
+
+```{r}
+#| eval: false
+
+tjet_sub = tjet_sub %>%
+  ...(year >= 1975)
+```
+
+First, let's explore the distribution of `trials_domestic` variable. Draw a histogram.
+
+```{r}
+#| eval: false
+
+...
+```
+
+Now, draw a boxplot of `trials_domestic` by `region`.
+
+```{r}
+#| eval: false
+
+ggplot(tjet_sub) +
+  ...(aes(x = region, y = ...))
+```
+
+Now, present the descriptive statistics for the same variable (`trials_domestic`)
+
+```{r}
+#| eval: false
+
+...
+```
+
+Now, let's do a slightly more detailed subgroup analysis. Calculate the average and median `trials_domestic` for all the regions. Save that to a new object. Why is the average so different from the median?
+
+```{r}
+#| eval: false
+
+trials_region = tjet_sub %>%
+  ...(region) %>%
+  ...(average_trials = ...(trials_domestic))
+
+trials_region
+```
+
+Now, let's the number of transitions (`dtr`). Why are there so many transitions?
+
+```{r}
+#| eval: false
+
+transitions_region = ...
+
+transitions_region
+```
+
+Let's visualize various statistics! Combine `trials_region` and `transitions_region` using `left_join()`. Draw a scatteplot. Let `transitions` be on the X axis, and `average_trials` on the Y axis. Add `geom_text()` with `label` argument set to `region`, use `vjust = 1.5`.
+
+```{r}
+#| eval: false
+
+trials_region %>%
+  ...
+  ggplot(...(x = ..., y = average_trials)) +
+    geom_point(size = 4) +
+    geom_text(aes(label = region), vjust = 1.5) 
+```
+
+Using `ggpairs()` visualize the following columns: `"trials_domestic", "region", "tcs_operated", "dtr"`. What do you notice?
+
+```{r}
+#| eval: false
+
+library(...)
+...
+```
+
+Set up a multiple linear regerssion. Predict democratic transition `dtr` by `trials_domestic` and `tcs_operated`. What type of model did we create based on the independent variables (IVs)? Present the results.
+
+```{r}
+#| eval: false
+
+model = ...
+summary(model)
+```
+
+Load `ggeffects` library
+
+```{r}
+#| warning: false
+
+library(ggeffects)
+```
+
+Visualize the model with terms `trials_domestic` and `tcs_operated`.
+
+```{r}
+#| eval: false
+
+ggpredict(model, terms = c("trials_domestic", "tcs_operated")) %>%
+  plot()
+```
+
+Check the normality of residuals.
+
+```{r}
+#| eval: false
+
+...(model, which = 2)
+```
+
+Set the linear probability model, but include country and year fixed effects.
+
+```{r}
+#| eval: false
+
+model_lpm = lm(dtr ~ trials_domestic + tcs_operated + ..., tjet_sub) 
+```
+
+Check the normality, again. Use Q-Q plot.
+
+```{r}
+#| eval: false
+
+plot(model_lpm, 2)
+```
+
+Now, let's check if the residuals are homoscedastic. Use `which = 1` for `plot()`. What's that? Can we fix that? Or even, should we?
+
+```{r}
+#| eval: false
+
+plot(model_lpm, 1)
+```
+
+# Logistic Regression
+
+As you can see, one of the assumptions is violated. You might try to solve it using SEs - but again, these are not panacea. A slightly more common approach to deal with binary dependent variable is logistic regression. Let's briefly try it out!
+
+```{r}
+#| eval: false
+
+model_glm = glm(dtr ~ trials_domestic + tcs_operated, tjet_sub, family = binomial(link = "logit")) 
+summary(model_glm)
+```
+Now, visualize how it looks like. Usually, we would expect to see slightly more "S" shaped curve. But still - good! 
+
+```{r}
+#| eval: false
+
+ggpredict(model_glm, term = c("trials_domestic", "tcs_operated")) %>%
+  plot(show_data = T)
+```
+Compare to linear probability model **without** country and year fixed effects.
+
+```{r}
+#| eval: false
+
+ggpredict(model, term = c("trials_domestic", "tcs_operated")) %>%
+  plot(show_data = T)
+```
+
+Present both: linear probability model without fixed effects and logistic regression. The problem, though, that Logit is way harder to interpret! Stick to marginal effects, which we have covered in [lab 5](https://artur-baranov.github.io/nu-ps405-ds/ps405-d_5.html)!
+
+```{r}
+#| eval: false
+library(modelsummary)
+
+modelsummary(list("LPM" = model,
+                  "Logit" = model_glm),
+             stars = T)
+```
+
+
+A final note, in most cases you would expect to see logistic regression as something like
+
+```{r}
+#| warning: false
+
+glm(am ~ hp + wt, data = mtcars, family = binomial) %>%
+  ggpredict(terms = c("hp")) %>%
+  plot(show_data = T)
+```
+
+# What's next?
+
+Congrats with finalizing the class! No exercises this time.
+
+-   [Helpful resource for R](https://rstudio.github.io/cheatsheets/)
+
+-   Check the [main page](https://artur-baranov.github.io/nu-ps405-ds/) for additional resources
+
+-   Learning to code is like learning a new language: if you're interested, keep practicing!
+
+-   I highly recommend taking POLI_SCI 406-0 Quantitative Causal Inference 
+
+# What we have covered in coding
+
+| Library      | Functions                          | Description                                          |
+|--------------|------------------------------------|------------------------------------------------------|
+| tidyverse    | `filter()`, `mutate()`, `ggplot()` | data wrangling and visualization                     |
+| modelsummary | `modelsummary()`                   | present good looking tables                          |
+| broom        | `tidy()`                           | extract additional information from the models       |
+| ggeffects    | `ggpredict()`                      | calculate and visualize marginal effects             |
+| GGally       | `ggpairs()`                        | extension to ggplot                                  |
+| lmtest       | `bptest()`                         | additional statistical tests for diagnostics         |
+| estimatr     | `lm_robust()`                      | regression with robust and clustered standard errors |
+| car          | `vif()`                            | additional statistical tests for diagnostics         |
+
+# Datasets we have used
+
+| Dataset                                           | Description                                | Link                                                     |
+|---------------------------------------------------|--------------------------------------------|----------------------------------------------------------|
+| **V-Dem**                                         | Measures democracy worldwide               | [V-Dem](https://www.v-dem.net/)                          |
+| **World Happiness Report**                        | Annual happiness report                    | [World Happiness Report](https://worldhappiness.report/) |
+| **Who Governs**                                   | Dataset on political elites                | [Who Governs](https://doi.org/10.1017/S0003055420000490) |
+| **SIPRI**                                         | Data on military operations                | [SIPRI](https://www.sipri.org/databases)                 |
+| **Comparative Political Data Set**                | A dataset covering political institutions  | [CPDS](https://www.cpds-data.org/)                       |
+| **European Social Survey**                        | Survey measuring attitudes across Europe   | [ESS](https://www.europeansocialsurvey.org/)             |
+| **Transitional Justice Evaluation Tools Dataset** | Dataset assessing transitional justice     | [TJET Dataset](https://transitionaljusticedata.org)      |
+
+# Check list
+
+<input type="checkbox"/> I know that every lab has check list below! And I will use it to navigate what we have learned
+
+<input type="checkbox"/> R doesn't scare me anymore
+
+<input type="checkbox"/> I have developed the intuition behind application of quantitative methods
