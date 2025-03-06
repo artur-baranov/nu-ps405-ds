@@ -11,9 +11,6 @@ toc: true
 
 # Before we start
 
--   How are you feeling?
-
-
 <center>
 <a href="https://artur-baranov.github.io/nu-ps405-ds/scripts/ps405-d_9.qmd" class="btn btn-primary" role="button" download="ps405-d_9.qmd" style="width:200px" target="_blank">Download script</a>
 </center>
@@ -23,7 +20,7 @@ toc: true
 </center>
 
 
-# Review of the previous week
+# Optional Review of the previous week
 
 ::: callout-note
 ## Review
@@ -348,7 +345,7 @@ Congrats with finalizing the class! No exercises this time.
 
 -   I highly recommend taking POLI_SCI 406-0 Quantitative Causal Inference 
 
-# What we have covered for coding
+# What we have covered in coding
 
 | Library      | Functions                          | Description                                          |
 |--------------|------------------------------------|------------------------------------------------------|
@@ -361,7 +358,7 @@ Congrats with finalizing the class! No exercises this time.
 | estimatr     | `lm_robust()`                      | regression with robust and clustered standard errors |
 | car          | `vif()`                            | additional statistical tests for diagnostics         |
 
-# What Datasets we have used
+# Datasets we have used
 
 | Dataset                                           | Description                                | Link                                                     |
 |---------------------------------------------------|--------------------------------------------|----------------------------------------------------------|
